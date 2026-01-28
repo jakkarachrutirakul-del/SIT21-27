@@ -1,0 +1,205 @@
+
+        /* --- CSS เฉพาะหน้า Map (Clean Theme) --- */
+        
+        body {
+            overflow: hidden; /* ห้ามสกรอลทั้งหน้า เพราะแมพจะเต็มจอ */
+            background: #fff;
+        }
+
+        .main-wrapper {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            padding-top: 70px; /* เว้นที่ให้ Navbar */
+        }
+
+        /* พื้นที่แผนที่ */
+        #map {
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            background: #f8f9fa; /* สีพื้นหลังระหว่างรอโหลดแมพ */
+        }
+
+        /* --- Sidebar (White Clean Style) --- */
+        .sidebar {
+            position: absolute;
+            top: 90px;
+            left: 20px;
+            bottom: 20px;
+            width: 380px;
+            background: #ffffff;
+            border: 1px solid #e9ecef;
+            border-radius: 15px;
+            display: flex;
+            flex-direction: column;
+            z-index: 1000;
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1); /* เงานุ่มๆ */
+        }
+
+        .sidebar.collapsed {
+            transform: translateX(calc(-100% - 30px));
+        }
+
+        /* ส่วนหัว Sidebar */
+        .sidebar-header {
+            padding: 20px;
+            border-bottom: 1px solid #e9ecef;
+            background: #fff;
+            border-radius: 15px 15px 0 0;
+        }
+
+        .sidebar-title {
+            font-size: 1.1rem;
+            color: #007bff; /* สีหลัก */
+            margin-bottom: 15px;
+            font-weight: 700;
+            display: flex; align-items: center; gap: 8px;
+        }
+
+        /* ปุ่ม Filter */
+        .filter-wrapper {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            padding-bottom: 5px;
+        }
+        .filter-wrapper::-webkit-scrollbar { height: 4px; }
+        .filter-wrapper::-webkit-scrollbar-thumb { background: #dee2e6; border-radius: 4px; }
+
+        .btn-filter {
+            background: #fff;
+            border: 1px solid #dee2e6;
+            color: #6c757d;
+            padding: 6px 16px;
+            border-radius: 50px;
+            white-space: nowrap;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .btn-filter:hover { background: #f8f9fa; border-color: #adb5bd; }
+        
+        .btn-filter.active {
+            background: #007bff;
+            color: #fff;
+            border-color: #007bff;
+            box-shadow: 0 4px 10px rgba(0, 123, 255, 0.3);
+        }
+
+        /* รายการสถานที่ */
+        .location-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 15px;
+            background: #fbfbfb; /* สีพื้นหลังรายการให้อ่อนกว่าการ์ดนิดนึง */
+            border-radius: 0 0 15px 15px;
+        }
+        .location-list::-webkit-scrollbar { width: 6px; }
+        .location-list::-webkit-scrollbar-thumb { background: #ccc; border-radius: 3px; }
+
+        .location-item {
+            background: #fff;
+            border: 1px solid #e9ecef;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .location-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            border-color: #007bff;
+        }
+
+        .location-item.active {
+            border: 2px solid #007bff;
+            background: #f0f7ff; /* สีฟ้าจางๆ เมื่อเลือก */
+        }
+
+        .loc-header { display: flex; align-items: center; gap: 15px; }
+        
+        .loc-icon {
+            font-size: 1.5rem;
+            width: 45px; height: 45px;
+            background: #e7f1ff;
+            color: #007bff;
+            border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .loc-info h5 { margin: 0; font-size: 1rem; color: #333; font-weight: 600; }
+        .loc-info p { margin: 0; font-size: 0.8rem; color: #777; }
+
+        /* รายละเอียดตอนกด */
+        .loc-details {
+            max-height: 0; opacity: 0; overflow: hidden;
+            transition: all 0.4s ease;
+        }
+        .location-item.active .loc-details {
+            max-height: 150px; opacity: 1; margin-top: 15px; padding-top: 15px;
+            border-top: 1px dashed #dee2e6;
+        }
+        .loc-desc { font-size: 0.85rem; color: #555; margin-bottom: 10px; line-height: 1.5; }
+
+        .btn-detail {
+            display: block; text-align: center;
+            background: #007bff; color: #fff;
+            padding: 8px; border-radius: 8px;
+            font-size: 0.85rem; text-decoration: none;
+            transition: 0.2s;
+        }
+        .btn-detail:hover { background: #0056b3; color: #fff; }
+
+        /* ปุ่มพับ Sidebar */
+        .sidebar-toggle-btn {
+            position: absolute;
+            top: 50%; right: -25px;
+            width: 25px; height: 50px;
+            transform: translateY(-50%);
+            background: #fff;
+            border: 1px solid #e9ecef;
+            border-left: none;
+            border-radius: 0 10px 10px 0;
+            color: #007bff;
+            cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 3px 0 10px rgba(0,0,0,0.05);
+        }
+
+        /* Popup บนแผนที่ */
+        .leaflet-popup-content-wrapper {
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            color: #333;
+        }
+        .leaflet-popup-tip { background: #fff; }
+        .popup-content h4 { color: #007bff; margin-bottom: 5px; font-weight: 700; }
+        .popup-btn { 
+            display: inline-block; background: #007bff; color: #fff; 
+            padding: 4px 12px; border-radius: 50px; text-decoration: none; font-size: 0.8rem;
+        }
+        .popup-btn:hover { background: #0056b3; color: #fff; }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 95%; left: 2.5%; top: auto; bottom: 10px; height: 60vh;
+                transform: translateY(0);
+                border-radius: 20px 20px 0 0;
+            }
+            .sidebar.collapsed { transform: translateY(105%); }
+            .sidebar-toggle-btn {
+                top: -25px; right: 50%; width: 50px; height: 25px;
+                transform: translateX(50%); border-radius: 10px 10px 0 0;
+                border-left: 1px solid #e9ecef; border-bottom: none;
+            }
+            .sidebar-toggle-btn i { transform: rotate(-90deg); }
+        }

@@ -1,0 +1,162 @@
+
+        /* --- Theme Configuration --- */
+        :root {
+            --primary-color: #00e0ff;
+            --secondary-color: #004d7a;
+            --warning-color: #ffca28;
+            --danger-color: #ff5252;
+            --success-color: #66bb6a;
+            --text-light: #e6f1ff;
+            --glass-bg: rgba(12, 28, 44, 0.85);
+            --glass-border: rgba(255, 255, 255, 0.15);
+        }
+
+        body {
+            font-family: 'Sarabun', sans-serif;
+            background: #021b2b;
+            color: var(--text-light);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4, .navbar-brand, .btn {
+            font-family: 'Kanit', sans-serif;
+        }
+
+        /* Background */
+        .ocean-bg {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
+            background: url('https://images.unsplash.com/photo-1582967788606-a171f1080ca8?q=80&w=2070&auto=format&fit=crop') no-repeat center center/cover;
+            filter: brightness(0.4);
+        }
+
+        /* Navbar */
+        .navbar { background: rgba(2, 27, 43, 0.95); backdrop-filter: blur(10px); border-bottom: 1px solid var(--glass-border); }
+        .navbar-brand { font-weight: 700; color: var(--primary-color) !important; }
+
+        /* Main Container */
+        .detail-container {
+            max-width: 1100px;
+            margin: 100px auto 50px;
+            padding: 0 20px;
+        }
+
+        /* Hero Section */
+        .detail-hero {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 30px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-icon {
+            font-size: 5rem;
+            background: rgba(255,255,255,0.05);
+            width: 120px; height: 120px;
+            display: flex; align-items: center; justify-content: center;
+            border-radius: 25px;
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 0 30px rgba(0, 224, 255, 0.1);
+        }
+
+        .hero-text { flex: 1; }
+        .hero-title { font-size: 2.8rem; color: var(--primary-color); font-weight: 700; margin-bottom: 10px; line-height: 1.2; }
+        .hero-subtitle { font-size: 1.1rem; color: #a8d5e5; display: flex; align-items: center; gap: 10px; }
+        .tag-pill { background: var(--secondary-color); font-size: 0.9rem; padding: 3px 12px; border-radius: 20px; color: white; }
+
+        /* Pollution Status Badge */
+        .pollution-badge {
+            position: absolute; top: 20px; right: 20px;
+            padding: 8px 15px; border-radius: 20px;
+            font-weight: 600; font-family: 'Kanit', sans-serif;
+            display: flex; align-items: center; gap: 8px;
+            font-size: 0.9rem;
+            backdrop-filter: blur(5px);
+        }
+        .status-critical { background: rgba(255, 82, 82, 0.2); border: 1px solid var(--danger-color); color: var(--danger-color); }
+        .status-warning { background: rgba(255, 202, 40, 0.2); border: 1px solid var(--warning-color); color: var(--warning-color); }
+        .status-good { background: rgba(102, 187, 106, 0.2); border: 1px solid var(--success-color); color: var(--success-color); }
+
+        /* Content Grid */
+        .content-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 30px;
+        }
+
+        /* Info Section */
+        .info-section {
+            background: var(--glass-bg);
+            border-radius: 25px;
+            padding: 35px;
+            border: 1px solid var(--glass-border);
+            margin-bottom: 30px;
+        }
+
+        .section-header {
+            display: flex; align-items: center; gap: 15px; margin-bottom: 20px;
+            border-bottom: 1px solid var(--glass-border); padding-bottom: 15px;
+        }
+        .section-header i { font-size: 1.8rem; color: var(--primary-color); }
+        .section-header h3 { margin: 0; color: white; font-size: 1.5rem; }
+
+        .knowledge-text { font-size: 1.1rem; line-height: 1.8; color: #d1e8ff; text-align: justify; }
+        .knowledge-text strong { color: var(--primary-color); }
+
+        /* Pollution Detail Box (New) */
+        .pollution-box {
+            background: rgba(255, 82, 82, 0.05);
+            border: 1px solid rgba(255, 82, 82, 0.3);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+        .pollution-header { color: var(--danger-color); font-size: 1.3rem; margin-bottom: 15px; font-weight: 700; display: flex; align-items: center; gap: 10px; }
+        .pollution-action { background: var(--danger-color); color: white; padding: 5px 10px; border-radius: 5px; font-size: 0.8rem; }
+
+        /* Right Column: Quick Stats */
+        .quick-stats {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 25px;
+            padding: 25px;
+            border: 1px solid var(--glass-border);
+            height: fit-content;
+            position: sticky;
+            top: 100px;
+        }
+
+        .stat-item { margin-bottom: 20px; }
+        .stat-label { font-size: 0.9rem; color: #8899aa; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 5px; }
+        .stat-value { font-size: 1.1rem; color: white; font-weight: 500; display: flex; align-items: center; gap: 10px; }
+        .stat-icon { color: var(--primary-color); }
+
+        /* Buttons */
+        .btn-nav {
+            width: 100%;
+            background: linear-gradient(45deg, var(--primary-color), #008cba);
+            border: none; padding: 12px; font-size: 1.1rem; border-radius: 15px;
+            color: #000; font-weight: 700; margin-top: 10px; transition: transform 0.2s;
+        }
+        .btn-nav:hover { transform: translateY(-3px); color: white; }
+
+        .btn-back { color: var(--primary-color); text-decoration: none; display: inline-flex; align-items: center; gap: 5px; font-weight: 600; margin-top: 20px; }
+        .btn-back:hover { color: white; }
+
+        @media (max-width: 991px) {
+            .content-grid { grid-template-columns: 1fr; }
+            .hero-icon { margin: 0 auto; }
+            .hero-text { text-align: center; }
+            .hero-subtitle { justify-content: center; }
+            .quick-stats { position: static; }
+            .pollution-badge { position: static; margin-bottom: 15px; justify-content: center; display: inline-flex; }
+            .detail-hero { flex-direction: column; text-align: center; }
+        }

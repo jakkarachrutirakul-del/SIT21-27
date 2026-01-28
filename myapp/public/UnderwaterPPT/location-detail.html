@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>เจาะลึกข้อมูลสถานที่ - Underwater Learning</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <link rel="stylesheet" href="css/style.css">
+    
+    <style>
+        /* --- Clean Theme Styles for Location Detail --- */
+        body {
+            font-family: 'Kanit', sans-serif;
+            background-color: #ffffff;
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        /* Navbar (White Standard) */
+        .navbar {
+            background-color: rgba(255, 255, 255, 0.98);
+            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+            padding: 15px 0;
+        }
+        .navbar-brand { color: #007bff !important; font-weight: 800; font-size: 1.6rem; }
+        .nav-link { color: #555 !important; font-weight: 500; margin: 0 10px; transition: 0.3s; }
+        .nav-link:hover, .nav-link.active { color: #007bff !important; }
+        
+        /* Buttons */
+        .btn-outline-custom {
+            border: 2px solid #007bff; color: #007bff; border-radius: 50px; padding: 8px 25px;
+        }
+        .btn-outline-custom:hover { background-color: #007bff; color: white; }
+
+        /* Detail Container */
+        .detail-container {
+            padding-top: 100px; /* เว้นที่ให้ Navbar */
+            padding-bottom: 60px;
+            background: linear-gradient(180deg, #f8f9fa 0%, #ffffff 100%);
+            min-height: 100vh;
+        }
+
+        /* Hero Section (Location Header) */
+        .detail-hero {
+            text-align: center;
+            padding: 40px 20px;
+            background: #fff;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            margin-bottom: 40px;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid #f0f0f0;
+        }
+
+        .pollution-badge {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 8px 20px; border-radius: 50px;
+            font-size: 0.9rem; font-weight: 600;
+            margin-bottom: 20px;
+        }
+        .status-good { background: #d1e7dd; color: #0f5132; }
+        .status-warning { background: #fff3cd; color: #664d03; }
+        .status-critical { background: #f8d7da; color: #842029; }
+
+        .hero-icon { font-size: 4rem; margin-bottom: 10px; }
+        .hero-title { font-size: 2.5rem; font-weight: 800; color: #007bff; margin-bottom: 10px; }
+        .hero-subtitle { color: #6c757d; font-size: 1.1rem; }
+        .tag-pill { background: #e9ecef; padding: 4px 12px; border-radius: 20px; font-size: 0.9rem; color: #495057; }
+
+        /* Content Grid */
+        .content-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Info Section (Left Column) */
+        .info-section {
+            background: #fff;
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.03);
+            border: 1px solid #eee;
+        }
+        .section-header {
+            display: flex; align-items: center; gap: 10px;
+            margin-bottom: 20px; padding-bottom: 15px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .section-header i { font-size: 1.5rem; color: #007bff; }
+        .section-header h3 { font-size: 1.25rem; font-weight: 700; margin: 0; color: #333; }
+        .knowledge-text { color: #555; line-height: 1.8; font-size: 1rem; }
+
+        /* Pollution Box (Special Style) */
+        .pollution-box {
+            background: #fff3cd;
+            border: 1px solid #ffecb5;
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 30px;
+            color: #664d03;
+        }
+        .pollution-header { font-weight: 700; font-size: 1.1rem; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .pollution-action { font-weight: 600; color: #007bff; display: block; margin-top: 10px; }
+
+        /* Sidebar (Right Column - Stats) */
+        .quick-stats {
+            background: #fff;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            border: 1px solid #eee;
+            position: sticky;
+            top: 100px;
+        }
+        .quick-stats h4 { font-weight: 700; color: #333; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2px solid #007bff; display: inline-block; }
+        
+        .stat-item { margin-bottom: 20px; }
+        .stat-label { font-size: 0.85rem; color: #888; display: block; margin-bottom: 5px; }
+        .stat-value { font-size: 1.1rem; font-weight: 600; color: #333; display: flex; align-items: center; gap: 8px; }
+        .stat-icon { color: #007bff; }
+
+        .btn-nav {
+            background: #007bff; color: #fff; width: 100%; padding: 12px;
+            border-radius: 10px; font-weight: 600; text-decoration: none;
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+            transition: 0.3s; margin-bottom: 15px;
+        }
+        .btn-nav:hover { background: #0056b3; transform: translateY(-2px); color: #fff; }
+
+        .btn-back { color: #6c757d; text-decoration: none; font-size: 0.9rem; transition: 0.3s; }
+        .btn-back:hover { color: #007bff; }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .content-grid { grid-template-columns: 1fr; }
+            .quick-stats { position: static; margin-top: 30px; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="index.html">
+                <i class="bi bi-water me-2 text-primary" style="font-size: 1.8rem;"></i>
+                <div class="d-flex flex-column lh-1">
+                    <span style="font-weight: 800; font-size: 1.6rem; letter-spacing: -0.5px;">Underwater Learning</span>
+                    <small class="text-muted" style="font-size: 0.75rem;">
+                        Voice Beneath the Waves
+                    </small>
+                </div>
+            </a>
+            
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar">
+                <i class="bi bi-list fs-2 text-dark"></i>
+            </button>
+
+            <div class="collapse navbar-collapse d-none d-lg-block">
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item"><a class="nav-link" href="lessons.html">สื่อการเรียนรู้</a></li>
+                    <li class="nav-item"><a class="nav-link" href="videos.html">วิดีโอ</a></li>
+                    <li class="nav-item"><a class="nav-link" href="minigame.html">Mini Game</a></li>
+                    <li class="nav-item"><a class="nav-link" href="quiz.html">แบบทดสอบ</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="map.html">แผนที่</a></li>
+                </ul>
+                <div class="d-flex align-items-center gap-3">
+                     <div class="dropdown">
+                        <button class="btn btn-link text-dark dropdown-toggle text-decoration-none fw-medium" type="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-globe2 me-1"></i> TH
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item active" href="#">ไทย (TH)</a></li>
+                            <li><a class="dropdown-item" href="#">English (EN)</a></li>
+                        </ul>
+                    </div>
+                    <a href="login.html" class="btn btn-outline-primary rounded-pill px-4 fw-medium">เข้าสู่ระบบ</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasNavbar">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title fw-bold text-primary">Underwater Learning</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+        </div>
+        <div class="offcanvas-body">
+            <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+                <li class="nav-item"><a class="nav-link" href="lessons.html">สื่อการเรียนรู้</a></li>
+                <li class="nav-item"><a class="nav-link" href="videos.html">วิดีโอ</a></li>
+                <li class="nav-item"><a class="nav-link" href="minigame.html">Mini Game</a></li>
+                <li class="nav-item"><a class="nav-link" href="quiz.html">แบบทดสอบ</a></li>
+                <li class="nav-item"><a class="nav-link active" href="map.html">แผนที่</a></li>
+                <li class="nav-item mt-3"><a href="login.html" class="btn btn-primary rounded-pill w-100">เข้าสู่ระบบ</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <main class="detail-container">
+        <div class="container" id="mainContent">
+            <div class="text-center py-5">
+                <div class="spinner-border text-primary" role="status"></div>
+                <p class="mt-3 text-muted">กำลังโหลดข้อมูล...</p>
+            </div>
+        </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({ once: true, offset: 50 });
+
+        /* --- ฐานข้อมูลเกาะและจุดวิกฤตขยะ (Same Data) --- */
+        const deepData = [
+            // --- ภาคใต้ฝั่งอันดามัน ---
+            
+
+            // --- ภาคใต้ฝั่งอ่าวไทย ---
+            { 
+                id: 1, name: 'เกาะเต่า', engName: 'Koh Tao', region: 'จ.สุราษฎร์ธานี', icon: '',
+                overview: 'เกาะเล็กๆ ที่เป็นศูนย์กลางการเรียนดำน้ำของโลก มีโรงเรียนสอนดำน้ำหนาแน่นที่สุด',
+                geology: 'ภูเขาหินแกรนิต สลับกับอ่าวเล็กๆ โค้งเว้า',
+                ecology: 'เคยเป็นแหล่งวางไข่เต่าทะเล ปัจจุบันยังพบเต่าตนุและฉลามวาฬได้บ่อย',
+                pollution: { level: 'Warning', status: 'เฝ้าระวังพิเศษ', desc: 'ปัญหาขยะสะสมบนเกาะ และเศษอวน (Ghost Nets) ใต้น้ำที่เป็นอันตรายต่อเต่า', action: 'สนับสนุนกลุ่ม Save Koh Tao ร่วมกิจกรรมตัดอวนและเก็บขยะ' },
+                bestTime: 'มี.ค. - ก.ย.', depth: '5 - 30 ม.', difficulty: 'ง่าย', highlight: 'กองหินชุมพร'
+            },
+            { id: 2, name: 'เกาะสมุย', engName: 'Koh Samui', region: 'จ.สุราษฎร์ธานี', icon: '',
+                overview: 'เกาะสวรรค์กลางอ่าวไทย เพียบพร้อมด้วยสิ่งอำนวยความสะดวกและธรรมชาติ',
+                geology: 'เกาะขนาดใหญ่ มีภูเขาตรงกลางและที่ราบชายฝั่ง',
+                ecology: 'สวนมะพร้าวและป่าดิบชื้น ชายหาดยาว',
+                pollution: { level: 'Medium', status: 'ปานกลาง', desc: 'ปัญหาขยะจากชุมชนและการท่องเที่ยวหนาแน่น น้ำเสียในบางหาด', action: 'เลือกโรงแรมที่เป็นมิตรต่อสิ่งแวดล้อม (Green Hotel)' },
+                bestTime: 'ม.ค. - เม.ย.', depth: '-', difficulty: 'ง่าย', highlight: 'หินตาหินยาย'
+            },
+            { id: 3, name: 'เกาะพะงัน', engName: 'Koh Phangan', region: 'จ.สุราษฎร์ธานี', icon: '',
+                overview: 'โด่งดังจาก Full Moon Party แต่ยังมีมุมสงบและธรรมชาติที่สวยงาม',
+                geology: 'ภูเขาสูงและหาดทรายขาว',
+                ecology: 'ป่าต้นน้ำสมบูรณ์ และแนวปะการังรอบเกาะ',
+                pollution: { level: 'Critical', status: 'วิกฤตหลังปาร์ตี้', desc: 'ขยะจำนวนมหาศาลหลังงาน Full Moon Party (ขวด, พลาสติก, บุหรี่) บริเวณหาดริ้น', action: 'ช่วยเก็บขยะหลังงานปาร์ตี้ ไม่ทิ้งขวดแก้วลงทราย' },
+                bestTime: 'ม.ค. - ส.ค.', depth: '-', difficulty: 'ง่าย', highlight: 'หาดริ้น'
+            },
+
+            // --- ภาคตะวันออก (อ่าวไทย) ---
+            { id: 4, name: 'เกาะช้าง', engName: 'Koh Chang', region: 'จ.ตราด', icon: '',
+                overview: 'เกาะใหญ่อันดับสองของไทย สภาพป่าดิบชื้นสมบูรณ์มาก',
+                geology: 'ภูเขาสูงสลับซับซ้อน มีน้ำตกหลายแห่ง',
+                ecology: 'ป่าดิบชื้นที่อุดมสมบูรณ์มาก พบช้างป่าและนกเงือก',
+                pollution: { level: 'Medium', status: 'ปานกลาง', desc: 'ปัญหาขยะพลาสติกที่ถูกคลื่นซัดเข้าหาดในช่วงมรสุม', action: 'เข้าร่วมกิจกรรม Trash Hero Koh Chang เก็บขยะชายหาด' },
+                bestTime: 'ต.ค. - พ.ค.', depth: '-', difficulty: 'ง่าย', highlight: 'หาดทรายขาว'
+            },
+            { id: 5, name: 'เกาะกูด', engName: 'Koh Kood', region: 'จ.ตราด', icon: '',
+                overview: 'อันดามันแห่งตะวันออก น้ำใส สงบ ธรรมชาติบริสุทธิ์',
+                geology: 'ที่ราบและภูเขา มีน้ำตกคลองเจ้าที่สวยงาม',
+                ecology: 'ป่าชายเลนและแนวปะการังที่สมบูรณ์',
+                pollution: { level: 'Low', status: 'ดี', desc: 'ยังคงความเป็นธรรมชาติสูง ขยะน้อย', action: 'ท่องเที่ยวแบบ Low Carbon ปั่นจักรยานแทนมอเตอร์ไซค์' },
+                bestTime: 'ต.ค. - พ.ค.', depth: '-', difficulty: 'ง่าย', highlight: 'น้ำตกคลองเจ้า'
+            },
+            { id: 6, name: 'เกาะหมาก', engName: 'Koh Mak', region: 'จ.ตราด', icon: '',
+                overview: 'เกาะต้นแบบ Low Carbon Destination เงียบสงบ เรียบง่าย',
+                geology: 'ที่ราบชายฝั่งสวนมะพร้าวและยางพารา',
+                ecology: 'แนวปะการังและแหล่งหญ้าทะเล',
+                pollution: { level: 'Low', status: 'ดีมาก (ต้นแบบ)', desc: 'เป็นเกาะที่มีการจัดการขยะดีเยี่ยม ส่งเสริมการใช้จักรยานและรถไฟฟ้า', action: 'สนับสนุนร้านค้าที่ไม่ใช้โฟมและพลาสติก' },
+                bestTime: 'ต.ค. - พ.ค.', depth: '-', difficulty: 'ง่าย', highlight: 'สะพานสู่ฝัน'
+            },
+            { id: 7, name: 'เกาะเสม็ด', engName: 'Koh Samet', region: 'จ.ระยอง', icon: '',
+                overview: 'เกาะยอดนิยมใกล้กรุงเทพฯ หาดทรายขาวละเอียดดั่งแก้ว',
+                geology: 'เกาะแก้วพิสดารในวรรณคดี',
+                ecology: 'อุทยานแห่งชาติเขาแหลมหญ้า',
+                pollution: { level: 'Critical', status: 'วิกฤตขยะ', desc: 'เนื่องจากนักท่องเที่ยวหนาแน่นมาก ทำให้เกิดขยะพลาสติกและเศษอาหารจำนวนมาก ล้นการจัดการ', action: 'นำขยะกลับฝั่ง ลดการสร้างขยะใหม่' },
+                bestTime: 'ต.ค. - พ.ค.', depth: '-', difficulty: 'ง่าย', highlight: 'หาดทรายแก้ว'
+            },
+            { id: 8, name: 'เกาะล้าน', engName: 'Koh Larn', region: 'จ.ชลบุรี (พัทยา)', icon: '',
+                overview: 'เกาะยอดฮิตของคนกรุง เดินทางง่าย น้ำใส',
+                geology: 'เกาะหินปูนและหาดทราย',
+                ecology: 'ปะการังน้ำตื้น',
+                pollution: { level: 'Critical', status: 'วิกฤตหนัก', desc: 'ขยะล้นเกาะ! ประชากรแฝงและนักท่องเที่ยวสร้างขยะหลายตันต่อวัน จนเตาเผาขยะรับไม่ไหว', action: 'ห้ามนำโฟมและพลาสติกเข้าเกาะเด็ดขาด (ตามกฎเมืองพัทยา)' },
+                bestTime: 'ตลอดปี', depth: '-', difficulty: 'ง่าย', highlight: 'หาดตาแหวน'
+            },
+            { id: 9, name: 'หาดบางแสน', engName: 'Bang Saen Beach', region: 'จ.ชลบุรี', icon: '',
+                overview: 'ชายหาดพักผ่อนหย่อนใจที่ใกล้กรุงเทพฯ ที่สุด',
+                geology: 'หาดโคลนปนทราย',
+                ecology: 'แพลงก์ตอนบลูม (น้ำเขียว) เกิดขึ้นบ่อยครั้ง',
+                pollution: { level: 'Warning', status: 'ขยะทะเล', desc: 'เป็นจุดรับขยะที่ลอยมาจากปากแม่น้ำบางปะกงและทะเลอ่าวไทย มักมีขยะเกลื่อนหาดในช่วงมรสุม', action: 'เก็บขยะเมื่อเห็น ไม่ทิ้งเพิ่ม' },
+                bestTime: 'พ.ย. - ก.พ.', depth: '-', difficulty: 'ง่าย', highlight: 'วงเวียนบางแสน'
+            },
+            { 
+                id: 10, name: 'หาดจอมเทียน', engName: 'Jomtien Beach', region: 'จ.ชลบุรี', icon: '',
+                overview: 'ชายหาดที่เงียบสงบกว่าพัทยา เหมาะสำหรับกีฬาทางน้ำ เช่น วินด์เซิร์ฟ และครอบครัวที่ต้องการพักผ่อน',
+                geology: 'ชายหาดยาวตรงและมีความลาดชันน้อย ทรายเม็ดละเอียด',
+                ecology: 'พบสัตว์หน้าดิน เช่น หอยเสียบ ปูเสฉวน และแมงกะพรุนในช่วงปลายฝนต้นหนาว',
+                pollution: { level: 'Warning', status: 'เฝ้าระวัง', desc: 'เศษอาหารและถุงพลาสติกจากนักท่องเที่ยวปิกนิกริมหาด รวมถึงคราบน้ำมันจากเรือเจ็ตสกี', action: 'เก็บขยะปิกนิกกลับบ้านให้หมด, หลีกเลี่ยงกิจกรรมที่ใช้น้ำมันเชื้อเพลิงในทะเล' },
+                bestTime: 'ตลอดปี', depth: '-', difficulty: 'ง่าย', highlight: 'กีฬาทางน้ำ'
+            },
+            { 
+                id: 11, name: 'หาดหัวหิน', engName: 'Hua Hin Beach', region: 'จ.ประจวบคีรีขันธ์', icon: '',
+                overview: 'เมืองตากอากาศชายทะเลแห่งแรกของไทย มีเอกลักษณ์คือการขี่ม้าชมหาด และบรรยากาศที่ดูย้อนยุค',
+                geology: 'ชายหาดทรายขาวยาวที่มี "กลุ่มหิน" กระจายอยู่ปลายหาด ซึ่งเป็นที่มาของชื่อ "หัวหิน"',
+                ecology: 'พบหอยเปลือกแข็งและปูม้า บริเวณเขาตะเกียบมีลิงแสมอาศัยอยู่',
+                pollution: { level: 'Medium', status: 'ปานกลาง', desc: 'ขยะอินทรีย์จากมูลม้าและเศษอาหาร น้ำเสียจากคลองชุมชนที่ไหลลงทะเลโดยไม่ผ่านการบำบัด', action: 'ไม่ให้อาหารลิง (ลดพฤติกรรมก้าวร้าวและขยะ), สนับสนุนโรงแรมที่มีระบบบำบัดน้ำเสีย' },
+                bestTime: 'ธ.ค. - พ.ค.', depth: '-', difficulty: 'ง่าย', highlight: 'สถานีรถไฟ, เขาตะเกียบ'
+            },
+            { 
+                id: 12, name: 'หาดชะอำ', engName: 'Cha-am Beach', region: 'จ.เพชรบุรี', icon: '',
+                overview: 'ชายหาดยอดนิยมสำหรับวัยรุ่นและครอบครัว มีเตียงผ้าใบเรียงรายยาวเหยียดและกิจกรรมปั่นจักรยาน',
+                geology: 'ชายหาดทรายปนเปลือกหอยบดละเอียด แนวชายฝั่งยาวตรง',
+                ecology: 'เป็นแหล่งอนุบาลปูม้าตามธรรมชาติ มีโครงการธนาคารปูม้าชุมชน',
+                pollution: { level: 'Warning', status: 'ขยะพลาสติก', desc: 'ขยะพลาสติกจำนวนมากจากร้านค้าแผงลอยและนักท่องเที่ยว (แก้วน้ำ, หลอด, ถุงหูหิ้ว)', action: 'พกแก้วน้ำส่วนตัวมาเที่ยว, ไม่ปล่อยลูกโป่งหรือโคมลอยริมทะเล' },
+                bestTime: 'ตลอดปี', depth: '-', difficulty: 'ง่าย', highlight: 'ปั่นจักรยานริมหาด'
+            },
+            { 
+                id: 13, name: 'หาดพัทยา', engName: 'Pattaya Beach', region: 'จ.ชลบุรี', icon: '',
+                overview: 'ชายหาดระดับโลกที่ไม่เคยหลับใหล ศูนย์รวมความบันเทิงและกิจกรรมทางน้ำครบวงจร',
+                geology: 'ชายหาดรูปวงพระจันทร์ยาว 3 กม. มีการเติมทรายเพื่อฟื้นฟูชายหาด',
+                ecology: 'ระบบนิเวศเมืองชายฝั่ง สิ่งมีชีวิตทนทานต่อการเปลี่ยนแปลงสภาพแวดล้อม',
+                pollution: { level: 'Critical', status: 'วิกฤต (มลพิษเมือง)', desc: 'ขยะพลาสติก ก้นบุหรี่ และน้ำเสียจากชุมชนเมืองที่ไหลลงทะเลในช่วงฝนตกหนัก', action: 'ลดขยะพลาสติก Single-use, ไม่ทิ้งก้นบุหรี่ลงทราย' },
+                bestTime: 'ตลอดปี', depth: '-', difficulty: 'ง่าย', highlight: 'Walking Street'
+            }
+        ];
+
+        window.onload = function() {
+            // รับ ID จาก URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const id = parseInt(urlParams.get('id'));
+            
+            // หาข้อมูล
+            let data = deepData.find(loc => loc.id === id);
+            
+            // Fallback ถ้าไม่เจอข้อมูล
+            if (!data) {
+                document.getElementById('mainContent').innerHTML = `
+                    <div class="text-center py-5">
+                        <h1 class="text-danger fw-bold">❌ ไม่พบข้อมูลสถานที่นี้</h1>
+                        <a href="map.html" class="btn btn-outline-primary mt-3 rounded-pill px-4">กลับหน้าแผนที่</a>
+                    </div>
+                `;
+                return;
+            }
+
+            renderContent(data);
+        };
+
+        function renderContent(data) {
+            const container = document.getElementById('mainContent');
+            
+            // กำหนดสี Badge ตามระดับมลพิษ
+            let badgeClass = 'status-good';
+            let pollutionIcon = 'bi-check-circle-fill';
+            if (data.pollution.level === 'Critical') {
+                badgeClass = 'status-critical';
+                pollutionIcon = 'bi-exclamation-triangle-fill';
+            } else if (data.pollution.level === 'Medium' || data.pollution.level === 'Warning') {
+                badgeClass = 'status-warning';
+                pollutionIcon = 'bi-exclamation-circle-fill';
+            }
+
+            container.innerHTML = `
+                <div class="detail-hero" data-aos="fade-down">
+                    <div class="pollution-badge ${badgeClass}">
+                        <i class="bi ${pollutionIcon}"></i> สถานะสิ่งแวดล้อม: ${data.pollution.status}
+                    </div>
+                    <div class="hero-icon">${data.icon}</div>
+                    <div class="hero-text">
+                        <h1 class="hero-title">${data.name}</h1>
+                        <div class="hero-subtitle">
+                            <span>${data.engName}</span> • 
+                            <span class="tag-pill"><i class="bi bi-geo-alt"></i> ${data.region}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="content-grid">
+                    <div class="left-col">
+                        <div class="info-section" data-aos="fade-up">
+                            <div class="section-header">
+                                <i class="bi bi-card-text"></i>
+                                <h3>ภาพรวมสถานที่</h3>
+                            </div>
+                            <p class="knowledge-text">${data.overview}</p>
+                        </div>
+
+                        <div class="pollution-box" data-aos="fade-up" data-aos-delay="100">
+                            <div class="pollution-header">
+                                <i class="bi bi-trash3-fill"></i> รายงานสถานการณ์ขยะ
+                            </div>
+                            <p class="knowledge-text">${data.pollution.desc}</p>
+                            <div class="mt-3">
+                                <span class="pollution-action">
+                                    <i class="bi bi-megaphone-fill"></i> สิ่งที่ช่วยได้: ${data.pollution.action}
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="info-section" data-aos="fade-up" data-aos-delay="200">
+                            <div class="section-header">
+                                <i class="bi bi-layers-half"></i>
+                                <h3>ธรณีวิทยาและการกำเนิด</h3>
+                            </div>
+                            <p class="knowledge-text">${data.geology}</p>
+                        </div>
+
+                        <div class="info-section" data-aos="fade-up" data-aos-delay="300">
+                            <div class="section-header">
+                                <i class="bi bi-flower1"></i>
+                                <h3>ระบบนิเวศและสิ่งมีชีวิต</h3>
+                            </div>
+                            <p class="knowledge-text">${data.ecology}</p>
+                        </div>
+                    </div>
+
+                    <div class="right-col">
+                        <div class="quick-stats" data-aos="fade-left">
+                            <h4 class="mb-4">ข้อมูลสังเขป</h4>
+                            
+                            <div class="stat-item">
+                                <span class="stat-label">ช่วงเวลาเที่ยวดีที่สุด</span>
+                                <div class="stat-value"><i class="bi bi-calendar-check stat-icon"></i> ${data.bestTime}</div>
+                            </div>
+                            
+                            <div class="stat-item">
+                                <span class="stat-label">ความลึก (น้ำ)</span>
+                                <div class="stat-value"><i class="bi bi-water stat-icon"></i> ${data.depth}</div>
+                            </div>
+
+                            <div class="stat-item">
+                                <span class="stat-label">ไฮไลท์ห้ามพลาด</span>
+                                <div class="stat-value"><i class="bi bi-star-fill stat-icon"></i> ${data.highlight}</div>
+                            </div>
+
+                            <hr style="border-color: #eee; margin: 20px 0;">
+
+                            <a href="https://www.google.com/maps/search/?api=1&query=${data.name}" target="_blank" class="btn btn-nav">
+                                <i class="bi bi-cursor-fill"></i> นำทางไปที่นี่
+                            </a>
+                            
+                            <div class="text-center">
+                                <a href="map.html" class="btn-back">
+                                    <i class="bi bi-arrow-left"></i> เลือกสถานที่อื่น
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+    </script>
+     <script>
+    // --- Smart Navbar Logic ---
+    let lastScrollTop = 0;
+    const navbar = document.querySelector('.navbar');
+
+    window.addEventListener('scroll', function() {
+        let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+
+        if (scrollTop > lastScrollTop && scrollTop > 100) {
+            navbar.style.transform = 'translateY(-100%)'; // ซ่อน
+        } else {
+            navbar.style.transform = 'translateY(0)'; // แสดง
+        }
+
+        if (scrollTop > 10) {
+            navbar.style.boxShadow = '0 4px 20px rgba(0,0,0,0.1)';
+        } else {
+            navbar.style.boxShadow = 'none';
+        }
+
+        lastScrollTop = scrollTop;
+    });
+</script>
+</body>
+</html>

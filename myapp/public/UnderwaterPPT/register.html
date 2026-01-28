@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>สมัครสมาชิก - Underwater Learning</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="css/style.css">
+    
+    <style>
+        /* --- Clean Theme Styles for Register Page --- */
+        body {
+            font-family: 'Kanit', sans-serif;
+            background-color: #ffffff;
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        /* Navbar (White Standard) */
+        .navbar {
+            background-color: rgba(255, 255, 255, 0.98);
+            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+            padding: 15px 0;
+        }
+        .navbar-brand { color: #007bff !important; font-weight: 800; font-size: 1.6rem; }
+        .nav-link { color: #555 !important; font-weight: 500; margin: 0 10px; transition: 0.3s; }
+        .nav-link:hover, .nav-link.active { color: #007bff !important; }
+        
+        /* Auth Section */
+        .auth-section {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e3f2fd 100%); /* พื้นหลังไล่สีอ่อนๆ */
+            padding: 120px 20px 60px; /* เว้นที่ให้ Navbar */
+        }
+
+        /* Auth Card (Clean) */
+        .auth-card {
+            background: #fff;
+            border-radius: 20px;
+            padding: 40px;
+            width: 100%;
+            max-width: 500px; /* กว้างกว่า Login นิดนึง */
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1); /* เงานุ่มๆ */
+            border: 1px solid #fff;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Decoration Circle */
+        .auth-card::before {
+            content: '';
+            position: absolute;
+            top: -50px; right: -50px;
+            width: 100px; height: 100px;
+            background: #e7f1ff;
+            border-radius: 50%;
+            z-index: 0;
+        }
+
+        /* Input Fields */
+        .form-custom {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            color: #333;
+            padding: 12px 15px;
+            border-radius: 10px;
+            transition: all 0.3s;
+        }
+        .form-custom:focus {
+            background: #fff;
+            border-color: #007bff;
+            box-shadow: 0 0 0 4px rgba(0, 123, 255, 0.1);
+            color: #333;
+        }
+        
+        .input-group-text {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-right: none;
+            color: #6c757d;
+            border-radius: 10px 0 0 10px;
+        }
+        .input-group .form-custom { border-left: none; border-radius: 0 10px 10px 0; }
+
+        /* Custom Button */
+        .btn-primary-custom {
+            background-color: #007bff; color: white; border: none;
+            border-radius: 50px; padding: 12px; width: 100%;
+            font-weight: 600; box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
+            transition: 0.3s;
+        }
+        .btn-primary-custom:hover {
+            background-color: #0056b3; transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 123, 255, 0.4);
+        }
+    </style>
+</head>
+<body>
+
+     <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="index.html">
+                <i class="bi bi-water me-2" style="font-size: 1.8rem;"></i>
+                <div class="d-flex flex-column lh-1">
+                    <span style="font-weight: 800; font-size: 1.6rem; letter-spacing: -0.5px;">Underwater Learning</span>
+                    <small class="text-muted" style="font-size: 0.85rem; font-weight: 400; margin-top: 2px;">
+                        Voice Beneath the Waves
+                    </small>
+                </div>
+            </a>
+            
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar">
+                <i class="bi bi-list fs-2 text-dark"></i>
+            </button>
+
+            <div class="collapse navbar-collapse d-none d-lg-block">
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item"><a class="nav-link" href="lessons.html">สื่อการเรียนรู้</a></li>
+                    <li class="nav-item"><a class="nav-link" href="videos.html">วิดีโอ</a></li>
+                    <li class="nav-item"><a class="nav-link" href="minigame.html">Mini Game</a></li>
+                    <li class="nav-item"><a class="nav-link" href="quiz.html">แบบทดสอบ</a></li>
+                    <li class="nav-item"><a class="nav-link" href="map.html">แผนที่</a></li>
+                </ul>
+                <div class="d-flex align-items-center gap-3">
+                     <div class="dropdown">
+                        <button class="btn btn-link text-dark dropdown-toggle text-decoration-none fw-medium" type="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-globe2 me-1"></i> TH
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item active" href="#">ไทย (TH)</a></li>
+                            <li><a class="dropdown-item" href="#">English (EN)</a></li>
+                        </ul>
+                    </div>
+                    <a href="login.html" class="btn btn-outline-primary rounded-pill px-4 fw-medium">เข้าสู่ระบบ</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasNavbar">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title fw-bold text-primary">Underwater Learning</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+        </div>
+        <div class="offcanvas-body">
+            <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+                <li class="nav-item"><a class="nav-link" href="lessons.html">สื่อการเรียนรู้</a></li>
+                <li class="nav-item"><a class="nav-link" href="videos.html">วิดีโอ</a></li>
+                <li class="nav-item"><a class="nav-link" href="minigame.html">Mini Game</a></li>
+                <li class="nav-item"><a class="nav-link" href="quiz.html">แบบทดสอบ</a></li>
+                <li class="nav-item"><a class="nav-link" href="map.html">แผนที่</a></li>
+                
+                <li class="nav-item dropdown mt-2">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                        <i class="bi bi-globe2 me-1"></i> ภาษา (TH)
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item active" href="#">ไทย (TH)</a></li>
+                        <li><a class="dropdown-item" href="#">English (EN)</a></li>
+                    </ul>
+                </li>
+
+                <li class="nav-item mt-3"><a href="login.html" class="btn btn-primary rounded-pill w-100">เข้าสู่ระบบ</a></li>
+            </ul>
+        </div>
+    </div>
+
+
+    <section class="auth-section">
+        <div class="auth-card" style="z-index: 1;">
+            <div class="text-center mb-4">
+                <h2 class="fw-bold text-dark mb-2">สร้างบัญชีใหม่</h2>
+                <p class="text-muted">เข้าร่วมชุมชนนักสำรวจโลกใต้น้ำ</p>
+            </div>
+
+            <form id="registerForm" onsubmit="handleRegister(event)">
+                <div class="mb-3">
+                    <label class="form-label text-secondary small fw-bold">ชื่อผู้ใช้ (Username)</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-person"></i></span>
+                        <input type="text" class="form-control form-custom" id="regName" placeholder="ตั้งชื่อเท่ๆ ของคุณ" required>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label text-secondary small fw-bold">อีเมล</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+                        <input type="email" class="form-control form-custom" id="regEmail" placeholder="name@example.com" required>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label text-secondary small fw-bold">รหัสผ่าน</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                            <input type="password" class="form-control form-custom" id="regPassword" placeholder="******" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label text-secondary small fw-bold">ยืนยันรหัสผ่าน</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-lock-fill"></i></span>
+                            <input type="password" class="form-control form-custom" id="regConfirmPassword" placeholder="******" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-check mb-4">
+                    <input class="form-check-input" type="checkbox" id="termsCheck" required>
+                    <label class="form-check-label text-muted small" for="termsCheck">
+                        ฉันยอมรับ <a href="#" class="text-primary text-decoration-none">เงื่อนไขการใช้งาน</a> และ <a href="#" class="text-primary text-decoration-none">นโยบายความเป็นส่วนตัว</a>
+                    </label>
+                </div>
+
+                <button type="submit" class="btn btn-primary-custom py-2 mb-3 fs-5">สมัครสมาชิก</button>
+            </form>
+
+            <div class="text-center mt-3 small">
+                <span class="text-muted">มีบัญชีอยู่แล้ว?</span>
+                <a href="login.html" class="fw-bold ms-1 text-primary text-decoration-none">เข้าสู่ระบบที่นี่</a>
+            </div>
+        </div>
+    </section>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/script.js"></script>
+
+    <script>
+        // ฟังก์ชันเก็บข้อมูลลง LocalStorage (แบบง่าย)
+        function handleRegister(event) {
+            event.preventDefault(); // ป้องกันเว็บรีโหลด
+
+            const name = document.getElementById('regName').value;
+            const email = document.getElementById('regEmail').value;
+            const password = document.getElementById('regPassword').value;
+            const confirmPass = document.getElementById('regConfirmPassword').value;
+
+            // 1. ตรวจสอบรหัสผ่านว่าตรงกันไหม
+            if (password !== confirmPass) {
+                alert("รหัสผ่านไม่ตรงกัน กรุณาลองใหม่");
+                return;
+            }
+
+            // 2. ตรวจสอบว่าอีเมลซ้ำไหม (ใน LocalStorage)
+            if (localStorage.getItem(email)) {
+                alert("อีเมลนี้ถูกใช้งานแล้ว");
+                return;
+            }
+
+            // 3. สร้างก้อนข้อมูลผู้ใช้
+            const userData = {
+                name: name,
+                email: email,
+                password: password, 
+                joinDate: new Date().toLocaleDateString()
+            };
+
+            // 4. บันทึกลง LocalStorage
+            try {
+                localStorage.setItem(email, JSON.stringify(userData));
+                alert("สมัครสมาชิกสำเร็จ! ยินดีต้อนรับคุณ " + name);
+                
+                // 5. ส่งกลับไปหน้า Login
+                window.location.href = 'login.html';
+            } catch (error) {
+                alert("เกิดข้อผิดพลาดในการบันทึกข้อมูล");
+                console.error(error);
+            }
+        }
+    </script>
+</body>
+</html>

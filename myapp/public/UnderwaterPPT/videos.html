@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>วิดีโอการเรียนรู้ - Underwater Learning</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <link rel="stylesheet" href="css/style.css">
+    
+    <link rel="stylesheet" href="css/videos.css">
+
+    <style>
+      
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="index.html">
+                <i class="bi bi-water me-2" style="font-size: 1.8rem;"></i>
+                <div class="d-flex flex-column lh-1">
+                    <span style="font-weight: 800; font-size: 1.6rem; letter-spacing: -0.5px;">Underwater Learning</span>
+                    <small class="text-muted" style="font-size: 0.85rem; font-weight: 400; margin-top: 2px;">
+                        Voice Beneath the Waves
+                    </small>
+                </div>
+            </a>
+            
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar">
+                <i class="bi bi-list fs-2 text-dark"></i>
+            </button>
+
+            <div class="collapse navbar-collapse d-none d-lg-block">
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item"><a class="nav-link" href="lessons.html">สื่อการเรียนรู้</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="videos.html">วิดีโอ</a></li >
+                    <li class="nav-item"><a class="nav-link" href="minigame.html">Mini Game</a></li>
+                    <li class="nav-item"><a class="nav-link" href="quiz.html">แบบทดสอบ</a></li>
+                    <li class="nav-item"><a class="nav-link" href="map.html">แผนที่</a></li>
+                </ul>
+                <div class="d-flex align-items-center gap-3">
+                     <div class="dropdown">
+                        <button class="btn btn-link text-dark dropdown-toggle text-decoration-none fw-medium" type="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-globe2 me-1"></i> TH
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item active" href="#">ไทย (TH)</a></li>
+                            <li><a class="dropdown-item" href="#">English (EN)</a></li>
+                        </ul>
+                    </div>
+                    <a href="login.html" class="btn btn-outline-primary rounded-pill px-4 fw-medium">เข้าสู่ระบบ</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasNavbar">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title fw-bold text-primary">Underwater Learning</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+        </div>
+        <div class="offcanvas-body">
+            <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+                <li class="nav-item"><a class="nav-link" href="lessons.html">สื่อการเรียนรู้</a></li>
+                <li class="nav-item"><a class="nav-link active" href="videos.html">วิดีโอ</a></li>
+                <li class="nav-item"><a class="nav-link" href="minigame.html">Mini Game</a></li>
+                <li class="nav-item"><a class="nav-link" href="quiz.html">แบบทดสอบ</a></li>
+                <li class="nav-item"><a class="nav-link" href="map.html">แผนที่</a></li>
+                
+                <li class="nav-item dropdown mt-2">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                        <i class="bi bi-globe2 me-1"></i> ภาษา (TH)
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item active" href="#">ไทย (TH)</a></li>
+                        <li><a class="dropdown-item" href="#">English (EN)</a></li>
+                    </ul>
+                </li>
+
+                <li class="nav-item mt-3"><a href="login.html" class="btn btn-primary rounded-pill w-100">เข้าสู่ระบบ</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <main>
+        <div class="container">
+            <section class="hero-section" data-aos="fade-down">
+                <h1 class="hero-title">คลิปวิดีโอ</h1>
+                <p class="hero-subtitle">รวมสารคดีและวิดีโอสอนเกี่ยวกับโลกใต้น้ำจากทั่วทุกมุมโลก</p>
+            </section>
+
+            <div class="filter-wrapper" data-aos="fade-up">
+                <button class="btn-filter active" onclick="filterVids('all')">ทั้งหมด</button>
+                <button class="btn-filter" onclick="filterVids('documentary')">สารคดี</button>
+                <button class="btn-filter" onclick="filterVids('tutorial')">สอนความรู้</button>
+                <button class="btn-filter" onclick="filterVids('adventure')">ผจญภัย</button>
+            </div>
+
+            <div class="row g-4" id="videosGrid"></div>
+        </div>
+    </main>
+
+    <div id="videoModal" class="modal fade" tabindex="-1">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content border-0 rounded-4 shadow-lg">
+                <div class="modal-header border-bottom-0">
+                    <h5 class="modal-title fw-bold text-primary" id="modalTitle"></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-0">
+                    <div class="ratio ratio-16x9" id="videoPlayer"></div>
+                    <div id="videoDesc" class="p-4 text-secondary"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <h4 class="fw-bold text-primary mb-3">Underwater Learning</h4>
+            <div class="d-flex justify-content-center gap-4 mb-4">
+                <a href="#" class="text-secondary fs-4"><i class="bi bi-facebook"></i></a>
+                <a href="#" class="text-secondary fs-4"><i class="bi bi-instagram"></i></a>
+                <a href="#" class="text-secondary fs-4"><i class="bi bi-youtube"></i></a>
+            </div>
+            <p class="text-secondary small mb-0">© 2025 Underwater Learning. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+    <script>
+        AOS.init({ once: true, offset: 50 });
+
+        // Video Data
+        const vids = [
+            {
+                id: 1, title: 'สำรวจโลกแนวปะการัง', cat: 'documentary', catName: 'สารคดี',
+                emoji: '', dur: '15:30', views: '1.2K',
+                ytID: 'wMP1KAtaJAg',
+                desc: 'ดำดิ่งลงสู่โลกใต้น้ำที่สวยงามของแนวปะการัง ชมความหลากหลายของสิ่งมีชีวิต',
+                full: 'แนวปะการังเป็นหนึ่งในระบบนิเวศที่หลากหลายที่สุดในโลก มีสิ่งมีชีวิตนับพันชนิดอาศัยอยู่'
+            },
+            {
+                id: 2, title: 'ชีวิตของฉลามขาว', cat: 'documentary', catName: 'สารคดี',
+                emoji: '', dur: '22:15', views: '2.5K',
+                ytID: '4HGNqFdaD34',
+                desc: 'ติดตามชีวิตของฉลามขาวขนาดใหญ่ สัตว์นักล่าที่น่าเกรงขามแห่งมหาสมุทร',
+                full: 'ฉลามขาวเป็นนักล่าที่มีประสิทธิภาพสูง อยู่บนสุดของห่วงโซ่อาหารในทะเล'
+            },
+            {
+                id: 3, title: 'วิธีดำน้ำดูปะการัง', cat: 'tutorial', catName: 'สอนความรู้',
+                emoji: '', dur: '12:45', views: '890',
+                ytID: 'EAUBDqaQDqs',
+                desc: 'เรียนรู้เทคนิคการดำน้ำดูปะการังอย่างถูกวิธี ปลอดภัย และไม่ทำลายสิ่งแวดล้อม',
+                full: 'การดำน้ำดูปะการังต้องทำอย่างระมัดระวัง ไม่แตะต้องปะการังและสัตว์ทะเล'
+            },
+            {
+                id: 4, title: 'เต่าทะเล: การเดินทาง', cat: 'documentary', catName: 'สารคดี',
+                emoji: '', dur: '18:20', views: '1.8K',
+                ytID: 'tA1Tj70u_1U',
+                desc: 'ติดตามการเดินทางอันยาวไกลของเต่าทะเลจากทะเลเปิดกลับสู่หาดที่เกิด',
+                full: 'เต่าทะเลมีความสามารถพิเศษในการนำทางกลับหาดเกิด แม้จะห่างไกลนับพันกิโล'
+            },
+            {
+                id: 5, title: 'รู้จักปลาในทะเลไทย', cat: 'tutorial', catName: 'สอนความรู้',
+                emoji: '', dur: '14:10', views: '1.5K',
+                ytID: 'X9tQv_3m1o8',
+                desc: 'เรียนรู้เกี่ยวกับปลาทะเลที่พบได้ในน่านน้ำไทย ทั้งปลาหายากและปลาสวยงาม',
+                full: 'ทะเลไทยมีปลาหลากหลายชนิด ตั้งแต่ปลาการ์ตูน ปลาผีเสื้อ ไปจนถึงปลากระเบน'
+            },
+            {
+                id: 6, title: 'ผจญภัยในถ้ำใต้น้ำ', cat: 'adventure', catName: 'ผจญภัย',
+                emoji: '', dur: '20:30', views: '3.2K',
+                ytID: 'u9W3N_5T_8U',
+                desc: 'ร่วมผจญภัยไปกับนักดำน้ำมืออาชีพในการสำรวจถ้ำใต้น้ำที่ลึกลับ',
+                full: 'การดำน้ำในถ้ำเป็นการผจญภัยที่ท้าทาย ต้องมีทักษะและอุปกรณ์พิเศษ'
+            }
+        ];
+
+        let modal;
+
+        function showVids(filter = 'all') {
+            const grid = document.getElementById('videosGrid');
+            const filtered = filter === 'all' ? vids : vids.filter(v => v.cat === filter);
+
+            grid.innerHTML = filtered.map((v, i) => `
+                <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="${i * 50}">
+                    <div class="video-card h-100" onclick="playVid(${v.id})">
+                        <div class="video-thumb">
+                            <img src="https://img.youtube.com/vi/${v.ytID}/mqdefault.jpg" alt="${v.title}">
+                            <div class="play-overlay">
+                                <div class="play-icon"><i class="bi bi-play-fill"></i></div>
+                            </div>
+                        </div>
+                        <div class="video-info">
+                            <span class="video-cat">${v.catName}</span>
+                            <h3 class="video-title">${v.title}</h3>
+                            <p class="video-desc">${v.desc}</p>
+                            <div class="video-meta">
+                                <span><i class="bi bi-clock"></i> ${v.dur}</span>
+                                <span><i class="bi bi-eye"></i> ${v.views}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function filterVids(cat) {
+            document.querySelectorAll('.btn-filter').forEach(b => b.classList.remove('active'));
+            event.target.classList.add('active');
+            showVids(cat);
+        }
+
+        function playVid(id) {
+            const v = vids.find(x => x.id === id);
+            if (!v) return;
+
+            document.getElementById('modalTitle').textContent = v.title;
+            document.getElementById('videoPlayer').innerHTML = `
+                <iframe src="https://www.youtube.com/embed/${v.ytID}?autoplay=1&rel=0" 
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                        allowfullscreen class="w-100 h-100">
+                </iframe>
+            `;
+            document.getElementById('videoDesc').innerHTML = `<p>${v.full}</p>`;
+
+            if (!modal) {
+                modal = new bootstrap.Modal(document.getElementById('videoModal'));
+            }
+            modal.show();
+        }
+
+        document.getElementById('videoModal').addEventListener('hidden.bs.modal', () => {
+            document.getElementById('videoPlayer').innerHTML = '';
+        });
+
+        showVids();
+    </script>
+     <script>
+    // --- Smart Navbar Logic ---
+    let lastScrollTop = 0;
+    const navbar = document.querySelector('.navbar');
+
+    window.addEventListener('scroll', function() {
+        let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+
+        if (scrollTop > lastScrollTop && scrollTop > 100) {
+            navbar.style.transform = 'translateY(-100%)'; // ซ่อน
+        } else {
+            navbar.style.transform = 'translateY(0)'; // แสดง
+        }
+
+        if (scrollTop > 10) {
+            navbar.style.boxShadow = '0 4px 20px rgba(0,0,0,0.1)';
+        } else {
+            navbar.style.boxShadow = 'none';
+        }
+
+        lastScrollTop = scrollTop;
+    });
+</script>
+</body>
+</html>

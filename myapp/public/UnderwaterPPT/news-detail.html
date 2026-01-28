@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>อ่านข่าว - Underwater Learning</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="css/style.css">
+    
+    <style>
+        /* --- Premium News Detail Style --- */
+        body {
+            font-family: 'Kanit', sans-serif;
+            background-color: #f9f9f9; /* พื้นหลังเทาอ่อน สบายตา */
+            color: #333;
+            /* ป้องกัน Google ดันหน้าเว็บ */
+            top: 0px !important; 
+            position: static !important; 
+        }
+
+        /* 🔥 FIX: ซ่อนแถบ Google Translate ด้านบนแบบถาวร */
+        .goog-te-banner-frame.skiptranslate, 
+        iframe.goog-te-banner-frame {
+            display: none !important;
+            visibility: hidden !important;
+            height: 0 !important; 
+            width: 0 !important;
+        }
+        
+        .navbar {
+            background-color: rgba(255, 255, 255, 0.98);
+            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+            padding: 15px 0;
+        }
+        .navbar-brand { color: #007bff !important; font-weight: 800; font-size: 1.6rem; }
+        
+        /* Hero Image */
+        .article-hero {
+            position: relative;
+            height: 60vh;
+            min-height: 400px;
+            overflow: hidden;
+            margin-top: 76px;
+        }
+        .hero-bg {
+            width: 100%; height: 100%;
+            object-fit: cover;
+            filter: brightness(0.7);
+        }
+        .hero-overlay {
+            position: absolute;
+            bottom: 0; left: 0; width: 100%;
+            padding: 40px 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+            color: white;
+        }
+
+        /* Content Container */
+        .content-wrapper {
+            background: #fff;
+            border-radius: 20px;
+            padding: 50px;
+            margin-top: -80px;
+            position: relative;
+            z-index: 10;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.05);
+        }
+
+        /* Typography */
+        .news-content {
+            font-size: 1.15rem;
+            line-height: 1.9;
+            color: #444;
+        }
+        .news-content p { margin-bottom: 1.5rem; }
+        .news-content h4 { 
+            font-weight: 700; 
+            color: #007bff; 
+            margin-top: 2rem; 
+            margin-bottom: 1rem; 
+        }
+        
+        /* Related News */
+        .related-card {
+            border: none;
+            border-radius: 15px;
+            overflow: hidden;
+            transition: 0.3s;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            background: #fff;
+        }
+        .related-card:hover { transform: translateY(-5px); box-shadow: 0 15px 30px rgba(0,0,0,0.1); }
+        .related-img { height: 200px; object-fit: cover; width: 100%; }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .content-wrapper { padding: 30px 20px; margin-top: -40px; }
+            .article-hero { height: 40vh; }
+            .display-4 { font-size: 2rem; }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container">
+            <a class="navbar-brand lh-1" href="index.html">
+                <i class="bi bi-water"></i> Underwater Learning
+            </a>
+            
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar">
+                <i class="bi bi-list fs-2 text-dark"></i>
+            </button>
+
+            <div class="collapse navbar-collapse d-none d-lg-block">
+                <div class="ms-auto d-flex align-items-center gap-2">
+                    
+                    <div id="desktop-translate-container">
+                        <div id="google_translate_element"></div>
+                    </div>
+
+                    <a href="index.html" class="btn btn-outline-primary rounded-pill btn-sm px-3">
+                        <i class="bi bi-arrow-left"></i> หน้าหลัก
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasNavbar">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title fw-bold text-primary">Underwater Learning</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+        </div>
+        <div class="offcanvas-body">
+            <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+                <li class="nav-item"><a class="nav-link" href="index.html">หน้าหลัก</a></li>
+                
+                <div id="mobile-translate-container" class="mt-3 mb-3">
+                    </div>
+            </ul>
+        </div>
+    </div>
+
+    <div id="newsContainer">
+        <div class="text-center py-5 mt-5">
+            <div class="spinner-border text-primary" role="status"></div>
+            <p class="mt-3 text-muted">กำลังดึงข้อมูลข่าว...</p>
+        </div>
+    </div>
+
+    <footer class="text-center bg-white py-5 mt-5 border-top">
+        <div class="container">
+            <p class="text-secondary mb-0">© 2025 Underwater Learning. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script type="text/javascript">
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({
+                pageLanguage: 'th',
+                includedLanguages: 'en,th,zh-CN,ja',
+                layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+                autoDisplay: false
+            }, 'google_translate_element');
+        }
+    </script>
+    <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+    <script>
+        // --- 1. สคริปต์ย้ายปุ่มแปลภาษา (เหมือนหน้า Index) ---
+        function moveTranslateWidget() {
+            const widget = document.getElementById('google_translate_element');
+            const desktopContainer = document.getElementById('desktop-translate-container');
+            const mobileContainer = document.getElementById('mobile-translate-container');
+            
+            if (window.innerWidth < 992) { 
+                if (mobileContainer && widget) mobileContainer.appendChild(widget);
+            } else {
+                if (desktopContainer && widget) desktopContainer.appendChild(widget);
+            }
+        }
+        window.addEventListener('resize', moveTranslateWidget);
+        window.addEventListener('load', moveTranslateWidget);
+
+        // --- รวมมิตรแหล่งข่าว ---
+        const RSS_SOURCES = [
+            {
+                name: "ScienceDaily (Marine Bio)",
+                url: "https://www.sciencedaily.com/rss/plants_animals/marine_biology.xml",
+                lang: "en",
+                category: "Marine Science"
+            },
+            {
+                name: "ScienceDaily (Oceanography)",
+                url: "https://www.sciencedaily.com/rss/earth_climate/oceanography.xml",
+                lang: "en",
+                category: "Oceanography"
+            },
+            {
+                name: "Thai PBS (Environment)",
+                url: "https://www.thaipbs.or.th/rss/news/environment.xml",
+                lang: "th",
+                category: "ข่าวสิ่งแวดล้อม"
+            }
+        ];
+
+        const MARINE_KEYWORDS = ["ทะเล", "มหาสมุทร", "ปะการัง", "สัตว์น้ำ", "ชายหาด", "เกาะ", "ประมง", "เต่า", "วาฬ", "โลมา", "ฉลาม", "ocean", "sea", "marine"];
+
+        let allNews = [];
+
+        async function fetchRealNews() {
+            const container = document.getElementById('newsContainer');
+            
+            try {
+                const fetchPromises = RSS_SOURCES.map(source => 
+                    fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(source.url)}&count=10`)
+                    .then(res => res.json())
+                    .then(data => {
+                        if(data.status === 'ok') {
+                            return data.items.map(item => ({
+                                sourceName: source.name,
+                                lang: source.lang,
+                                category: source.category,
+                                title: item.title,
+                                date: item.pubDate,
+                                image: item.enclosure.link || item.thumbnail || "https://images.unsplash.com/photo-1682687220742-aba13b6e50ba?q=80&w=1000",
+                                desc: item.description,
+                                link: item.link
+                            }));
+                        }
+                        return [];
+                    })
+                );
+
+                const results = await Promise.all(fetchPromises);
+                let rawNews = results.flat();
+
+                allNews = rawNews.filter(news => {
+                    if (news.lang === 'th') {
+                        const content = (news.title + news.desc).toLowerCase();
+                        return MARINE_KEYWORDS.some(keyword => content.includes(keyword));
+                    }
+                    return true;
+                });
+
+                allNews.sort((a, b) => new Date(b.date) - new Date(a.date));
+                allNews = allNews.map((item, index) => ({ ...item, id: index }));
+
+                renderNewsPage();
+
+            } catch (error) {
+                console.error("Error fetching news:", error);
+                container.innerHTML = `<div class="text-center py-5 mt-5"><h3>⚠️ โหลดข่าวไม่สำเร็จ</h3><p>${error.message}</p></div>`;
+            }
+        }
+
+        function renderNewsPage() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const newsId = urlParams.get('id');
+            const container = document.getElementById('newsContainer');
+
+            if (newsId === null || !allNews[newsId]) {
+                let newsHTML = `<h2 class="fw-bold mb-4 text-primary"><i class="bi bi-newspaper"></i> อัปเดตข่าวทะเลรอบโลก</h2>`;
+                newsHTML += `<div class="row g-4">`;
+                
+                allNews.forEach(news => {
+                    newsHTML += `
+                        <div class="col-md-6 col-lg-4">
+                            <a href="?id=${news.id}" class="text-decoration-none text-dark">
+                                <div class="card h-100 border-0 shadow-sm hover-card">
+                                    <div style="height: 200px; overflow: hidden; border-radius: 15px 15px 0 0;">
+                                        <img src="${news.image}" class="w-100 h-100 object-fit-cover" onerror="this.src='https://images.unsplash.com/photo-1468581264429-2548ef9eb732?q=80&w=800'">
+                                    </div>
+                                    <div class="card-body">
+                                        <span class="badge bg-primary bg-opacity-10 text-primary mb-2">${news.sourceName}</span>
+                                        <h5 class="card-title fw-bold text-truncate-2">${news.title}</h5>
+                                        <p class="small text-muted mb-2"><i class="bi bi-clock"></i> ${new Date(news.date).toLocaleDateString('th-TH')}</p>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    `;
+                });
+                
+                newsHTML += `</div>`;
+                container.innerHTML = newsHTML;
+                return;
+            }
+
+            const newsItem = allNews[newsId];
+            container.innerHTML = `
+                <div class="article-hero mb-5">
+                    <img src="${newsItem.image}" class="hero-bg" alt="${newsItem.title}" onerror="this.src='https://images.unsplash.com/photo-1468581264429-2548ef9eb732?q=80&w=1600'">
+                    <div class="hero-overlay d-flex align-items-end">
+                        <div class="container text-center text-white pb-5">
+                            <span class="badge bg-light text-dark px-3 py-2 rounded-pill mb-3">${newsItem.category}</span>
+                            <h1 class="display-5 fw-bold mb-3">${newsItem.title}</h1>
+                            <div class="d-flex justify-content-center gap-3 small opacity-75">
+                                <span><i class="bi bi-calendar3"></i> ${new Date(newsItem.date).toLocaleDateString('th-TH')}</span>
+                                <span><i class="bi bi-globe"></i> ${newsItem.sourceName}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="container">
+                    <div class="row justify-content-center">
+                        <div class="col-lg-8">
+                            <div class="content-wrapper bg-white p-5 rounded-4 shadow-sm" style="margin-top: -100px; position: relative; z-index: 10;">
+                                <div class="news-content">
+                                    <p class="lead">${newsItem.desc}</p>
+                                    <div class="alert alert-info border-0 d-flex align-items-center mt-4">
+                                        <i class="bi bi-info-circle-fill fs-4 me-3"></i>
+                                        <div>
+                                            <strong>อ่านฉบับเต็มได้ที่:</strong> 
+                                            <a href="${newsItem.link}" target="_blank" class="text-decoration-underline">คลิกเพื่อไปยังเว็บต้นทาง (${newsItem.sourceName})</a>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <hr class="my-5">
+
+                                <h4 class="fw-bold mb-4">ข่าวอื่นๆ ที่น่าสนใจ</h4>
+                                <div class="row g-3">
+                                    ${getRelatedNews(newsItem.id)}
+                                </div>
+                                
+                                <div class="text-center mt-5">
+                                    <a href="news-detail.html" class="btn btn-outline-primary rounded-pill px-4">ดูข่าวทั้งหมด</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function getRelatedNews(currentId) {
+            return allNews
+                .filter(n => n.id != currentId)
+                .slice(0, 2)
+                .map(n => `
+                    <div class="col-md-6">
+                        <a href="?id=${n.id}" class="text-decoration-none text-dark">
+                            <div class="d-flex gap-3 align-items-center bg-light p-3 rounded-3 hover-bg">
+                                <img src="${n.image}" style="width: 80px; height: 80px; object-fit: cover; border-radius: 10px;" onerror="this.src='https://images.unsplash.com/photo-1582967788606-a171f1080ca8?q=80&w=200'">
+                                <div>
+                                    <h6 class="fw-bold mb-1 text-truncate-2" style="font-size: 0.95rem;">${n.title}</h6>
+                                    <small class="text-muted" style="font-size: 0.8rem;">${new Date(n.date).toLocaleDateString('th-TH')}</small>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                `).join('');
+        }
+
+        const style = document.createElement('style');
+        style.innerHTML = `
+            .text-truncate-2 {
+                display: -webkit-box;
+                -webkit-line-clamp: 2;
+                -webkit-box-orient: vertical;
+                overflow: hidden;
+            }
+            .hover-card:hover { transform: translateY(-5px); transition: 0.3s; }
+            .hover-bg:hover { background-color: #e9ecef !important; transition: 0.3s; }
+        `;
+        document.head.appendChild(style);
+
+        window.onload = fetchRealNews;
+    </script>
+</body>
+</html>

@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>แผนที่ทะเล - Underwater Learning</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+    
+    <link rel="stylesheet" href="css/style.css"> 
+    <link rel="stylesheet" href="css/map.css"> 
+
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="index.html">
+                <i class="bi bi-water me-2" style="font-size: 1.8rem;"></i>
+                <div class="d-flex flex-column lh-1">
+                    <span style="font-weight: 800; font-size: 1.6rem; letter-spacing: -0.5px;">Underwater Learning</span>
+                    <small class="text-muted" style="font-size: 0.85rem; font-weight: 400; margin-top: 2px;">
+                        Voice Beneath the Waves
+                    </small>
+                </div>
+            </a>
+            
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar">
+                <i class="bi bi-list fs-2 text-dark"></i>
+            </button>
+
+            <div class="collapse navbar-collapse d-none d-lg-block">
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item"><a class="nav-link" href="lessons.html">สื่อการเรียนรู้</a></li>
+                    <li class="nav-item"><a class="nav-link" href="videos.html">วิดีโอ</a></li>
+                    <li class="nav-item"><a class="nav-link" href="minigame.html">Mini Game</a></li>
+                    <li class="nav-item"><a class="nav-link" href="quiz.html">แบบทดสอบ</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="map.html">แผนที่</a></li>
+                </ul>
+                <div class="d-flex align-items-center gap-3">
+                     <div class="dropdown">
+                        <button class="btn btn-link text-dark dropdown-toggle text-decoration-none fw-medium" type="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-globe2 me-1"></i> TH
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item active" href="#">ไทย (TH)</a></li>
+                            <li><a class="dropdown-item" href="#">English (EN)</a></li>
+                        </ul>
+                    </div>
+                    <a href="login.html" class="btn btn-outline-primary rounded-pill px-4 fw-medium">เข้าสู่ระบบ</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasNavbar">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title fw-bold text-primary">Underwater Learning</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+        </div>
+        <div class="offcanvas-body">
+            <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+                <li class="nav-item"><a class="nav-link" href="lessons.html">สื่อการเรียนรู้</a></li>
+                <li class="nav-item"><a class="nav-link" href="videos.html">วิดีโอ</a></li>
+                <li class="nav-item"><a class="nav-link" href="minigame.html">Mini Game</a></li>
+                <li class="nav-item"><a class="nav-link" href="quiz.html">แบบทดสอบ</a></li>
+                <li class="nav-item"><a class="nav-link active" href="map.html">แผนที่</a></li>
+                
+                <li class="nav-item dropdown mt-2">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                        <i class="bi bi-globe2 me-1"></i> ภาษา (TH)
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item active" href="#">ไทย (TH)</a></li>
+                        <li><a class="dropdown-item" href="#">English (EN)</a></li>
+                    </ul>
+                </li>
+
+                <li class="nav-item mt-3"><a href="login.html" class="btn btn-primary rounded-pill w-100">เข้าสู่ระบบ</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasNavbar">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title fw-bold text-primary">Underwater Learning</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+        </div>
+        <div class="offcanvas-body">
+            <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+                <li class="nav-item"><a class="nav-link" href="Home.html">หน้าแรก</a></li>
+                <li class="nav-item"><a class="nav-link active" href="map.html">แผนที่</a></li>
+                <li class="nav-item mt-3"><a href="login.html" class="btn btn-primary-custom w-100">เข้าสู่ระบบ</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="main-wrapper">
+        
+        <aside class="sidebar" id="sidebar">
+            <button class="sidebar-toggle-btn" onclick="toggleSidebar()" title="ย่อ/ขยาย เมนู">
+                <i class="bi bi-chevron-left" id="toggleIcon"></i>
+            </button>
+
+            <div class="sidebar-header">
+                <div class="sidebar-title"><i class="bi bi-geo-alt-fill"></i> สถานที่ยอดนิยม</div>
+                <div class="filter-wrapper">
+                    <button class="btn-filter active" onclick="filterMap('all')">ทั้งหมด</button>
+                    <button class="btn-filter" onclick="filterMap('beach')">ชายหาด</button>
+                    <button class="btn-filter" onclick="filterMap('diving')">จุดดำน้ำ</button>
+                    <button class="btn-filter" onclick="filterMap('island')">เกาะ</button>
+                </div>
+            </div>
+            
+            <div class="location-list" id="locationList">
+                </div>
+        </aside>
+
+        <div id="map"></div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <script>
+        const locations = [
+
+    // --- อ่าวไทย ---
+    { id: 1, name: 'เกาะเต่า', lat: 10.0956, lng: 99.8404, type: 'diving', icon: '', desc: 'แหล่งเรียนดำน้ำยอดนิยมของโลก' },
+    { id: 2, name: 'เกาะสมุย', lat: 9.5120, lng: 100.0136, type: 'island', icon: '', desc: 'เกาะสวรรค์แห่งอ่าวไทย' },
+    { id: 3, name: 'เกาะพะงัน', lat: 9.7319, lng: 100.0136, type: 'island', icon: '', desc: 'Full Moon Party และหาดริ้น' },
+    { id: 4, name: 'เกาะช้าง', lat: 12.0469, lng: 102.3243, type: 'island', icon: '', desc: 'เกาะใหญ่อันดับสอง ป่าสมบูรณ์' },
+    { id: 5, name: 'เกาะกูด', lat: 11.6608, lng: 102.5647, type: 'island', icon: '', desc: 'อันดามันแห่งตะวันออก' },
+    { id: 6, name: 'เกาะหมาก', lat: 11.8167, lng: 102.4833, type: 'island', icon: '', desc: 'เกาะ Low Carbon สงบเรียบง่าย' },
+    { id: 7, name: 'เกาะเสม็ด', lat: 12.5607, lng: 101.4504, type: 'island', icon: '', desc: 'เกาะแก้วพิสดาร ใกล้กรุง' },
+    { id: 8, name: 'เกาะล้าน', lat: 12.9208, lng: 100.7778, type: 'island', icon: '', desc: 'น้ำใสใกล้พัทยา' },
+
+    // --- ชายหาด (เพิ่มใหม่) ---
+    { id: 9, name: 'หาดบางแสน', lat: 13.2843, lng: 100.9134, type: 'beach', icon: '', desc: 'ทะเลใกล้กรุงฯ ยอดฮิต' },
+    { id: 10, name: 'หาดจอมเทียน', lat: 12.8867, lng: 100.8806, type: 'beach', icon: '', desc: 'ชายหาดสงบสำหรับกีฬาทางน้ำ' },
+    { id: 11, name: 'หาดหัวหิน', lat: 12.5684, lng: 99.9577, type: 'beach', icon: '', desc: 'เมืองตากอากาศสุดคลาสสิก' },
+    { id: 12, name: 'หาดชะอำ', lat: 12.8021, lng: 99.9809, type: 'beach', icon: '', desc: 'เตียงผ้าใบและกิจกรรมครอบครัว' },
+    { id: 13, name: 'หาดพัทยา', lat: 12.9346, lng: 100.8830, type: 'beach', icon: '', desc: 'ชายหาดที่ไม่เคยหลับใหล' },
+        
+        ];
+
+        let map;
+        let markers = [];
+
+        function initMap() {
+            map = L.map('map', { zoomControl: false }).setView([10.0, 100.0], 6);
+            L.control.zoom({ position: 'topright' }).addTo(map);
+
+            // ใช้แผนที่แบบ Light (Positron) เพื่อให้เข้ากับธีมขาว
+            L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+                attribution: '&copy; OpenStreetMap &copy; CARTO',
+                subdomains: 'abcd',
+                maxZoom: 19
+            }).addTo(map);
+
+            createMarkers(locations);
+            renderList(locations);
+        }
+
+        function createMarkers(data) {
+            markers.forEach(m => map.removeLayer(m));
+            markers = [];
+            data.forEach(loc => {
+                const popupContent = `
+                    <div class="popup-content">
+                        <h4>${loc.icon} ${loc.name}</h4>
+                        <p>${loc.desc}</p>
+                        <a href="location-detail.html?id=${loc.id}" class="popup-btn">ดูข้อมูลเพิ่มเติม</a>
+                    </div>`;
+                const marker = L.marker([loc.lat, loc.lng]).addTo(map).bindPopup(popupContent);
+                marker.on('click', () => highlightListItem(loc.id));
+                marker.feature = { type: loc.type };
+                markers.push(marker);
+            });
+        }
+
+        function renderList(data) {
+            const listContainer = document.getElementById('locationList');
+            listContainer.innerHTML = '';
+            data.forEach(loc => {
+                const item = document.createElement('div');
+                item.className = 'location-item';
+                item.id = `loc-${loc.id}`;
+                item.innerHTML = `
+                    <div class="loc-header">
+                        <div class="loc-icon">${loc.icon}</div>
+                        <div class="loc-info">
+                            <h5>${loc.name}</h5>
+                            <p>${loc.desc}</p>
+                        </div>
+                    </div>
+                    <div class="loc-details">
+                        <p class="loc-desc">${loc.desc}</p>
+                        <a href="location-detail.html?id=${loc.id}" class="btn-detail">ดูข้อมูลเพิ่มเติม</a>
+                    </div>`;
+                
+                item.onclick = function() {
+                    document.querySelectorAll('.location-item').forEach(el => el.classList.remove('active'));
+                    this.classList.add('active');
+                    this.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                    map.flyTo([loc.lat, loc.lng], 10, { duration: 1.2 });
+                    const targetMarker = markers.find(m => m.getLatLng().lat === loc.lat);
+                    if(targetMarker) targetMarker.openPopup();
+                };
+                listContainer.appendChild(item);
+            });
+        }
+
+        function filterMap(type) {
+            document.querySelectorAll('.btn-filter').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            const filteredData = (type === 'all') ? locations : locations.filter(l => l.type === type);
+            renderList(filteredData);
+            createMarkers(filteredData);
+        }
+
+        function highlightListItem(id) {
+            const item = document.getElementById(`loc-${id}`);
+            if(item) item.click();
+        }
+
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const icon = document.getElementById('toggleIcon');
+            sidebar.classList.toggle('collapsed');
+            
+            if (sidebar.classList.contains('collapsed')) {
+                icon.classList.remove('bi-chevron-left');
+                icon.classList.add('bi-chevron-right');
+            } else {
+                icon.classList.remove('bi-chevron-right');
+                icon.classList.add('bi-chevron-left');
+            }
+        }
+
+        window.onload = initMap;
+    </script>
+</body>
+</html>
+  

@@ -1,0 +1,267 @@
+:root {
+    /* Color Palette: สะอาดตา มินิมอล */
+    --primary-color: #007bff;       /* สีฟ้ามาตรฐาน */
+    --secondary-color: #f8f9fa;     /* สีเทาอ่อนมาก */
+    --bg-color: #ffffff;            /* สีขาว */
+    --text-main: #333333;           /* สีเทาเข้ม */
+    --text-muted: #6c757d;          /* สีเทากลาง */
+    --nav-bg: rgba(255, 255, 255, 0.95); /* สีเมนู */
+    --border-color: #e9ecef;        /* สีเส้นขอบ */
+    
+    /* Shadows */
+    --shadow-sm: 0 2px 4px rgba(0,0,0,0.05);
+    --shadow-md: 0 5px 15px rgba(0,0,0,0.08);
+    --shadow-lg: 0 10px 30px rgba(0,0,0,0.12);
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: 'Kanit', sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-main);
+    line-height: 1.6;
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    /* แก้ Google Translate ดันหน้าเว็บลง */
+    top: 0px !important; 
+    position: static !important; 
+}
+
+a { text-decoration: none; color: inherit; transition: 0.3s; }
+
+/* --- Navbar --- */
+.navbar {
+    background: var(--nav-bg) !important;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    padding: 15px 0;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s;
+    border-bottom: 1px solid transparent;
+}
+
+.navbar.scrolled, .navbar:not(.navbar-hidden) {
+    box-shadow: var(--shadow-sm);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.navbar-hidden { transform: translateY(-100%); }
+
+.navbar-brand {
+    font-weight: 700;
+    font-size: 1.5rem;
+    color: var(--primary-color) !important;
+    letter-spacing: 0.5px;
+}
+
+.nav-link {
+    color: var(--text-main) !important;
+    font-size: 0.95rem;
+    font-weight: 500;
+    margin: 0 10px;
+    transition: all 0.2s;
+}
+
+.nav-link:hover, .nav-link.active { color: var(--primary-color) !important; }
+
+/* --- Layout --- */
+main {
+    flex: 1;
+    margin-top: 80px;
+    padding: 40px 20px;
+    width: 100%;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* --- Buttons --- */
+.btn-custom {
+    background-color: var(--primary-color);
+    color: #fff !important;
+    border: 1px solid var(--primary-color);
+    border-radius: 50px;
+    padding: 10px 24px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    box-shadow: var(--shadow-sm);
+}
+
+.btn-custom:hover {
+    background-color: #0056b3;
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+    color: #fff;
+}
+
+.btn-glass {
+    background: transparent;
+    border: 1px solid var(--border-color);
+    color: var(--text-main);
+    border-radius: 50px;
+    padding: 8px 20px;
+}
+
+.btn-glass:hover {
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+}
+
+/* --- Cards --- */
+.feature-card, .lesson-card, .glass-card, .news-card {
+    background-color: #fff;
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 30px;
+    height: 100%;
+    transition: all 0.3s ease;
+    box-shadow: var(--shadow-sm);
+}
+
+.feature-card:hover, .lesson-card:hover, .glass-card:hover, .news-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--primary-color);
+}
+
+/* --- Google Translate Fix (รวมเป็นชุดเดียว) --- */
+
+/* 1. ซ่อนแถบด้านบนสุด */
+.goog-te-banner-frame.skiptranslate { display: none !important; }
+
+/* 2. ซ่อน Tooltip และ Highlight */
+.goog-tooltip { display: none !important; }
+.goog-tooltip:hover { display: none !important; }
+.goog-text-highlight {
+    background-color: transparent !important;
+    border: none !important; 
+    box-shadow: none !important;
+}
+
+/* 3. ปรับแต่งปุ่ม Dropdown */
+.goog-te-gadget-simple {
+    background-color: #fff !important;
+    border: 1px solid #e2e8f0 !important;
+    padding: 8px 12px !important;
+    border-radius: 50px !important;
+    font-size: 14px !important;
+    font-family: 'Kanit', sans-serif !important;
+    color: var(--text-main) !important;
+    display: flex !important;
+    align-items: center !important;
+    transition: all 0.3s;
+}
+
+.goog-te-gadget-simple:hover {
+    border-color: var(--primary-color) !important;
+    background-color: #f8f9fa !important;
+}
+
+/* ซ่อนโลโก้ Google */
+.goog-te-gadget-icon, .goog-te-gadget-simple img { display: none !important; }
+
+/* จัดข้อความข้างใน */
+.goog-te-menu-value { margin: 0 !important; }
+.goog-te-menu-value span {
+    color: var(--text-main) !important;
+    border-left: none !important;
+    font-weight: 500;
+}
+
+/* --- Animations --- */
+@keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-15px); }
+    100% { transform: translateY(0px); }
+}
+.animate-float { animation: float 4s ease-in-out infinite; }
+
+@keyframes pulse-blue {
+    0% { box-shadow: 0 0 0 0 rgba(0, 123, 255, 0.7); }
+    70% { box-shadow: 0 0 0 10px rgba(0, 123, 255, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(0, 123, 255, 0); }
+}
+.btn-pulse { animation: pulse-blue 2s infinite; }
+
+/* --- Footer --- */
+footer {
+    text-align: center;
+    padding: 50px 0;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    background-color: var(--secondary-color);
+    border-top: 1px solid var(--border-color);
+    margin-top: auto;
+}
+/* --- ULTIMATE FIX: Google Translate Banner --- */
+
+/* 1. ซ่อน Iframe ของแถบแปลภาษา (ตัวปัญหาหลัก) */
+.goog-te-banner-frame {
+    display: none !important;
+    visibility: hidden !important;
+    height: 0 !important;
+    width: 0 !important;
+}
+
+/* 2. บังคับให้ Body อยู่ที่เดิม ไม่ให้โดนดันลงมา */
+body {
+    top: 0px !important; 
+    position: static !important; 
+    min-height: 100vh !important;
+}
+
+/* 3. ดันแถบ Google ขึ้นไปซ่อนบนฟ้า (ไม้ตาย) */
+iframe.goog-te-banner-frame {
+    display: none !important;
+    visibility: hidden !important;
+}
+
+/* 4. ซ่อน Tooltip และ Highlight เวลาเอาเมาส์ชี้ */
+.goog-tooltip {
+    display: none !important;
+}
+.goog-tooltip:hover {
+    display: none !important;
+}
+.goog-text-highlight {
+    background-color: transparent !important;
+    border: none !important; 
+    box-shadow: none !important;
+}
+
+/* 5. จัดการกับ Layout ของหน้าเว็บเมื่อแปลแล้ว (กันเพี้ยน) */
+font {
+    background-color: transparent !important;
+    box-shadow: none !important;
+}
+
+/* --- ปรับแต่งปุ่ม Dropdown ให้สวย (เหมือนเดิม) --- */
+.goog-te-gadget-simple {
+    background-color: #fff !important;
+    border: 1px solid #dee2e6 !important;
+    padding: 6px 12px !important;
+    border-radius: 50px !important;
+    font-size: 14px !important;
+    font-family: 'Kanit', sans-serif !important;
+    color: #333 !important;
+    display: flex !important;
+    align-items: center !important;
+    white-space: nowrap;
+}
+
+.goog-te-gadget-simple img { display: none !important; }
+.goog-te-menu-value { margin: 0 !important; }
+.goog-te-menu-value span { color: #333 !important; border: none !important; }

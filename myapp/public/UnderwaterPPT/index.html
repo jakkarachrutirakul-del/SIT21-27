@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Underwater Learning - เสียงจากใต้คลื่น</title>
+
+    <script>
+        if (localStorage.getItem('hasSeenIntro') === 'true') {
+            var style = document.createElement('style');
+            style.innerHTML = '#intro-screen { display: none !important; }';
+            document.head.appendChild(style);
+        }
+    </script>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="css/style.css">
+
+    <style>
+        /* --- CSS Fixes --- */
+        
+        /* ซ่อนแถบ Google ด้านบนแบบถาวร */
+        .goog-te-banner-frame.skiptranslate, 
+        iframe.goog-te-banner-frame {
+            display: none !important;
+            visibility: hidden !important;
+            height: 0 !important; width: 0 !important;
+        }
+        body { top: 0px !important; position: static !important; }
+
+        /* ปรับแต่งปุ่ม Google Translate */
+        .goog-te-gadget-simple {
+            background-color: #fff !important;
+            border: 1px solid #dee2e6 !important;
+            padding: 6px 12px !important;
+            border-radius: 50px !important;
+            font-size: 14px !important;
+            font-family: 'Kanit', sans-serif !important;
+            color: #333 !important;
+            display: flex !important; align-items: center !important;
+        }
+        .goog-te-gadget-simple img { display: none !important; }
+        .goog-te-menu-value { margin: 0 !important; }
+        .goog-te-menu-value span { color: #333 !important; border: none !important; }
+
+        /* Intro CSS (คงเดิม) */
+        #intro-screen {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
+            background: linear-gradient(180deg, #021b2b 0%, #004d7a 100%);
+            z-index: 9999; display: flex; flex-direction: column;
+            justify-content: center; align-items: center; color: #fff;
+            transition: opacity 1s ease-out, visibility 1s; overflow: hidden;
+        }
+        #intro-screen.hide { opacity: 0; visibility: hidden; }
+        #bubbles-intro { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
+        .intro-bubble {
+            position: absolute; bottom: -100px; background: rgba(255, 255, 255, 0.15);
+            border-radius: 50%; border: 1px solid rgba(255, 255, 255, 0.3);
+            animation: rise-intro linear infinite;
+        }
+        @keyframes rise-intro {
+            0% { transform: translateY(0); opacity: 0; }
+            20% { opacity: 1; }
+            100% { transform: translateY(-120vh); opacity: 0; }
+        }
+        .intro-content { z-index: 10; text-align: center; animation: float-intro 3s ease-in-out infinite; }
+        .intro-logo { font-size: 6rem; color: #00e0ff; text-shadow: 0 0 20px rgba(0, 224, 255, 0.5); }
+        .intro-title { font-weight: 800; font-size: 2.5rem; margin-top: 20px; }
+        .intro-subtitle { font-weight: 300; letter-spacing: 2px; opacity: 0.8; }
+        @keyframes float-intro {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+    </style>
+</head>
+
+<body>
+    
+    <div id="intro-screen">
+        <div id="bubbles-intro"></div> 
+        <div class="intro-content">
+            <i class="bi bi-water intro-logo"></i>
+            <h1 class="intro-title">Underwater Learning</h1>
+            <p class="intro-subtitle">Voice Beneath the Waves</p>
+            <div class="spinner-border text-info mt-4" role="status" style="width: 3rem; height: 3rem;">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+    </div>
+
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="index.html">
+                <i class="bi bi-water me-2 text-primary" style="font-size: 1.8rem;"></i>
+                <div class="d-flex flex-column lh-1">
+                    <span style="font-weight: 800; font-size: 1.6rem; letter-spacing: -0.5px;">Underwater Learning</span>
+                    <small class="text-muted" style="font-size: 0.85rem; font-weight: 400; margin-top: 2px;">
+                        Voice Beneath the Waves
+                    </small>
+                </div>
+            </a>
+            
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar">
+                <i class="bi bi-list fs-2 text-dark"></i>
+            </button>
+
+            <div class="collapse navbar-collapse d-none d-lg-block">
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item"><a class="nav-link" href="lessons.html">สื่อการเรียนรู้</a></li>
+                    <li class="nav-item"><a class="nav-link" href="videos.html">วิดีโอ</a></li>
+                    <li class="nav-item"><a class="nav-link" href="minigame.html">Mini Game</a></li>
+                    <li class="nav-item"><a class="nav-link" href="quiz.html">แบบทดสอบ</a></li>
+                    <li class="nav-item"><a class="nav-link" href="map.html">แผนที่</a></li>
+                </ul>
+                <div class="d-flex align-items-center gap-3">
+                     
+                     <div id="desktop-translate-container">
+                         <div id="google_translate_element"></div>
+                     </div>
+
+                    <a href="login.html" class="btn btn-outline-primary rounded-pill px-4 fw-medium">เข้าสู่ระบบ</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasNavbar">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title fw-bold text-primary">Underwater Learning</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+        </div>
+        <div class="offcanvas-body">
+            <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+                <li class="nav-item"><a class="nav-link" href="lessons.html">สื่อการเรียนรู้</a></li>
+                <li class="nav-item"><a class="nav-link" href="videos.html">วิดีโอ</a></li>
+                <li class="nav-item"><a class="nav-link" href="minigame.html">Mini Game</a></li>
+                <li class="nav-item"><a class="nav-link" href="quiz.html">แบบทดสอบ</a></li>
+                <li class="nav-item"><a class="nav-link" href="map.html">แผนที่</a></li>
+                
+                <div id="mobile-translate-container" class="mt-3 mb-3">
+                    </div>
+
+                <li class="nav-item mt-3"><a href="login.html" class="btn btn-primary rounded-pill w-100">เข้าสู่ระบบ</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <section class="d-flex align-items-center position-relative" style="min-height: 95vh; padding-top: 80px;">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6 mb-5 mb-lg-0 pe-lg-5" data-aos="fade-right">
+                    <span class="badge bg-primary bg-opacity-10 text-primary border border-primary-subtle px-3 py-2 mb-3 rounded-pill">
+                        🌊 เสียงจากใต้คลื่น
+                    </span>
+                    <h1 class="display-3 fw-bold mb-3" style="line-height: 1.2;">
+                        สำรวจโลกใต้ทะเล <br>
+                        <span class="text-primary">ในมุมมองใหม่</span>
+                    </h1>
+                    <p class="lead text-secondary mb-5">
+                        เรียนรู้ระบบนิเวศ สัตว์ทะเล และความมหัศจรรย์ของมหาสมุทร 
+                        ผ่านสื่อการสอนที่เข้าใจง่าย วิดีโอ และเกมสนุกๆ ที่จะทำให้คุณรักทะเลมากขึ้น
+                    </p>
+                    <div class="d-flex gap-3 flex-wrap">
+                        <a href="lessons.html" class="btn btn-primary-custom btn-lg shadow-lg">
+                            <i class="bi bi-rocket-takeoff"></i> เริ่มต้นผจญภัย
+                        </a>
+                        <a href="videos.html" class="btn btn-outline-custom btn-lg">
+                            <i class="bi bi-play-circle"></i> ชมตัวอย่าง
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-6" data-aos="fade-left">
+                    <img src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?q=80&w=2070&auto=format&fit=crop" 
+                         alt="Diver exploring underwater" 
+                         class="hero-img img-fluid">
+                </div>
+            </div>
+        </div>
+        
+        <div class="wave-bottom">
+            <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+                <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" class="shape-fill"></path>
+            </svg>
+        </div>
+    </section>
+
+    <section class="py-5 bg-light"> <div class="container py-4"> <div class="text-center mb-5" data-aos="fade-up"> <h2 class="fw-bold">เริ่มเรียนรู้อะไรดี?</h2> <p class="text-secondary">เลือกหัวข้อที่คุณสนใจแล้วดำดิ่งไปด้วยกัน</p> </div> <div class="row g-4 justify-content-center"> <div class="col-md-3 col-6" data-aos="fade-up" data-aos-delay="100"> <a href="lessons.html#coral" class="text-decoration-none"> <div class="cat-card"> <i class="bi bi-flower1 cat-icon"></i> <h5 class="text-dark fw-bold">ปะการัง</h5> <small class="text-muted">ระบบนิเวศ</small> </div> </a> </div> <div class="col-md-3 col-6" data-aos="fade-up" data-aos-delay="200"> <a href="lessons.html#animals" class="text-decoration-none"> <div class="cat-card"> <i class="bi bi-tropical-storm cat-icon"></i> <h5 class="text-dark fw-bold">สัตว์ทะเล</h5> <small class="text-muted">สิ่งมีชีวิต</small> </div> </a> </div> <div class="col-md-3 col-6" data-aos="fade-up" data-aos-delay="300"> <a href="map.html" class="text-decoration-none"> <div class="cat-card"> <i class="bi bi-map cat-icon"></i> <h5 class="text-dark fw-bold">แผนที่</h5> <small class="text-muted">แหล่งเรียนรู้</small> </div> </a> </div> <div class="col-md-3 col-6" data-aos="fade-up" data-aos-delay="400"> <a href="lessons.html#conservation" class="text-decoration-none"> <div class="cat-card"> <i class="bi bi-recycle cat-icon"></i> <h5 class="text-dark fw-bold">อนุรักษ์</h5> <small class="text-muted">ปัญหาขยะ</small> </div> </a> </div> </div> </div> </section>
+
+    <div class="container"> <div class="quiz-section text-center shadow-sm" data-aos="zoom-in"> <h2 class="fw-bold mb-3">Quiz of the Day</h2> <p class="lead text-secondary mb-4">เสียงจากใต้คลื่นกำลังท้าทายคุณ... วันนี้คุณรู้จักทะเลดีแค่ไหน?</p> <a href="quiz.html" class="btn btn-primary-custom btn-lg"> <i class="bi bi-controller"></i> เริ่มทำแบบทดสอบเลย </a> </div> </div>
+    <section class="py-5"> <div class="container"> <div class="d-flex justify-content-between align-items-end mb-4" data-aos="fade-up"> <div> <h2 class="fw-bold">ข่าวสารทะเลไทย</h2> <p class="text-secondary mb-0">ทะเลไทยกำลังเปลี่ยนแปลง คุณรู้หรือยัง? อัปเดตสถานการณ์ล่าสุด</p> </div> <a href="news-detail.html?id=1" class="text-primary fw-bold text-decoration-none small">อ่านต่อ <i class="bi bi-arrow-right"></i></a> </div> <div class="row g-4"> <div class="col-md-4" data-aos="fade-up"> <div class="news-card"> <img src="https://images.unsplash.com/photo-1546026423-cc4642628d2b?q=80&w=800" class="news-img" alt="Coral"> <div class="p-4"> <span class="badge bg-success bg-opacity-10 text-success mb-2">ข่าวดี</span> <h5 class="fw-bold mt-1">ปะการังอ่าวไทยเริ่มฟื้นตัว</h5> <p class="text-secondary small">หลังจากปิดอ่าวมานานกว่า 6 เดือน ธรรมชาติเริ่มกลับมาสมบูรณ์อีกครั้ง...</p> <a href="news-detail.html?id=1" class="text-primary fw-bold text-decoration-none small">อ่านต่อ <i class="bi bi-arrow-right"></i></a> </div> </div> </div> <div class="col-md-4" data-aos="fade-up" data-aos-delay="100"> <div class="news-card"> <img src="https://phuketaquarium.org/wp-content/uploads/2019/01/%E0%B8%A5%E0%B8%B9%E0%B8%81%E0%B9%80%E0%B8%95%E0%B9%88%E0%B8%B2%E0%B8%A1%E0%B8%B0%E0%B9%80%E0%B8%9F%E0%B8%B7%E0%B8%AD%E0%B8%87.jpg" class="news-img" alt="Turtle"> <div class="p-4"> <span class="badge bg-info bg-opacity-10 text-info mb-2">สัตว์ทะเล</span> <h5 class="fw-bold mt-1">ลูกเต่ามะเฟืองฟักตัวแล้ว!</h5> <p class="text-secondary small">ที่หาดไม้ขาว ภูเก็ต ลูกเต่ามะเฟืองกว่า 50 ตัว เดินลงสู่ทะเลอย่างปลอดภัย...</p> <a href="news-detail.html?id=2" class="text-primary fw-bold text-decoration-none small">อ่านต่อ <i class="bi bi-arrow-right"></i></a> </div> </div> </div> <div class="col-md-4" data-aos="fade-up" data-aos-delay="200"> <div class="news-card"> <img src="https://images.unsplash.com/photo-1618477461853-cf6ed80faba5?q=80&w=800" class="news-img" alt="Pollution"> <div class="p-4"> <span class="badge bg-warning bg-opacity-10 text-warning mb-2">กิจกรรม</span> <h5 class="fw-bold mt-1">ชวนเก็บขยะวันทะเลโลก</h5> <p class="text-secondary small">ร่วมเป็นอาสาสมัครทำความสะอาดชายหาดพัทยา ในวันที่ 8 มิ.ย. นี้...</p> <a href="news-detail.html?id=3" class="text-primary fw-bold text-decoration-none small">อ่านต่อ <i class="bi bi-arrow-right"></i></a> </div> </div> </div> </div> </div> </section>
+
+    <footer class="text-center">
+        <div class="container">
+            <h4 class="fw-bold text-primary mb-3">Underwater Learning</h4>
+            <p class="text-secondary small mb-0">© 2025 Underwater Learning. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+    <script type="text/javascript">
+        function googleTranslateElementInit() {
+            // ประกาศแค่ครั้งเดียวพอ
+            new google.translate.TranslateElement({
+                pageLanguage: 'th',
+                includedLanguages: 'en,th,zh-CN,ja',
+                layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+                autoDisplay: false
+            }, 'google_translate_element');
+        }
+    </script>
+    <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+    <script>
+        // --- 1. สคริปต์ย้ายปุ่มแปลภาษา (สำคัญมาก!) ---
+        function moveTranslateWidget() {
+            const widget = document.getElementById('google_translate_element');
+            const desktopContainer = document.getElementById('desktop-translate-container');
+            const mobileContainer = document.getElementById('mobile-translate-container');
+            
+            // เช็คขนาดหน้าจอ (992px คือจุดตัดของ Desktop/Mobile ใน Bootstrap)
+            if (window.innerWidth < 992) { 
+                // ถ้าเป็นมือถือ -> ย้ายไปใส่ใน Mobile Container
+                if (mobileContainer && widget) mobileContainer.appendChild(widget);
+            } else {
+                // ถ้าเป็น Desktop -> ย้ายกลับมา Desktop Container
+                if (desktopContainer && widget) desktopContainer.appendChild(widget);
+            }
+        }
+
+        // สั่งให้ทำงานตอนโหลดหน้าเว็บ และตอนปรับขนาดหน้าจอ
+        window.addEventListener('resize', moveTranslateWidget);
+        window.addEventListener('load', moveTranslateWidget);
+
+
+        // --- 2. ฟังก์ชันสร้างฟองน้ำ ---
+        function createIntroBubbles() {
+            const container = document.getElementById('bubbles-intro');
+            if(!container) return; 
+            for (let i = 0; i < 30; i++) {
+                const bubble = document.createElement('div');
+                bubble.className = 'intro-bubble';
+                const size = Math.random() * 60 + 20 + 'px';
+                bubble.style.width = size;
+                bubble.style.height = size;
+                bubble.style.left = Math.random() * 100 + '%';
+                bubble.style.animationDuration = Math.random() * 4 + 3 + 's';
+                bubble.style.animationDelay = Math.random() * 2 + 's';
+                container.appendChild(bubble);
+            }
+        }
+
+        // --- 3. Intro Logic ---
+        window.addEventListener('load', () => {
+            const introScreen = document.getElementById('intro-screen');
+            const hasSeen = localStorage.getItem('hasSeenIntro');
+
+            if (hasSeen === 'true') {
+                if(introScreen) introScreen.style.display = 'none';
+                AOS.init({ duration: 800, once: true, offset: 100 });
+            } else {
+                if(introScreen) {
+                    createIntroBubbles();
+                    setTimeout(() => {
+                        introScreen.classList.add('hide'); 
+                        localStorage.setItem('hasSeenIntro', 'true'); 
+                        setTimeout(() => {
+                            introScreen.style.display = 'none';
+                            AOS.init({ duration: 800, once: true, offset: 100 });
+                        }, 1000); 
+                    }, 2500);
+                }
+            }
+        });
+
+        // --- 4. Navbar Logic ---
+        let lastScrollTop = 0;
+        const navbar = document.querySelector('.navbar');
+        window.addEventListener('scroll', function() {
+            let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            if (scrollTop > lastScrollTop && scrollTop > 100) {
+                navbar.style.transform = 'translateY(-100%)'; 
+            } else {
+                navbar.style.transform = 'translateY(0)'; 
+            }
+            if (scrollTop > 10) {
+                navbar.style.boxShadow = '0 4px 20px rgba(0,0,0,0.1)';
+            } else {
+                navbar.style.boxShadow = 'none';
+            }
+            lastScrollTop = scrollTop;
+        });
+    </script>
+</body>
+</html>
