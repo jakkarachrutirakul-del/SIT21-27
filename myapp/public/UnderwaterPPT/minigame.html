@@ -3,137 +3,285 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mini Game - Ocean Cleaner</title>
+    <title>Mini Games - Underwater Learning</title>
     
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
     <link rel="stylesheet" href="css/style.css">
 
     <style>
-        /* --- Clean Theme Styles for Minigame --- */
-        body {
-            font-family: 'Kanit', sans-serif;
-            background-color: #ffffff;
-            color: #333;
-            overflow-x: hidden;
-        }
+        .goog-te-banner-frame { display: none !important; }
+        body { top: 0 !important; font-family: 'Kanit', sans-serif; background: #f8f9fa; }
+        #google_translate_element { display: inline-block; }
+        .goog-te-gadget-simple { background: #fff !important; border: 1px solid #dee2e6 !important; padding: 8px 16px !important; border-radius: 50px !important; font-size: 14px !important; }
+        .goog-te-gadget-simple img { display: none !important; }
 
-        /* Navbar (White Standard) */
-        .navbar {
-            background-color: rgba(255, 255, 255, 0.98);
-            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
-            padding: 15px 0;
-        }
-        .navbar-brand { color: #007bff !important; font-weight: 800; font-size: 1.6rem; }
-        .nav-link { color: #555 !important; font-weight: 500; margin: 0 10px; transition: 0.3s; }
-        .nav-link:hover, .nav-link.active { color: #007bff !important; }
+        .navbar { background: rgba(255,255,255,0.98); box-shadow: 0 2px 15px rgba(0,0,0,0.05); padding: 15px 0; }
         
-        /* Buttons */
-        .btn-outline-custom {
-            border: 2px solid #007bff; color: #007bff; border-radius: 50px; padding: 8px 25px;
+        .hero-section { 
+            background: linear-gradient(135deg, #0077b6, #00b4d8); 
+            padding: 140px 0 80px; 
+            color: white; 
+            text-align: center; 
         }
-        .btn-outline-custom:hover { background-color: #007bff; color: white; }
-
-        /* Game Section */
-        .game-section {
-            padding-top: 140px; /* Push down from navbar */
-            padding-bottom: 60px;
-            min-height: 100vh;
-            background: linear-gradient(180deg, #f8f9fa 0%, #ffffff 100%);
-            text-align: center;
+        .hero-section h1 { font-weight: 700; font-size: 2.5rem; }
+        
+        .games-section { padding: 60px 0; }
+        
+        .game-card { 
+            background: white; 
+            border-radius: 16px; 
+            overflow: hidden; 
+            box-shadow: 0 5px 25px rgba(0,0,0,0.08); 
+            transition: all 0.3s; 
+            height: 100%; 
         }
-
-        .game-title { color: #007bff; font-weight: 700; margin-bottom: 10px; }
-        .game-desc { color: #6c757d; margin-bottom: 30px; }
-
-        /* Game Container (The "Screen") */
-        #game-container {
-            width: 800px;
-            height: 500px;
-            background: linear-gradient(180deg, #a2d9ff 0%, #007bff 100%); /* Underwater gradient */
-            margin: 0 auto;
-            border-radius: 20px;
+        .game-card:hover { 
+            transform: translateY(-8px); 
+            box-shadow: 0 15px 40px rgba(0,0,0,0.12); 
+        }
+        
+        .game-image {
+            height: 180px;
             position: relative;
             overflow: hidden;
-            box-shadow: 0 20px 50px rgba(0, 123, 255, 0.2);
-            border: 8px solid #fff; /* White frame */
-            cursor: url('https://img.icons8.com/ios-filled/50/000000/trash.png'), auto; /* Optional: Custom cursor */
         }
-
-        /* HUD (Heads-Up Display) */
-        .hud {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            right: 20px;
-            display: flex;
-            justify-content: space-between;
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: #fff;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
-            z-index: 10;
-            pointer-events: none;
+        .game-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s;
         }
-
-        /* Screens (Start / Game Over) */
-        #start-screen, #game-over-screen {
+        .game-card:hover .game-image img {
+            transform: scale(1.05);
+        }
+        .game-overlay {
             position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(255, 255, 255, 0.9);
+            inset: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.6), transparent);
             display: flex;
-            flex-direction: column;
-            justify-content: center;
+            align-items: flex-end;
+            padding: 20px;
+        }
+        .game-overlay .game-icon {
+            width: 50px;
+            height: 50px;
+            background: white;
+            border-radius: 12px;
+            display: flex;
             align-items: center;
-            z-index: 20;
-            color: #333;
+            justify-content: center;
+            font-size: 1.5rem;
         }
-
-        #start-screen h1, #game-over-screen h1 {
-            color: #007bff;
-            font-weight: 800;
-            font-size: 3rem;
-            margin-bottom: 20px;
+        
+        .game-body { padding: 20px; }
+        .game-body h3 { font-weight: 600; font-size: 1.2rem; margin-bottom: 8px; color: #333; }
+        .game-body p { color: #666; font-size: 0.9rem; margin-bottom: 15px; line-height: 1.5; }
+        
+        .game-badge { 
+            display: inline-block; 
+            padding: 4px 10px; 
+            border-radius: 20px; 
+            font-size: 0.75rem; 
+            font-weight: 500; 
+            margin-bottom: 12px; 
         }
+        .badge-easy { background: #d4edda; color: #155724; }
+        .badge-medium { background: #fff3cd; color: #856404; }
+        .badge-hard { background: #f8d7da; color: #721c24; }
+        
+        .btn-play { 
+            background: #0077b6; 
+            color: white; 
+            border: none; 
+            padding: 10px 24px; 
+            border-radius: 8px; 
+            font-weight: 500; 
+            width: 100%; 
+            transition: background 0.2s;
+        }
+        .btn-play:hover { background: #005a8c; color: white; }
 
-        /* Game Items */
-        .game-item {
-            position: absolute;
-            font-size: 3rem;
-            cursor: pointer;
-            user-select: none;
+        .game-modal .modal-content { border: none; border-radius: 16px; overflow: hidden; }
+        .game-modal .modal-header { background: #0077b6; color: white; border: none; padding: 20px 25px; }
+        .game-modal .modal-header .modal-title { font-weight: 600; }
+        .game-modal .btn-close { filter: brightness(0) invert(1); }
+        .game-modal .modal-body { padding: 0; }
+        
+        .game-container { 
+            width: 100%; 
+            height: 480px; 
+            background: linear-gradient(180deg, #a8dadc, #457b9d); 
+            position: relative; 
+            overflow: hidden; 
+        }
+        
+        .hud { 
+            position: absolute; 
+            top: 15px; 
+            left: 15px; 
+            right: 15px; 
+            display: flex; 
+            justify-content: space-between; 
+            font-size: 1.1rem; 
+            font-weight: 600; 
+            color: #fff; 
+            text-shadow: 0 1px 3px rgba(0,0,0,0.3); 
+            z-index: 10; 
+        }
+        
+        .game-screen { 
+            position: absolute; 
+            inset: 0;
+            background: rgba(255,255,255,0.95); 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: center; 
+            align-items: center; 
+            z-index: 20; 
+            text-align: center; 
+            padding: 30px; 
+        }
+        .game-screen h2 { color: #0077b6; font-weight: 700; font-size: 1.8rem; margin-bottom: 15px; }
+        .game-screen p { color: #666; margin-bottom: 10px; }
+        .game-screen .btn { padding: 12px 40px; border-radius: 8px; font-weight: 600; }
+        
+        .game-item { 
+            position: absolute; 
+            width: 45px;
+            height: 45px;
+            cursor: pointer; 
+            user-select: none; 
             transition: transform 0.1s;
-            animation: floatItem 3s ease-in-out infinite;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
         }
-        .game-item:active { transform: scale(0.9); }
+        .game-item:hover { transform: scale(1.15); }
+        
+        .game-item.trash-bottle { background-image: url('https://cdn-icons-png.flaticon.com/512/1054/1054055.png'); }
+        .game-item.trash-can { background-image: url('https://cdn-icons-png.flaticon.com/512/484/484611.png'); }
+        .game-item.trash-bag { background-image: url('https://cdn-icons-png.flaticon.com/512/3106/3106702.png'); }
+        .game-item.trash-box { background-image: url('https://cdn-icons-png.flaticon.com/512/685/685388.png'); }
+        .game-item.fish { background-image: url('https://cdn-icons-png.flaticon.com/512/1998/1998610.png'); }
+        .game-item.turtle { background-image: url('https://cdn-icons-png.flaticon.com/512/3069/3069186.png'); }
+        .game-item.crab { background-image: url('https://cdn-icons-png.flaticon.com/512/2530/2530847.png'); }
+        .game-item.octopus { background-image: url('https://cdn-icons-png.flaticon.com/512/2530/2530849.png'); }
 
-        @keyframes floatItem {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
+        .sorting-game { background: linear-gradient(180deg, #95d5b2, #40916c); }
+        .bin-container { 
+            position: absolute; 
+            bottom: 20px; 
+            left: 0; 
+            right: 0; 
+            display: flex; 
+            justify-content: center; 
+            gap: 15px; 
+        }
+        .trash-bin { 
+            width: 90px; 
+            height: 110px; 
+            background: white; 
+            border-radius: 10px; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center; 
+            cursor: pointer; 
+            transition: all 0.2s; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15); 
+        }
+        .trash-bin:hover { transform: scale(1.05); }
+        .trash-bin.correct { background: #d4edda; }
+        .trash-bin.wrong { background: #f8d7da; }
+        .trash-bin i { font-size: 2rem; margin-bottom: 5px; }
+        .trash-bin span { font-size: 0.7rem; font-weight: 500; }
+        .bin-organic i { color: #28a745; }
+        .bin-recycle i { color: #007bff; }
+        .bin-hazard i { color: #dc3545; }
+        
+        .sort-item { 
+            position: absolute; 
+            width: 60px; 
+            height: 60px; 
+            background: white;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            z-index: 15;
+        }
+        .sort-item img {
+            width: 40px;
+            height: 40px;
+            object-fit: contain;
         }
 
-        /* Shake Animation for Wrong Click */
-        .shake {
-            animation: shake 0.5s;
+        .quiz-game { background: linear-gradient(180deg, #ffd166, #ef8354); }
+        .quiz-container { padding: 20px; }
+        .quiz-question { 
+            font-size: 1.2rem; 
+            font-weight: 600; 
+            color: #333; 
+            margin: 50px 0 25px; 
+            text-align: center;
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
-        @keyframes shake {
-            0% { transform: translate(1px, 1px) rotate(0deg); }
-            10% { transform: translate(-1px, -2px) rotate(-1deg); }
-            20% { transform: translate(-3px, 0px) rotate(1deg); }
-            30% { transform: translate(3px, 2px) rotate(0deg); }
-            40% { transform: translate(1px, -1px) rotate(1deg); }
-            50% { transform: translate(-1px, 2px) rotate(-1deg); }
-            60% { transform: translate(-3px, 1px) rotate(0deg); }
-            70% { transform: translate(3px, 1px) rotate(-1deg); }
-            80% { transform: translate(-1px, -1px) rotate(1deg); }
-            90% { transform: translate(1px, 2px) rotate(0deg); }
-            100% { transform: translate(1px, -2px) rotate(-1deg); }
+        .quiz-options { 
+            display: grid; 
+            grid-template-columns: 1fr 1fr; 
+            gap: 12px; 
+            max-width: 450px; 
+            margin: 0 auto; 
         }
+        .quiz-option { 
+            background: white; 
+            border: 2px solid #ddd; 
+            border-radius: 10px; 
+            padding: 14px; 
+            cursor: pointer; 
+            transition: all 0.2s; 
+            font-weight: 500;
+            text-align: center;
+        }
+        .quiz-option:hover { border-color: #0077b6; background: #f8f9fa; }
+        .quiz-option.correct { background: #d4edda; border-color: #28a745; }
+        .quiz-option.wrong { background: #f8d7da; border-color: #dc3545; }
 
-        /* Footer */
-        footer { background-color: #f8f9fa; padding: 50px 0; border-top: 1px solid #eee; margin-top: 80px; text-align: center; }
+        .memory-game { background: linear-gradient(180deg, #dda0dd, #9370db); }
+        .memory-grid { 
+            display: grid; 
+            grid-template-columns: repeat(4, 1fr); 
+            gap: 10px; 
+            padding: 50px 20px 20px; 
+            max-width: 360px; 
+            margin: 0 auto; 
+        }
+        .memory-card { 
+            aspect-ratio: 1; 
+            background: #0077b6; 
+            border-radius: 10px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            cursor: pointer; 
+            transition: all 0.3s;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+        .memory-card i { font-size: 1.8rem; color: white; }
+        .memory-card img { width: 35px; height: 35px; display: none; }
+        .memory-card.flipped { background: white; }
+        .memory-card.flipped i { display: none; }
+        .memory-card.flipped img { display: block; }
+        .memory-card.matched { background: #d4edda; pointer-events: none; }
+
+        footer { background: #1a1a2e; color: white; padding: 40px 0; text-align: center; }
     </style>
 </head>
 <body>
@@ -141,16 +289,18 @@
     <nav class="navbar navbar-expand-lg fixed-top">
         <div class="container">
             <a class="navbar-brand d-flex align-items-center" href="index.html">
-                <i class="bi bi-water me-2" style="font-size: 1.8rem;"></i>
+                <i class="bi bi-water me-2 text-primary" style="font-size: 1.8rem;"></i>
                 <div class="d-flex flex-column lh-1">
-                    <span style="font-weight: 800; font-size: 1.6rem; letter-spacing: -0.5px;">Underwater Learning</span>
+                    <span style="font-weight: 800; font-size: 1.6rem; letter-spacing: -0.5px;">Underwater
+                        Learning</span>
                     <small class="text-muted" style="font-size: 0.85rem; font-weight: 400; margin-top: 2px;">
                         Voice Beneath the Waves
                     </small>
                 </div>
             </a>
-            
-            <button class="navbar-toggler border-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar">
+
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="offcanvas"
+                data-bs-target="#offcanvasNavbar">
                 <i class="bi bi-list fs-2 text-dark"></i>
             </button>
 
@@ -158,22 +308,10 @@
                 <ul class="navbar-nav mx-auto">
                     <li class="nav-item"><a class="nav-link" href="lessons.html">สื่อการเรียนรู้</a></li>
                     <li class="nav-item"><a class="nav-link" href="videos.html">วิดีโอ</a></li>
-                    <li class="nav-item"><a class="nav-link active" href="minigame.html">Mini Game</a></li>
+                    <li class="nav-item"><a class="nav-link" href="minigame.html">Mini Game</a></li>
                     <li class="nav-item"><a class="nav-link" href="quiz.html">แบบทดสอบ</a></li>
                     <li class="nav-item"><a class="nav-link" href="map.html">แผนที่</a></li>
                 </ul>
-                <div class="d-flex align-items-center gap-3">
-                     <div class="dropdown">
-                        <button class="btn btn-link text-dark dropdown-toggle text-decoration-none fw-medium" type="button" data-bs-toggle="dropdown">
-                            <i class="bi bi-globe2 me-1"></i> TH
-                        </button>
-                        <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a class="dropdown-item active" href="#">ไทย (TH)</a></li>
-                            <li><a class="dropdown-item" href="#">English (EN)</a></li>
-                        </ul>
-                    </div>
-                    <a href="login.html" class="btn btn-outline-primary rounded-pill px-4 fw-medium">เข้าสู่ระบบ</a>
-                </div>
             </div>
         </div>
     </nav>
@@ -187,180 +325,465 @@
             <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
                 <li class="nav-item"><a class="nav-link" href="lessons.html">สื่อการเรียนรู้</a></li>
                 <li class="nav-item"><a class="nav-link" href="videos.html">วิดีโอ</a></li>
-                <li class="nav-item"><a class="nav-link active" href="minigame.html">Mini Game</a></li>
+                <li class="nav-item"><a class="nav-link" href="minigame.html">Mini Game</a></li>
                 <li class="nav-item"><a class="nav-link" href="quiz.html">แบบทดสอบ</a></li>
                 <li class="nav-item"><a class="nav-link" href="map.html">แผนที่</a></li>
-                
-                <li class="nav-item dropdown mt-2">
-                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-                        <i class="bi bi-globe2 me-1"></i> ภาษา (TH)
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item active" href="#">ไทย (TH)</a></li>
-                        <li><a class="dropdown-item" href="#">English (EN)</a></li>
-                    </ul>
-                </li>
-
-                <li class="nav-item mt-3"><a href="login.html" class="btn btn-primary rounded-pill w-100">เข้าสู่ระบบ</a></li>
+                <li class="nav-item mt-3"><a href="login.html"
+                        class="btn btn-primary rounded-pill w-100">เข้าสู่ระบบ</a></li>
             </ul>
         </div>
     </div>
 
-    <main class="game-section">
+    <section class="hero-section">
         <div class="container">
-            <h1 class="game-title">🎮 Ocean Cleaner</h1>
-            <p class="game-desc">ภารกิจ: ช่วยกันเก็บขยะพลาสติกออกจากทะเลให้ได้มากที่สุดภายใน 30 วินาที!</p>
+            <h1><i class="bi bi-controller me-2"></i>Mini Games</h1>
+            <p class="mb-0">เรียนรู้การอนุรักษ์ทะเลผ่านเกมสนุก ๆ</p>
+        </div>
+    </section>
 
-            <div id="game-container">
-                <div class="hud">
-                    <span id="score-display">คะแนน: 0</span>
-                    <span id="time-display">เวลา: 30</span>
-                </div>
-                
-                <div id="start-screen">
-                    <i class="bi bi-controller text-primary mb-3" style="font-size: 4rem;"></i>
-                    <h1>พร้อมไหม?</h1>
-                    <div class="fs-4 mb-2">เก็บขยะ: 🗑️ 🧴 🥡 <span class="text-success">(+10)</span></div>
-                    <div class="fs-4 mb-4">ห้ามจับ: 🐠 🦀 🐢 <span class="text-danger">(-5)</span></div>
-                    <button class="btn btn-primary btn-lg rounded-pill px-5 shadow" onclick="startGame()">เริ่มเกม</button>
-                </div>
-
-                <div id="game-over-screen" style="display: none;">
-                    <i class="bi bi-alarm text-danger mb-3" style="font-size: 4rem;"></i>
-                    <h1>หมดเวลา!</h1>
-                    <h3 class="mb-4">คะแนนของคุณ: <span id="final-score" class="text-primary fw-bold">0</span></h3>
-                    <div class="d-flex gap-2">
-                        <button class="btn btn-primary rounded-pill px-4" onclick="startGame()">เล่นอีกครั้ง</button>
-                        <a href="scores.html" class="btn btn-outline-secondary rounded-pill px-4">ดูอันดับ</a>
+    <section class="games-section">
+        <div class="container">
+            <div class="row g-4">
+                <!-- Game 1: Ocean Cleaner -->
+                <div class="col-lg-3 col-md-6">
+                    <div class="game-card">
+                        <div class="game-image">
+                            <img src="https://images.unsplash.com/photo-1618477461853-cf6ed80faba5?w=400" alt="Ocean Cleaner">
+                            <div class="game-overlay">
+                                <div class="game-icon text-primary"><i class="bi bi-trash3"></i></div>
+                            </div>
+                        </div>
+                        <div class="game-body">
+                            <span class="game-badge badge-easy">ง่าย</span>
+                            <h3>Ocean Cleaner</h3>
+                            <p>ช่วยเก็บขยะออกจากทะเล คลิกขยะให้ได้มากที่สุด ระวังอย่าจับสัตว์ทะเล</p>
+                            <button class="btn btn-play" onclick="openGame(1)"><i class="bi bi-play-fill me-1"></i>เล่นเกม</button>
+                        </div>
                     </div>
                 </div>
-                
-                <div id="game-area"></div>
+
+                <!-- Game 2: Trash Sorter -->
+                <div class="col-lg-3 col-md-6">
+                    <div class="game-card">
+                        <div class="game-image">
+                            <img src="https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?w=400" alt="Trash Sorter">
+                            <div class="game-overlay">
+                                <div class="game-icon text-success"><i class="bi bi-recycle"></i></div>
+                            </div>
+                        </div>
+                        <div class="game-body">
+                            <span class="game-badge badge-medium">ปานกลาง</span>
+                            <h3>Trash Sorter</h3>
+                            <p>แยกขยะให้ถูกประเภท เรียนรู้การคัดแยกขยะอย่างถูกวิธี</p>
+                            <button class="btn btn-play" onclick="openGame(2)"><i class="bi bi-play-fill me-1"></i>เล่นเกม</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Game 3: Sea Quiz -->
+                <div class="col-lg-3 col-md-6">
+                    <div class="game-card">
+                        <div class="game-image">
+                            <img src="https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=400" alt="Sea Quiz">
+                            <div class="game-overlay">
+                                <div class="game-icon text-warning"><i class="bi bi-lightbulb"></i></div>
+                            </div>
+                        </div>
+                        <div class="game-body">
+                            <span class="game-badge badge-medium">ปานกลาง</span>
+                            <h3>Sea Quiz</h3>
+                            <p>ทดสอบความรู้เรื่องทะเล ตอบคำถามเกี่ยวกับการอนุรักษ์</p>
+                            <button class="btn btn-play" onclick="openGame(3)"><i class="bi bi-play-fill me-1"></i>เล่นเกม</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Game 4: Sea Memory -->
+                <div class="col-lg-3 col-md-6">
+                    <div class="game-card">
+                        <div class="game-image">
+                            <img src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=400" alt="Sea Memory">
+                            <div class="game-overlay">
+                                <div class="game-icon text-info"><i class="bi bi-grid-3x3"></i></div>
+                            </div>
+                        </div>
+                        <div class="game-body">
+                            <span class="game-badge badge-hard">ยาก</span>
+                            <h3>Sea Memory</h3>
+                            <p>จับคู่สัตว์ทะเล พลิกการ์ดหาคู่ที่เหมือนกัน ฝึกความจำ</p>
+                            <button class="btn btn-play" onclick="openGame(4)"><i class="bi bi-play-fill me-1"></i>เล่นเกม</button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-    </main>
+    </section>
+
+    <!-- Game 1 Modal -->
+    <div class="modal fade game-modal" id="game1Modal" tabindex="-1">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"><i class="bi bi-trash3 me-2"></i>Ocean Cleaner</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="game-container" id="game1-container">
+                        <div class="hud"><span id="g1-score">คะแนน: 0</span><span id="g1-time">เวลา: 30</span></div>
+                        <div class="game-screen" id="g1-start">
+                            <h2><i class="bi bi-trash3 me-2"></i>Ocean Cleaner</h2>
+                            <p>คลิกเก็บขยะ <span class="text-success fw-bold">(+10 คะแนน)</span></p>
+                            <p class="mb-4">ห้ามจับสัตว์ทะเล <span class="text-danger fw-bold">(-5 คะแนน)</span></p>
+                            <button class="btn btn-primary" onclick="startGame1()">เริ่มเกม</button>
+                        </div>
+                        <div class="game-screen" id="g1-end" style="display:none;">
+                            <h2>หมดเวลา!</h2>
+                            <p class="fs-4">คะแนนของคุณ: <span id="g1-final" class="text-primary fw-bold">0</span></p>
+                            <button class="btn btn-primary" onclick="startGame1()">เล่นอีกครั้ง</button>
+                        </div>
+                        <div id="g1-area"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Game 2 Modal -->
+    <div class="modal fade game-modal" id="game2Modal" tabindex="-1">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header" style="background:#28a745;">
+                    <h5 class="modal-title"><i class="bi bi-recycle me-2"></i>Trash Sorter</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="game-container sorting-game" id="game2-container">
+                        <div class="hud"><span id="g2-score">คะแนน: 0</span><span id="g2-items">เหลือ: 10</span></div>
+                        <div class="game-screen" id="g2-start">
+                            <h2><i class="bi bi-recycle me-2"></i>Trash Sorter</h2>
+                            <p class="mb-1">แยกขยะให้ถูกประเภท!</p>
+                            <div class="d-flex justify-content-center gap-4 my-3">
+                                <div class="text-center"><i class="bi bi-circle-fill text-success fs-4"></i><br><small>ย่อยสลายได้</small></div>
+                                <div class="text-center"><i class="bi bi-circle-fill text-primary fs-4"></i><br><small>รีไซเคิล</small></div>
+                                <div class="text-center"><i class="bi bi-circle-fill text-danger fs-4"></i><br><small>อันตราย</small></div>
+                            </div>
+                            <button class="btn btn-success" onclick="startGame2()">เริ่มเกม</button>
+                        </div>
+                        <div class="game-screen" id="g2-end" style="display:none;">
+                            <h2>จบเกม!</h2>
+                            <p class="fs-4">คะแนน: <span id="g2-final" class="text-success fw-bold">0</span>/100</p>
+                            <button class="btn btn-success" onclick="startGame2()">เล่นอีกครั้ง</button>
+                        </div>
+                        <div id="g2-current-item" class="sort-item" style="display:none;"></div>
+                        <div class="bin-container" id="g2-bins" style="display:none;">
+                            <div class="trash-bin bin-organic" data-type="organic" onclick="sortTrash('organic')">
+                                <i class="bi bi-leaf"></i><span>ย่อยสลายได้</span>
+                            </div>
+                            <div class="trash-bin bin-recycle" data-type="recycle" onclick="sortTrash('recycle')">
+                                <i class="bi bi-arrow-repeat"></i><span>รีไซเคิล</span>
+                            </div>
+                            <div class="trash-bin bin-hazard" data-type="hazard" onclick="sortTrash('hazard')">
+                                <i class="bi bi-exclamation-triangle"></i><span>อันตราย</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Game 3 Modal -->
+    <div class="modal fade game-modal" id="game3Modal" tabindex="-1">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header" style="background:#fd7e14;">
+                    <h5 class="modal-title"><i class="bi bi-lightbulb me-2"></i>Sea Quiz</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="game-container quiz-game" id="game3-container">
+                        <div class="hud" style="color:#333;text-shadow:none;"><span id="g3-score">คะแนน: 0</span><span id="g3-qnum">ข้อ: 1/10</span></div>
+                        <div class="game-screen" id="g3-start" style="background:rgba(255,255,255,0.95);">
+                            <h2><i class="bi bi-lightbulb me-2"></i>Sea Quiz</h2>
+                            <p class="mb-4">ตอบคำถามเกี่ยวกับทะเล 10 ข้อ</p>
+                            <button class="btn btn-warning" onclick="startGame3()">เริ่มเกม</button>
+                        </div>
+                        <div class="game-screen" id="g3-end" style="display:none;background:rgba(255,255,255,0.95);">
+                            <h2>จบเกม!</h2>
+                            <p class="fs-4">คะแนน: <span id="g3-final" class="fw-bold">0</span>/100</p>
+                            <p id="g3-msg"></p>
+                            <button class="btn btn-warning" onclick="startGame3()">เล่นอีกครั้ง</button>
+                        </div>
+                        <div class="quiz-container" id="g3-quiz" style="display:none;">
+                            <div class="quiz-question" id="g3-q"></div>
+                            <div class="quiz-options" id="g3-opts"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Game 4 Modal -->
+    <div class="modal fade game-modal" id="game4Modal" tabindex="-1">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header" style="background:#6f42c1;">
+                    <h5 class="modal-title"><i class="bi bi-grid-3x3 me-2"></i>Sea Memory</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="game-container memory-game" id="game4-container">
+                        <div class="hud"><span id="g4-moves">ครั้ง: 0</span><span id="g4-pairs">คู่: 0/8</span></div>
+                        <div class="game-screen" id="g4-start">
+                            <h2><i class="bi bi-grid-3x3 me-2"></i>Sea Memory</h2>
+                            <p class="mb-4">จับคู่สัตว์ทะเลให้ครบ 8 คู่!</p>
+                            <button class="btn btn-purple text-white" style="background:#6f42c1;" onclick="startGame4()">เริ่มเกม</button>
+                        </div>
+                        <div class="game-screen" id="g4-end" style="display:none;">
+                            <h2>ยินดีด้วย!</h2>
+                            <p class="fs-4">จับคู่ครบใน <span id="g4-final" class="fw-bold text-primary">0</span> ครั้ง</p>
+                            <button class="btn text-white" style="background:#6f42c1;" onclick="startGame4()">เล่นอีกครั้ง</button>
+                        </div>
+                        <div class="memory-grid" id="g4-grid"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <footer>
         <div class="container">
-            <h4 class="fw-bold text-primary mb-3">Underwater Learning</h4>
-            <div class="d-flex justify-content-center gap-4 mb-4">
-                <a href="#" class="text-secondary fs-4"><i class="bi bi-facebook"></i></a>
-                <a href="#" class="text-secondary fs-4"><i class="bi bi-instagram"></i></a>
-                <a href="#" class="text-secondary fs-4"><i class="bi bi-youtube"></i></a>
-            </div>
-            <p class="text-secondary small mb-0">© 2025 Underwater Learning. All rights reserved.</p>
+            <h5 class="fw-bold mb-2">Underwater Learning</h5>
+            <p class="mb-0 opacity-75 small">© 2025 Underwater Learning. All rights reserved.</p>
         </div>
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        let score = 0;
-        let timeLeft = 30;
-        let gameInterval;
-        let spawnInterval;
-        const gameArea = document.getElementById('game-area');
-        const trashTypes = ['🗑️', '🧴', '🥡', '🥤', '💿'];
-        const fishTypes = ['🐠', '🦀', '🐢', '🐡', '🐙'];
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({ pageLanguage: 'th', includedLanguages: 'en,th', layout: google.translate.TranslateElement.InlineLayout.SIMPLE, autoDisplay: false }, 'google_translate_element');
+        }
+    </script>
+    <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
-        function startGame() {
-            score = 0;
-            timeLeft = 30;
-            document.getElementById('score-display').innerText = 'คะแนน: ' + score;
-            document.getElementById('time-display').innerText = 'เวลา: ' + timeLeft;
-            document.getElementById('start-screen').style.display = 'none';
-            document.getElementById('game-over-screen').style.display = 'none';
-            gameArea.innerHTML = '';
+    <script>
+        setInterval(() => { const f = document.querySelector('.goog-te-banner-frame'); if (f) f.style.display = 'none'; document.body.style.top = '0'; }, 300);
 
-            gameInterval = setInterval(updateTimer, 1000);
-            spawnInterval = setInterval(spawnItem, 600);
+        function openGame(n) { new bootstrap.Modal(document.getElementById('game' + n + 'Modal')).show(); }
+
+        // Game 1: Ocean Cleaner
+        let g1Score=0, g1Time=30, g1Int, g1Spawn;
+        const g1Trash = ['trash-bottle','trash-can','trash-bag','trash-box'];
+        const g1Fish = ['fish','turtle','crab','octopus'];
+
+        function startGame1() {
+            g1Score=0; g1Time=30;
+            document.getElementById('g1-score').innerText = 'คะแนน: 0';
+            document.getElementById('g1-time').innerText = 'เวลา: 30';
+            document.getElementById('g1-start').style.display = 'none';
+            document.getElementById('g1-end').style.display = 'none';
+            document.getElementById('g1-area').innerHTML = '';
+            g1Int = setInterval(() => { g1Time--; document.getElementById('g1-time').innerText = 'เวลา: ' + g1Time; if (g1Time <= 0) endGame1(); }, 1000);
+            g1Spawn = setInterval(spawnG1, 700);
         }
 
-        function updateTimer() {
-            timeLeft--;
-            document.getElementById('time-display').innerText = 'เวลา: ' + timeLeft;
-            if (timeLeft <= 0) {
-                endGame();
+        function spawnG1() {
+            const item = document.createElement('div');
+            item.className = 'game-item';
+            const isTrash = Math.random() < 0.65;
+            const type = isTrash ? g1Trash[Math.floor(Math.random() * g1Trash.length)] : g1Fish[Math.floor(Math.random() * g1Fish.length)];
+            item.classList.add(type);
+            item.style.left = Math.random() * 85 + '%';
+            item.style.top = (Math.random() * 65 + 15) + '%';
+            item.onclick = function() { 
+                if (isTrash) g1Score += 10; else g1Score -= 5; 
+                document.getElementById('g1-score').innerText = 'คะแนน: ' + g1Score; 
+                this.remove(); 
+            };
+            document.getElementById('g1-area').appendChild(item);
+            setTimeout(() => { if (item.parentNode) item.remove(); }, 2500);
+        }
+
+        function endGame1() {
+            clearInterval(g1Int); clearInterval(g1Spawn);
+            document.getElementById('g1-final').innerText = g1Score;
+            document.getElementById('g1-end').style.display = 'flex';
+        }
+
+        // Game 2: Trash Sorter
+        let g2Score=0, g2Left=10, g2Current;
+        const g2Items = [
+            {icon:'https://cdn-icons-png.flaticon.com/512/2909/2909841.png',t:'organic',name:'กล้วย'},
+            {icon:'https://cdn-icons-png.flaticon.com/512/2909/2909787.png',t:'organic',name:'แอปเปิ้ล'},
+            {icon:'https://cdn-icons-png.flaticon.com/512/5787/5787016.png',t:'organic',name:'ใบไม้'},
+            {icon:'https://cdn-icons-png.flaticon.com/512/1054/1054055.png',t:'recycle',name:'ขวดพลาสติก'},
+            {icon:'https://cdn-icons-png.flaticon.com/512/2917/2917995.png',t:'recycle',name:'กระป๋อง'},
+            {icon:'https://cdn-icons-png.flaticon.com/512/2541/2541988.png',t:'recycle',name:'กระดาษ'},
+            {icon:'https://cdn-icons-png.flaticon.com/512/3176/3176298.png',t:'hazard',name:'แบตเตอรี่'},
+            {icon:'https://cdn-icons-png.flaticon.com/512/2913/2913520.png',t:'hazard',name:'หลอดไฟ'},
+            {icon:'https://cdn-icons-png.flaticon.com/512/3140/3140343.png',t:'hazard',name:'สารเคมี'},
+            {icon:'https://cdn-icons-png.flaticon.com/512/2107/2107957.png',t:'recycle',name:'ขวดแก้ว'}
+        ];
+        let g2Queue = [];
+
+        function startGame2() {
+            g2Score=0; g2Left=10;
+            document.getElementById('g2-score').innerText = 'คะแนน: 0';
+            document.getElementById('g2-items').innerText = 'เหลือ: 10';
+            document.getElementById('g2-start').style.display = 'none';
+            document.getElementById('g2-end').style.display = 'none';
+            document.getElementById('g2-bins').style.display = 'flex';
+            g2Queue = [...g2Items].sort(() => Math.random() - 0.5);
+            nextG2();
+        }
+
+        function nextG2() {
+            if (g2Queue.length === 0) { endGame2(); return; }
+            g2Current = g2Queue.pop();
+            const el = document.getElementById('g2-current-item');
+            el.innerHTML = '<img src="' + g2Current.icon + '" alt="' + g2Current.name + '">';
+            el.style.display = 'flex';
+            el.style.left = 'calc(50% - 30px)';
+            el.style.top = '35%';
+        }
+
+        function sortTrash(type) {
+            document.querySelectorAll('.trash-bin').forEach(b => b.classList.remove('correct', 'wrong'));
+            const bin = document.querySelector('.trash-bin[data-type="' + type + '"]');
+            if (type === g2Current.t) { g2Score += 10; bin.classList.add('correct'); } else { bin.classList.add('wrong'); }
+            g2Left--;
+            document.getElementById('g2-score').innerText = 'คะแนน: ' + g2Score;
+            document.getElementById('g2-items').innerText = 'เหลือ: ' + g2Left;
+            setTimeout(() => { document.querySelectorAll('.trash-bin').forEach(b => b.classList.remove('correct', 'wrong')); nextG2(); }, 400);
+        }
+
+        function endGame2() {
+            document.getElementById('g2-current-item').style.display = 'none';
+            document.getElementById('g2-bins').style.display = 'none';
+            document.getElementById('g2-final').innerText = g2Score;
+            document.getElementById('g2-end').style.display = 'flex';
+        }
+
+        // Game 3: Sea Quiz
+        let g3Score=0, g3Cur=0;
+        const g3Qs = [
+            {q:"ขยะพลาสติกในทะเลใช้เวลาย่อยสลายนานเท่าไหร่?",a:["50 ปี","100 ปี","450 ปี","10 ปี"],c:2},
+            {q:"สัตว์ทะเลชนิดใดได้รับผลกระทบจากถุงพลาสติกมากที่สุด?",a:["ปลาฉลาม","เต่าทะเล","ปลาโลมา","ปลาวาฬ"],c:1},
+            {q:"ปะการังฟอกขาวเกิดจากสาเหตุใด?",a:["มลพิษ","อุณหภูมิน้ำสูงขึ้น","แสงแดดมากไป","น้ำเค็มเกินไป"],c:1},
+            {q:"ทะเลผลิตออกซิเจนให้โลกประมาณกี่เปอร์เซ็นต์?",a:["20%","50%","70%","90%"],c:2},
+            {q:"ขยะชนิดใดพบมากที่สุดในทะเล?",a:["ขวดแก้ว","พลาสติก","โลหะ","กระดาษ"],c:1},
+            {q:"ไมโครพลาสติกคืออะไร?",a:["พลาสติกใหญ่","พลาสติกเล็กกว่า 5มม.","พลาสติกรีไซเคิล","พลาสติกย่อยสลายได้"],c:1},
+            {q:"แนวปะการังที่ใหญ่ที่สุดในโลกอยู่ที่ไหน?",a:["ไทย","ออสเตรเลีย","อินโดนีเซีย","มัลดีฟส์"],c:1},
+            {q:"การทำประมงเกินขนาดส่งผลอย่างไร?",a:["ปลามีมากขึ้น","ระบบนิเวศเสียสมดุล","ทะเลสะอาดขึ้น","ไม่มีผลกระทบ"],c:1},
+            {q:"วิธีใดช่วยลดขยะในทะเลได้?",a:["ใช้ถุงผ้า","ทิ้งขยะลงทะเล","ใช้พลาสติกครั้งเดียว","ไม่แยกขยะ"],c:0},
+            {q:"ป่าชายเลนมีความสำคัญอย่างไร?",a:["เป็นแหล่งอนุบาลสัตว์น้ำ","ทำให้ทะเลสกปรก","ไม่มีประโยชน์","กีดขวางเรือ"],c:0}
+        ];
+        let g3Shuffled = [];
+
+        function startGame3() {
+            g3Score=0; g3Cur=0;
+            document.getElementById('g3-score').innerText = 'คะแนน: 0';
+            document.getElementById('g3-qnum').innerText = 'ข้อ: 1/10';
+            document.getElementById('g3-start').style.display = 'none';
+            document.getElementById('g3-end').style.display = 'none';
+            document.getElementById('g3-quiz').style.display = 'block';
+            g3Shuffled = [...g3Qs].sort(() => Math.random() - 0.5);
+            showG3();
+        }
+
+        function showG3() {
+            if (g3Cur >= 10) { endGame3(); return; }
+            const q = g3Shuffled[g3Cur];
+            document.getElementById('g3-q').innerText = q.q;
+            const opts = document.getElementById('g3-opts');
+            opts.innerHTML = '';
+            q.a.forEach((a, i) => {
+                const btn = document.createElement('div');
+                btn.className = 'quiz-option';
+                btn.innerText = a;
+                btn.onclick = () => answerG3(i, q.c);
+                opts.appendChild(btn);
+            });
+        }
+
+        function answerG3(sel, cor) {
+            const opts = document.querySelectorAll('.quiz-option');
+            opts.forEach((o, i) => { o.style.pointerEvents = 'none'; if (i === cor) o.classList.add('correct'); else if (i === sel) o.classList.add('wrong'); });
+            if (sel === cor) g3Score += 10;
+            document.getElementById('g3-score').innerText = 'คะแนน: ' + g3Score;
+            g3Cur++;
+            document.getElementById('g3-qnum').innerText = 'ข้อ: ' + Math.min(g3Cur + 1, 10) + '/10';
+            setTimeout(showG3, 800);
+        }
+
+        function endGame3() {
+            document.getElementById('g3-quiz').style.display = 'none';
+            document.getElementById('g3-final').innerText = g3Score;
+            document.getElementById('g3-msg').innerText = g3Score >= 80 ? 'เก่งมาก!' : g3Score >= 50 ? 'ดีมาก!' : 'ลองใหม่นะ!';
+            document.getElementById('g3-end').style.display = 'flex';
+        }
+
+        // Game 4: Memory
+        let g4Moves=0, g4Pairs=0, g4Flipped=[], g4Locked=false;
+        const g4Animals = [
+            'https://cdn-icons-png.flaticon.com/512/1998/1998610.png',
+            'https://cdn-icons-png.flaticon.com/512/3069/3069186.png',
+            'https://cdn-icons-png.flaticon.com/512/2530/2530847.png',
+            'https://cdn-icons-png.flaticon.com/512/2530/2530849.png',
+            'https://cdn-icons-png.flaticon.com/512/3256/3256391.png',
+            'https://cdn-icons-png.flaticon.com/512/2219/2219592.png',
+            'https://cdn-icons-png.flaticon.com/512/3069/3069168.png',
+            'https://cdn-icons-png.flaticon.com/512/2219/2219459.png'
+        ];
+
+        function startGame4() {
+            g4Moves=0; g4Pairs=0; g4Flipped=[]; g4Locked=false;
+            document.getElementById('g4-moves').innerText = 'ครั้ง: 0';
+            document.getElementById('g4-pairs').innerText = 'คู่: 0/8';
+            document.getElementById('g4-start').style.display = 'none';
+            document.getElementById('g4-end').style.display = 'none';
+            const grid = document.getElementById('g4-grid');
+            grid.innerHTML = '';
+            grid.style.display = 'grid';
+            const cards = [...g4Animals, ...g4Animals].sort(() => Math.random() - 0.5);
+            cards.forEach((a, i) => {
+                const card = document.createElement('div');
+                card.className = 'memory-card';
+                card.dataset.animal = a;
+                card.innerHTML = '<i class="bi bi-question-lg"></i><img src="' + a + '">';
+                card.onclick = () => flipCard(card);
+                grid.appendChild(card);
+            });
+        }
+
+        function flipCard(card) {
+            if (g4Locked || card.classList.contains('flipped') || card.classList.contains('matched')) return;
+            card.classList.add('flipped');
+            g4Flipped.push(card);
+            if (g4Flipped.length === 2) {
+                g4Moves++;
+                document.getElementById('g4-moves').innerText = 'ครั้ง: ' + g4Moves;
+                if (g4Flipped[0].dataset.animal === g4Flipped[1].dataset.animal) {
+                    g4Flipped.forEach(c => c.classList.add('matched'));
+                    g4Pairs++;
+                    document.getElementById('g4-pairs').innerText = 'คู่: ' + g4Pairs + '/8';
+                    g4Flipped = [];
+                    if (g4Pairs === 8) endGame4();
+                } else {
+                    g4Locked = true;
+                    setTimeout(() => { g4Flipped.forEach(c => c.classList.remove('flipped')); g4Flipped = []; g4Locked = false; }, 800);
+                }
             }
         }
 
-        function spawnItem() {
-            const item = document.createElement('div');
-            item.className = 'game-item';
-            
-            // 70% chance trash, 30% chance fish
-            const isTrash = Math.random() < 0.7;
-            item.innerText = isTrash ? 
-                trashTypes[Math.floor(Math.random() * trashTypes.length)] : 
-                fishTypes[Math.floor(Math.random() * fishTypes.length)];
-            
-            // Random Position (within 800x500 container)
-            const maxLeft = 720; // width - item width approx
-            const maxTop = 420;  // height - item height approx
-            item.style.left = Math.random() * maxLeft + 'px';
-            item.style.top = Math.random() * maxTop + 'px';
-
-            item.onclick = function() {
-                if(isTrash) {
-                    score += 10;
-                    // Create +10 text effect (optional enhancement)
-                    this.remove();
-                } else {
-                    score -= 5;
-                    this.classList.add('shake'); // Shake animation
-                    // Remove after shake if you want, or let it stay
-                    setTimeout(() => { if(this.parentNode) this.remove(); }, 500);
-                }
-                document.getElementById('score-display').innerText = 'คะแนน: ' + score;
-            };
-
-            gameArea.appendChild(item);
-
-            // Auto remove after 2 seconds
-            setTimeout(() => {
-                if(item.parentNode) item.remove();
-            }, 2000);
+        function endGame4() {
+            document.getElementById('g4-grid').style.display = 'none';
+            document.getElementById('g4-final').innerText = g4Moves;
+            document.getElementById('g4-end').style.display = 'flex';
         }
 
-        function endGame() {
-            clearInterval(gameInterval);
-            clearInterval(spawnInterval);
-            document.getElementById('final-score').innerText = score;
-            document.getElementById('game-over-screen').style.display = 'flex';
-            
-            // Save Score Logic (Optional)
-            saveScore(score);
-        }
-
-        function saveScore(newScore) {
-            let scores = JSON.parse(localStorage.getItem('oceanScores')) || [];
-            scores.push({ date: new Date().toLocaleDateString(), score: newScore, game: 'Ocean Cleaner' });
-            scores.sort((a, b) => b.score - a.score);
-            scores = scores.slice(0, 10);
-            localStorage.setItem('oceanScores', JSON.stringify(scores));
-        }
+        document.querySelectorAll('.game-modal').forEach(m => m.addEventListener('hidden.bs.modal', () => { clearInterval(g1Int); clearInterval(g1Spawn); }));
     </script>
-     <script>
-    // --- Smart Navbar Logic ---
-    let lastScrollTop = 0;
-    const navbar = document.querySelector('.navbar');
-
-    window.addEventListener('scroll', function() {
-        let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-
-        if (scrollTop > lastScrollTop && scrollTop > 100) {
-            navbar.style.transform = 'translateY(-100%)'; // ซ่อน
-        } else {
-            navbar.style.transform = 'translateY(0)'; // แสดง
-        }
-
-        if (scrollTop > 10) {
-            navbar.style.boxShadow = '0 4px 20px rgba(0,0,0,0.1)';
-        } else {
-            navbar.style.boxShadow = 'none';
-        }
-
-        lastScrollTop = scrollTop;
-    });
-</script>
 </body>
 </html>
