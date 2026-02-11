@@ -1,0 +1,1453 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Underwater Learning</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <style>
+        * { font-family: 'Kanit', sans-serif; }
+        body { background: #f0f2f5; min-height: 100vh; }
+
+        .sidebar {
+            position: fixed;
+            top: 0; left: 0;
+            width: 250px;
+            height: 100vh;
+            background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);
+            padding: 20px 0;
+            z-index: 1000;
+            overflow-y: auto;
+        }
+        .sidebar-brand {
+            padding: 10px 20px 25px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 15px;
+        }
+        .sidebar-brand h5 { color: white; font-weight: 700; margin: 0; }
+        .sidebar-brand small { color: rgba(255,255,255,0.5); font-size: 0.75rem; }
+
+        .sidebar-menu { list-style: none; padding: 0; margin: 0; }
+        .sidebar-menu li a {
+            display: flex; align-items: center; gap: 12px;
+            padding: 12px 20px;
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+            transition: all 0.2s;
+            border-left: 3px solid transparent;
+            font-size: 0.95rem;
+        }
+        .sidebar-menu li a:hover, .sidebar-menu li a.active {
+            background: rgba(255,255,255,0.1);
+            color: white;
+            border-left-color: #00b4d8;
+        }
+        .sidebar-menu li a i { font-size: 1.1rem; width: 22px; }
+        .menu-divider {
+            height: 1px;
+            background: rgba(255,255,255,0.1);
+            margin: 15px 20px;
+        }
+
+        .main-content {
+            margin-left: 250px;
+            padding: 25px;
+            min-height: 100vh;
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            background: white;
+            padding: 15px 25px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        .topbar h4 { margin: 0; font-weight: 600; color: #333; }
+
+        .btn-logout {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 8px;
+            font-weight: 500;
+        }
+        .btn-logout:hover { background: #c82333; color: white; }
+
+        .stat-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            height: 100%;
+        }
+        .stat-card .stat-icon {
+            width: 50px; height: 50px;
+            border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+        }
+        .stat-icon.blue { background: linear-gradient(135deg, #0077b6, #00b4d8); }
+        .stat-icon.green { background: linear-gradient(135deg, #28a745, #20c997); }
+        .stat-icon.orange { background: linear-gradient(135deg, #fd7e14, #ffc107); }
+        .stat-icon.purple { background: linear-gradient(135deg, #6f42c1, #e83e8c); }
+        .stat-icon.red { background: linear-gradient(135deg, #dc3545, #e91e63); }
+        .stat-value { font-size: 1.8rem; font-weight: 700; color: #333; }
+        .stat-label { color: #666; font-size: 0.85rem; }
+
+        .content-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+        }
+        .content-card h5 {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 20px;
+            display: flex; align-items: center; gap: 10px;
+        }
+        .content-card h5 i { color: #0077b6; }
+
+        .page-section { display: none; }
+        .page-section.active { display: block; }
+
+        .table th { background: #f8f9fa; font-weight: 600; color: #555; border-top: none; }
+        .table td { vertical-align: middle; }
+
+        .btn-action { padding: 5px 10px; font-size: 0.8rem; }
+
+        .form-label { font-weight: 500; color: #555; }
+        .form-control, .form-select { border-radius: 8px; }
+
+        .modal-header { background: #0077b6; color: white; }
+        .modal-header .btn-close { filter: brightness(0) invert(1); }
+
+        .img-preview { max-width: 100%; max-height: 150px; border-radius: 8px; margin-top: 10px; }
+
+        .chart-container { position: relative; height: 300px; }
+
+        .settings-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid #eee;
+        }
+        .settings-item:last-child { border-bottom: none; }
+
+        @media (max-width: 991px) {
+            .sidebar { transform: translateX(-100%); transition: transform 0.3s; }
+            .sidebar.show { transform: translateX(0); }
+            .main-content { margin-left: 0; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="sidebar" id="sidebar">
+    <div class="sidebar-brand">
+        <h5><i class="bi bi-water text-info me-2"></i>Admin Panel</h5>
+        <small>Underwater Learning</small>
+    </div>
+    
+    <ul class="sidebar-menu">
+        <li><a href="#" class="active" data-page="dashboard"><i class="bi bi-speedometer2"></i> Dashboard</a></li>
+        <div class="menu-divider"></div>
+        <li><a href="#" data-page="lessons"><i class="bi bi-book"></i> จัดการบทเรียน</a></li>
+        <li><a href="#" data-page="videos"><i class="bi bi-play-circle"></i> จัดการวิดีโอ</a></li>
+        <li><a href="#" data-page="games"><i class="bi bi-controller"></i> จัดการเกม</a></li>
+        <li><a href="#" data-page="quizzes"><i class="bi bi-patch-question"></i> จัดการแบบทดสอบ</a></li>
+        <li><a href="#" data-page="news"><i class="bi bi-newspaper"></i> จัดการข่าว</a></li>
+        <div class="menu-divider"></div>
+        <li><a href="#" data-page="stats"><i class="bi bi-bar-chart"></i> สถิติการใช้งาน</a></li>
+        <li><a href="#" data-page="settings"><i class="bi bi-gear"></i> ตั้งค่าระบบ</a></li>
+        <div class="menu-divider"></div>
+        <li><a href="index.html" target="_blank"><i class="bi bi-eye"></i> ดูเว็บไซต์</a></li>
+    </ul>
+</div>
+
+<div class="main-content">
+    <div class="topbar">
+        <div>
+            <button class="btn btn-light d-lg-none me-2" onclick="document.getElementById('sidebar').classList.toggle('show')">
+                <i class="bi bi-list"></i>
+            </button>
+            <span class="fw-bold" id="pageTitle">Dashboard</span>
+        </div>
+        <div class="d-flex align-items-center gap-3">
+            <span class="text-muted small">สวัสดี, <strong id="adminName">Admin</strong></span>
+            <button class="btn btn-logout btn-sm" onclick="logout()">
+                <i class="bi bi-box-arrow-right me-1"></i>ออกจากระบบ
+            </button>
+        </div>
+    </div>
+
+    <!-- Dashboard -->
+    <div class="page-section active" id="page-dashboard">
+        <div class="row g-3 mb-4">
+            <div class="col-md-4 col-lg-2">
+                <div class="stat-card">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <div class="stat-value" id="stat-visitors">0</div>
+                            <div class="stat-label">ผู้เข้าชมวันนี้</div>
+                        </div>
+                        <div class="stat-icon blue"><i class="bi bi-people"></i></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 col-lg-2">
+                <div class="stat-card">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <div class="stat-value" id="stat-lessons">0</div>
+                            <div class="stat-label">บทเรียน</div>
+                        </div>
+                        <div class="stat-icon green"><i class="bi bi-book"></i></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 col-lg-2">
+                <div class="stat-card">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <div class="stat-value" id="stat-videos">0</div>
+                            <div class="stat-label">วิดีโอ</div>
+                        </div>
+                        <div class="stat-icon orange"><i class="bi bi-play-circle"></i></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 col-lg-2">
+                <div class="stat-card">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <div class="stat-value" id="stat-games">0</div>
+                            <div class="stat-label">เกม</div>
+                        </div>
+                        <div class="stat-icon purple"><i class="bi bi-controller"></i></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 col-lg-2">
+                <div class="stat-card">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <div class="stat-value" id="stat-quizzes">0</div>
+                            <div class="stat-label">แบบทดสอบ</div>
+                        </div>
+                        <div class="stat-icon red"><i class="bi bi-patch-question"></i></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 col-lg-2">
+                <div class="stat-card">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <div class="stat-value" id="stat-news">0</div>
+                            <div class="stat-label">ข่าว</div>
+                        </div>
+                        <div class="stat-icon blue"><i class="bi bi-newspaper"></i></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row g-3">
+            <div class="col-lg-8">
+                <div class="content-card">
+                    <h5><i class="bi bi-graph-up"></i> สถิติผู้เข้าชม 7 วันล่าสุด</h5>
+                    <div class="chart-container">
+                        <canvas id="visitorsChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="content-card">
+                    <h5><i class="bi bi-pie-chart"></i> หน้าที่เข้าชมมากสุด</h5>
+                    <div class="chart-container">
+                        <canvas id="pagesChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-card">
+            <h5><i class="bi bi-clock-history"></i> กิจกรรมล่าสุด</h5>
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead>
+                        <tr><th>กิจกรรม</th><th>หน้า</th><th>เวลา</th></tr>
+                    </thead>
+                    <tbody id="recentActivity"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Lessons Management -->
+    <div class="page-section" id="page-lessons">
+        <div class="content-card">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5 class="mb-0"><i class="bi bi-book"></i> จัดการบทเรียน</h5>
+                <button class="btn btn-primary btn-sm" onclick="openModal('lesson')">
+                    <i class="bi bi-plus-lg me-1"></i>เพิ่มบทเรียน
+                </button>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead>
+                        <tr><th width="50">#</th><th>ชื่อบทเรียน</th><th>หมวดหมู่</th><th>สถานะ</th><th width="120">จัดการ</th></tr>
+                    </thead>
+                    <tbody id="lessonsTable"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Videos Management -->
+    <div class="page-section" id="page-videos">
+        <div class="content-card">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5 class="mb-0"><i class="bi bi-play-circle"></i> จัดการวิดีโอ</h5>
+                <button class="btn btn-primary btn-sm" onclick="openModal('video')">
+                    <i class="bi bi-plus-lg me-1"></i>เพิ่มวิดีโอ
+                </button>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead>
+                        <tr><th width="50">#</th><th>ชื่อวิดีโอ</th><th>แหล่งที่มา</th><th>สถานะ</th><th width="120">จัดการ</th></tr>
+                    </thead>
+                    <tbody id="videosTable"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Games Management -->
+    <div class="page-section" id="page-games">
+        <div class="content-card">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5 class="mb-0"><i class="bi bi-controller"></i> จัดการเกม</h5>
+                <button class="btn btn-primary btn-sm" onclick="openModal('game')">
+                    <i class="bi bi-plus-lg me-1"></i>เพิ่มเกม
+                </button>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead>
+                        <tr><th width="50">#</th><th>ชื่อเกม</th><th>ระดับความยาก</th><th>สถานะ</th><th width="120">จัดการ</th></tr>
+                    </thead>
+                    <tbody id="gamesTable"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quizzes Management -->
+    <div class="page-section" id="page-quizzes">
+        <div class="content-card">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5 class="mb-0"><i class="bi bi-patch-question"></i> จัดการแบบทดสอบ</h5>
+                <button class="btn btn-primary btn-sm" onclick="openModal('quiz')">
+                    <i class="bi bi-plus-lg me-1"></i>เพิ่มคำถาม
+                </button>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead>
+                        <tr><th width="50">#</th><th>คำถาม</th><th>คำตอบที่ถูก</th><th>สถานะ</th><th width="120">จัดการ</th></tr>
+                    </thead>
+                    <tbody id="quizzesTable"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- News Management -->
+    <div class="page-section" id="page-news">
+        <div class="content-card">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5 class="mb-0"><i class="bi bi-newspaper"></i> จัดการข่าว</h5>
+                <button class="btn btn-primary btn-sm" onclick="openModal('news')">
+                    <i class="bi bi-plus-lg me-1"></i>เพิ่มข่าว
+                </button>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead>
+                        <tr><th width="50">#</th><th>หัวข้อข่าว</th><th>หมวดหมู่</th><th>วันที่</th><th width="120">จัดการ</th></tr>
+                    </thead>
+                    <tbody id="newsTable"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Statistics -->
+    <div class="page-section" id="page-stats">
+        <div class="row g-3 mb-4">
+            <div class="col-md-3">
+                <div class="stat-card text-center">
+                    <div class="stat-value text-primary" id="total-visitors">0</div>
+                    <div class="stat-label">ผู้เข้าชมทั้งหมด</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-card text-center">
+                    <div class="stat-value text-success" id="total-pageviews">0</div>
+                    <div class="stat-label">จำนวนหน้าที่เปิด</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-card text-center">
+                    <div class="stat-value text-warning" id="total-gameplays">0</div>
+                    <div class="stat-label">เล่นเกมทั้งหมด</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-card text-center">
+                    <div class="stat-value text-info" id="total-quiztakes">0</div>
+                    <div class="stat-label">ทำแบบทดสอบ</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row g-3">
+            <div class="col-lg-6">
+                <div class="content-card">
+                    <h5><i class="bi bi-graph-up"></i> ผู้เข้าชมรายเดือน</h5>
+                    <div class="chart-container">
+                        <canvas id="monthlyChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="content-card">
+                    <h5><i class="bi bi-device-hdd"></i> อุปกรณ์ที่ใช้</h5>
+                    <div class="chart-container">
+                        <canvas id="devicesChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-card">
+            <h5><i class="bi bi-trophy"></i> คะแนนเกมสูงสุด</h5>
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead>
+                        <tr><th>อันดับ</th><th>เกม</th><th>คะแนน</th><th>วันที่</th></tr>
+                    </thead>
+                    <tbody id="highScores"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings -->
+    <div class="page-section" id="page-settings">
+        <div class="content-card">
+            <h5><i class="bi bi-gear"></i> ตั้งค่าทั่วไป</h5>
+            <div class="settings-item">
+                <div>
+                    <strong>ชื่อเว็บไซต์</strong>
+                    <p class="text-muted small mb-0">ชื่อที่แสดงบน Title</p>
+                </div>
+                <input type="text" class="form-control" style="width:250px" id="setting-sitename" value="Underwater Learning">
+            </div>
+            <div class="settings-item">
+                <div>
+                    <strong>คำอธิบายเว็บไซต์</strong>
+                    <p class="text-muted small mb-0">Meta Description</p>
+                </div>
+                <input type="text" class="form-control" style="width:250px" id="setting-description" value="เรียนรู้โลกใต้ทะเล">
+            </div>
+            <div class="settings-item">
+                <div>
+                    <strong>แสดง Intro Animation</strong>
+                    <p class="text-muted small mb-0">หน้าจอต้อนรับเมื่อเข้าเว็บ</p>
+                </div>
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="setting-intro" checked style="width:50px;height:25px;">
+                </div>
+            </div>
+            <div class="settings-item">
+                <div>
+                    <strong>เปิดใช้งาน Google Translate</strong>
+                    <p class="text-muted small mb-0">ปุ่มแปลภาษาบน Navbar</p>
+                </div>
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="setting-translate" checked style="width:50px;height:25px;">
+                </div>
+            </div>
+        </div>
+
+        <div class="content-card">
+            <h5><i class="bi bi-shield-lock"></i> ตั้งค่าผู้ดูแล</h5>
+            <div class="settings-item">
+                <div>
+                    <strong>ชื่อผู้ใช้</strong>
+                    <p class="text-muted small mb-0">ใช้สำหรับเข้าสู่ระบบ</p>
+                </div>
+                <input type="text" class="form-control" style="width:200px" id="setting-username" value="admin">
+            </div>
+            <div class="settings-item">
+                <div>
+                    <strong>รหัสผ่านใหม่</strong>
+                    <p class="text-muted small mb-0">เว้นว่างถ้าไม่ต้องการเปลี่ยน</p>
+                </div>
+                <input type="password" class="form-control" style="width:200px" id="setting-password" placeholder="รหัสผ่านใหม่">
+            </div>
+            <div class="mt-3">
+                <button class="btn btn-primary" onclick="saveSettings()">
+                    <i class="bi bi-check-lg me-1"></i>บันทึกการตั้งค่า
+                </button>
+                <button class="btn btn-outline-danger ms-2" onclick="resetAllData()">
+                    <i class="bi bi-trash me-1"></i>รีเซ็ตข้อมูลทั้งหมด
+                </button>
+            </div>
+        </div>
+
+        <div class="content-card">
+            <h5><i class="bi bi-download"></i> สำรอง/กู้คืนข้อมูล</h5>
+            <p class="text-muted">ข้อมูลทั้งหมดจะถูกบันทึกเป็นไฟล์ JSON</p>
+            <button class="btn btn-success me-2" onclick="exportData()">
+                <i class="bi bi-download me-1"></i>ดาวน์โหลดข้อมูล
+            </button>
+            <label class="btn btn-outline-primary mb-0">
+                <i class="bi bi-upload me-1"></i>นำเข้าข้อมูล
+                <input type="file" accept=".json" onchange="importData(event)" hidden>
+            </label>
+        </div>
+    </div>
+</div>
+
+<!-- Modals -->
+<!-- Lesson Modal -->
+<div class="modal fade" id="lessonModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><i class="bi bi-book me-2"></i><span id="lessonModalTitle">เพิ่มบทเรียน</span></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="lessonId">
+                <div class="mb-3">
+                    <label class="form-label">ชื่อบทเรียน</label>
+                    <input type="text" class="form-control" id="lessonTitle" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">หมวดหมู่</label>
+                    <select class="form-select" id="lessonCategory">
+                        <option value="coral">ปะการัง</option>
+                        <option value="animals">สัตว์ทะเล</option>
+                        <option value="conservation">การอนุรักษ์</option>
+                        <option value="ecosystem">ระบบนิเวศ</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">เนื้อหา</label>
+                    <textarea class="form-control" id="lessonContent" rows="5"></textarea>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">รูปภาพ (URL)</label>
+                    <input type="url" class="form-control" id="lessonImage" placeholder="https://...">
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="lessonActive" checked>
+                    <label class="form-check-label">เปิดใช้งาน</label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ยกเลิก</button>
+                <button type="button" class="btn btn-primary" onclick="saveLesson()">บันทึก</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Video Modal -->
+<div class="modal fade" id="videoModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><i class="bi bi-play-circle me-2"></i><span id="videoModalTitle">เพิ่มวิดีโอ</span></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="videoId">
+                <div class="mb-3">
+                    <label class="form-label">ชื่อวิดีโอ</label>
+                    <input type="text" class="form-control" id="videoTitle" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">YouTube URL หรือ Video ID</label>
+                    <input type="text" class="form-control" id="videoUrl" placeholder="https://youtube.com/watch?v=... หรือ dQw4w9WgXcQ">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">คำอธิบาย</label>
+                    <textarea class="form-control" id="videoDesc" rows="3"></textarea>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="videoActive" checked>
+                    <label class="form-check-label">เปิดใช้งาน</label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ยกเลิก</button>
+                <button type="button" class="btn btn-primary" onclick="saveVideo()">บันทึก</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Game Modal -->
+<div class="modal fade" id="gameModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><i class="bi bi-controller me-2"></i><span id="gameModalTitle">เพิ่มเกม</span></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="gameId">
+                <div class="mb-3">
+                    <label class="form-label">ชื่อเกม</label>
+                    <input type="text" class="form-control" id="gameTitle" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">คำอธิบาย</label>
+                    <textarea class="form-control" id="gameDesc" rows="3"></textarea>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">ระดับความยาก</label>
+                    <select class="form-select" id="gameDifficulty">
+                        <option value="easy">ง่าย</option>
+                        <option value="medium">ปานกลาง</option>
+                        <option value="hard">ยาก</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">รูปภาพ (URL)</label>
+                    <input type="url" class="form-control" id="gameImage" placeholder="https://...">
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="gameActive" checked>
+                    <label class="form-check-label">เปิดใช้งาน</label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ยกเลิก</button>
+                <button type="button" class="btn btn-primary" onclick="saveGame()">บันทึก</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Quiz Modal -->
+<div class="modal fade" id="quizModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><i class="bi bi-patch-question me-2"></i><span id="quizModalTitle">เพิ่มคำถาม</span></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="quizId">
+                <div class="mb-3">
+                    <label class="form-label">คำถาม</label>
+                    <textarea class="form-control" id="quizQuestion" rows="2" required></textarea>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">ตัวเลือกที่ 1</label>
+                    <input type="text" class="form-control" id="quizOpt1" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">ตัวเลือกที่ 2</label>
+                    <input type="text" class="form-control" id="quizOpt2" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">ตัวเลือกที่ 3</label>
+                    <input type="text" class="form-control" id="quizOpt3" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">ตัวเลือกที่ 4</label>
+                    <input type="text" class="form-control" id="quizOpt4" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">คำตอบที่ถูกต้อง</label>
+                    <select class="form-select" id="quizCorrect">
+                        <option value="0">ตัวเลือกที่ 1</option>
+                        <option value="1">ตัวเลือกที่ 2</option>
+                        <option value="2">ตัวเลือกที่ 3</option>
+                        <option value="3">ตัวเลือกที่ 4</option>
+                    </select>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="quizActive" checked>
+                    <label class="form-check-label">เปิดใช้งาน</label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ยกเลิก</button>
+                <button type="button" class="btn btn-primary" onclick="saveQuiz()">บันทึก</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- News Modal -->
+<div class="modal fade" id="newsModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><i class="bi bi-newspaper me-2"></i><span id="newsModalTitle">เพิ่มข่าว</span></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="newsId">
+                <div class="mb-3">
+                    <label class="form-label">หัวข้อข่าว</label>
+                    <input type="text" class="form-control" id="newsTitle" required>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">หมวดหมู่</label>
+                        <select class="form-select" id="newsCategory">
+                            <option value="Marine Science">Marine Science</option>
+                            <option value="Conservation">Conservation</option>
+                            <option value="Wildlife">Wildlife</option>
+                            <option value="Environment">Environment</option>
+                            <option value="Research">Research</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">แหล่งที่มา</label>
+                        <input type="text" class="form-control" id="newsSource" placeholder="เช่น National Geographic">
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">เนื้อหา</label>
+                    <textarea class="form-control" id="newsContent" rows="5"></textarea>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">รูปภาพ (URL)</label>
+                    <input type="url" class="form-control" id="newsImage" placeholder="https://...">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">ลิงก์ต้นทาง (ถ้ามี)</label>
+                    <input type="url" class="form-control" id="newsLink" placeholder="https://...">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ยกเลิก</button>
+                <button type="button" class="btn btn-primary" onclick="saveNews()">บันทึก</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+// ==================== AUTH ====================
+if (localStorage.getItem('adminLoggedIn') !== 'true') {
+    window.location.href = 'login.html';
+}
+document.getElementById('adminName').textContent = localStorage.getItem('adminUsername') || 'Admin';
+
+function logout() {
+    if (confirm('ต้องการออกจากระบบ?')) {
+        localStorage.removeItem('adminLoggedIn');
+        localStorage.removeItem('adminUsername');
+        window.location.href = 'login.html';
+    }
+}
+
+// ==================== NAVIGATION ====================
+document.querySelectorAll('.sidebar-menu a[data-page]').forEach(link => {
+    link.addEventListener('click', function(e) {
+        e.preventDefault();
+        const page = this.dataset.page;
+        
+        document.querySelectorAll('.sidebar-menu a').forEach(a => a.classList.remove('active'));
+        this.classList.add('active');
+        
+        document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
+        document.getElementById('page-' + page).classList.add('active');
+        
+        const titles = {
+            dashboard: 'Dashboard',
+            lessons: 'จัดการบทเรียน',
+            videos: 'จัดการวิดีโอ',
+            games: 'จัดการเกม',
+            quizzes: 'จัดการแบบทดสอบ',
+            news: 'จัดการข่าว',
+            stats: 'สถิติการใช้งาน',
+            settings: 'ตั้งค่าระบบ'
+        };
+        document.getElementById('pageTitle').textContent = titles[page] || 'Dashboard';
+        
+        document.getElementById('sidebar').classList.remove('show');
+    });
+});
+
+// ==================== DATA STORAGE ====================
+const defaultData = {
+    lessons: [
+        { id: 1, title: 'ปะการังและแนวปะการัง', category: 'coral', content: 'ปะการังเป็นสัตว์ทะเลที่สร้างโครงสร้างหินปูน...', image: 'https://images.unsplash.com/photo-1546026423-cc4642628d2b?w=800', active: true },
+        { id: 2, title: 'สัตว์ทะเลหายาก', category: 'animals', content: 'สัตว์ทะเลหายากที่ต้องการการอนุรักษ์...', image: 'https://images.unsplash.com/photo-1583212292454-1fe6229603b7?w=800', active: true },
+        { id: 3, title: 'ปัญหาขยะในทะเล', category: 'conservation', content: 'ขยะพลาสติกเป็นปัญหาใหญ่...', image: 'https://images.unsplash.com/photo-1618477461853-cf6ed80faba5?w=800', active: true }
+    ],
+    videos: [
+        { id: 1, title: 'ความลับของมหาสมุทร', url: 'dQw4w9WgXcQ', desc: 'สารคดีเกี่ยวกับโลกใต้ทะเล', active: true },
+        { id: 2, title: 'ชีวิตในแนวปะการัง', url: '9bZkp7q19f0', desc: 'สำรวจแนวปะการังที่สวยงาม', active: true }
+    ],
+    games: [
+        { id: 1, title: 'Ocean Cleaner', desc: 'เก็บขยะออกจากทะเล', difficulty: 'easy', image: 'https://images.unsplash.com/photo-1618477461853-cf6ed80faba5?w=400', active: true },
+        { id: 2, title: 'Trash Sorter', desc: 'แยกขยะให้ถูกประเภท', difficulty: 'medium', image: 'https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?w=400', active: true },
+        { id: 3, title: 'Sea Quiz', desc: 'ทดสอบความรู้เรื่องทะเล', difficulty: 'medium', image: 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=400', active: true },
+        { id: 4, title: 'Sea Memory', desc: 'จับคู่สัตว์ทะเล', difficulty: 'hard', image: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=400', active: true }
+    ],
+    quizzes: [
+        { id: 1, question: 'ขยะพลาสติกในทะเลใช้เวลาย่อยสลายนานเท่าไหร่?', options: ['50 ปี', '100 ปี', '450 ปี', '10 ปี'], correct: 2, active: true },
+        { id: 2, question: 'สัตว์ทะเลชนิดใดได้รับผลกระทบจากถุงพลาสติกมากที่สุด?', options: ['ปลาฉลาม', 'เต่าทะเล', 'ปลาโลมา', 'ปลาวาฬ'], correct: 1, active: true },
+        { id: 3, question: 'ทะเลผลิตออกซิเจนให้โลกประมาณกี่เปอร์เซ็นต์?', options: ['20%', '50%', '70%', '90%'], correct: 2, active: true }
+    ],
+    news: [
+        { id: 1, title: 'Coral Reefs Show Signs of Recovery', category: 'Marine Science', source: 'National Geographic', content: 'New research reveals that coral reefs...', image: 'https://images.unsplash.com/photo-1546026423-cc4642628d2b?w=800', link: '', date: new Date().toISOString() },
+        { id: 2, title: 'Sea Turtles Return to Nesting Beaches', category: 'Wildlife', source: 'BBC Earth', content: 'Conservation efforts have led to...', image: 'https://images.unsplash.com/photo-1583212292454-1fe6229603b7?w=800', link: '', date: new Date(Date.now() - 86400000).toISOString() }
+    ],
+    stats: {
+        visitors: generateRandomStats(7, 100, 500),
+        pageviews: generateRandomStats(7, 300, 1000),
+        monthly: generateRandomStats(12, 2000, 8000),
+        devices: { desktop: 45, mobile: 40, tablet: 15 },
+        pages: { 'หน้าหลัก': 35, 'บทเรียน': 25, 'วิดีโอ': 20, 'เกม': 15, 'แบบทดสอบ': 5 },
+        totalVisitors: 15420,
+        totalPageviews: 45680,
+        totalGameplays: 8750,
+        totalQuiztakes: 3240,
+        highScores: [
+            { game: 'Ocean Cleaner', score: 980, date: '2025-01-15' },
+            { game: 'Sea Quiz', score: 100, date: '2025-01-14' },
+            { game: 'Sea Memory', score: 12, date: '2025-01-13' }
+        ]
+    },
+    settings: {
+        sitename: 'Underwater Learning',
+        description: 'เรียนรู้โลกใต้ทะเล',
+        showIntro: true,
+        showTranslate: true,
+        username: 'admin',
+        password: 'admin123'
+    },
+    activities: []
+};
+
+function generateRandomStats(count, min, max) {
+    return Array(count).fill(0).map(() => Math.floor(Math.random() * (max - min) + min));
+}
+
+function getData() {
+    const stored = localStorage.getItem('adminData');
+    if (stored) {
+        return JSON.parse(stored);
+    }
+    localStorage.setItem('adminData', JSON.stringify(defaultData));
+    return defaultData;
+}
+
+function saveData(data) {
+    localStorage.setItem('adminData', JSON.stringify(data));
+}
+
+// ==================== RENDER FUNCTIONS ====================
+function renderDashboard() {
+    const data = getData();
+    
+    // Update stats
+    document.getElementById('stat-visitors').textContent = data.stats.visitors[data.stats.visitors.length - 1];
+    document.getElementById('stat-lessons').textContent = data.lessons.length;
+    document.getElementById('stat-videos').textContent = data.videos.length;
+    document.getElementById('stat-games').textContent = data.games.length;
+    document.getElementById('stat-quizzes').textContent = data.quizzes.length;
+    document.getElementById('stat-news').textContent = data.news.length;
+    
+    // Visitors Chart
+    const labels = [];
+    for (let i = 6; i >= 0; i--) {
+        const d = new Date();
+        d.setDate(d.getDate() - i);
+        labels.push(d.toLocaleDateString('th-TH', { day: 'numeric', month: 'short' }));
+    }
+    
+    new Chart(document.getElementById('visitorsChart'), {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'ผู้เข้าชม',
+                data: data.stats.visitors,
+                borderColor: '#0077b6',
+                backgroundColor: 'rgba(0,119,182,0.1)',
+                fill: true,
+                tension: 0.4
+            }]
+        },
+        options: { responsive: true, maintainAspectRatio: false }
+    });
+    
+    // Pages Chart
+    new Chart(document.getElementById('pagesChart'), {
+        type: 'doughnut',
+        data: {
+            labels: Object.keys(data.stats.pages),
+            datasets: [{
+                data: Object.values(data.stats.pages),
+                backgroundColor: ['#0077b6', '#28a745', '#fd7e14', '#6f42c1', '#dc3545']
+            }]
+        },
+        options: { responsive: true, maintainAspectRatio: false }
+    });
+    
+    // Recent Activity
+    const activities = [
+        { action: 'ผู้ใช้เข้าชมบทเรียน', page: 'ปะการังและแนวปะการัง', time: '2 นาทีที่แล้ว' },
+        { action: 'ผู้ใช้เล่นเกม', page: 'Ocean Cleaner', time: '5 นาทีที่แล้ว' },
+        { action: 'ผู้ใช้ทำแบบทดสอบ', page: 'Quiz - สัตว์ทะเล', time: '10 นาทีที่แล้ว' },
+        { action: 'ผู้ใช้ดูวิดีโอ', page: 'ความลับของมหาสมุทร', time: '15 นาทีที่แล้ว' }
+    ];
+    document.getElementById('recentActivity').innerHTML = activities.map(a => 
+        `<tr><td>${a.action}</td><td>${a.page}</td><td class="text-muted">${a.time}</td></tr>`
+    ).join('');
+}
+
+function renderLessons() {
+    const data = getData();
+    const categories = { coral: 'ปะการัง', animals: 'สัตว์ทะเล', conservation: 'การอนุรักษ์', ecosystem: 'ระบบนิเวศ' };
+    document.getElementById('lessonsTable').innerHTML = data.lessons.map((l, i) => `
+        <tr>
+            <td>${i + 1}</td>
+            <td>${l.title}</td>
+            <td><span class="badge bg-secondary">${categories[l.category] || l.category}</span></td>
+            <td><span class="badge ${l.active ? 'bg-success' : 'bg-danger'}">${l.active ? 'เปิด' : 'ปิด'}</span></td>
+            <td>
+                <button class="btn btn-sm btn-outline-primary btn-action" onclick="editLesson(${l.id})"><i class="bi bi-pencil"></i></button>
+                <button class="btn btn-sm btn-outline-danger btn-action" onclick="deleteLesson(${l.id})"><i class="bi bi-trash"></i></button>
+            </td>
+        </tr>
+    `).join('') || '<tr><td colspan="5" class="text-center text-muted">ไม่มีข้อมูล</td></tr>';
+}
+
+function renderVideos() {
+    const data = getData();
+    document.getElementById('videosTable').innerHTML = data.videos.map((v, i) => `
+        <tr>
+            <td>${i + 1}</td>
+            <td>${v.title}</td>
+            <td><span class="badge bg-danger">YouTube</span></td>
+            <td><span class="badge ${v.active ? 'bg-success' : 'bg-danger'}">${v.active ? 'เปิด' : 'ปิด'}</span></td>
+            <td>
+                <button class="btn btn-sm btn-outline-primary btn-action" onclick="editVideo(${v.id})"><i class="bi bi-pencil"></i></button>
+                <button class="btn btn-sm btn-outline-danger btn-action" onclick="deleteVideo(${v.id})"><i class="bi bi-trash"></i></button>
+            </td>
+        </tr>
+    `).join('') || '<tr><td colspan="5" class="text-center text-muted">ไม่มีข้อมูล</td></tr>';
+}
+
+function renderGames() {
+    const data = getData();
+    const diff = { easy: 'ง่าย', medium: 'ปานกลาง', hard: 'ยาก' };
+    const diffClass = { easy: 'bg-success', medium: 'bg-warning', hard: 'bg-danger' };
+    document.getElementById('gamesTable').innerHTML = data.games.map((g, i) => `
+        <tr>
+            <td>${i + 1}</td>
+            <td>${g.title}</td>
+            <td><span class="badge ${diffClass[g.difficulty]}">${diff[g.difficulty]}</span></td>
+            <td><span class="badge ${g.active ? 'bg-success' : 'bg-danger'}">${g.active ? 'เปิด' : 'ปิด'}</span></td>
+            <td>
+                <button class="btn btn-sm btn-outline-primary btn-action" onclick="editGame(${g.id})"><i class="bi bi-pencil"></i></button>
+                <button class="btn btn-sm btn-outline-danger btn-action" onclick="deleteGame(${g.id})"><i class="bi bi-trash"></i></button>
+            </td>
+        </tr>
+    `).join('') || '<tr><td colspan="5" class="text-center text-muted">ไม่มีข้อมูล</td></tr>';
+}
+
+function renderQuizzes() {
+    const data = getData();
+    document.getElementById('quizzesTable').innerHTML = data.quizzes.map((q, i) => `
+        <tr>
+            <td>${i + 1}</td>
+            <td>${q.question.substring(0, 50)}${q.question.length > 50 ? '...' : ''}</td>
+            <td>${q.options[q.correct]}</td>
+            <td><span class="badge ${q.active ? 'bg-success' : 'bg-danger'}">${q.active ? 'เปิด' : 'ปิด'}</span></td>
+            <td>
+                <button class="btn btn-sm btn-outline-primary btn-action" onclick="editQuiz(${q.id})"><i class="bi bi-pencil"></i></button>
+                <button class="btn btn-sm btn-outline-danger btn-action" onclick="deleteQuiz(${q.id})"><i class="bi bi-trash"></i></button>
+            </td>
+        </tr>
+    `).join('') || '<tr><td colspan="5" class="text-center text-muted">ไม่มีข้อมูล</td></tr>';
+}
+
+function renderNews() {
+    const data = getData();
+    document.getElementById('newsTable').innerHTML = data.news.map((n, i) => `
+        <tr>
+            <td>${i + 1}</td>
+            <td>${n.title.substring(0, 40)}${n.title.length > 40 ? '...' : ''}</td>
+            <td><span class="badge bg-info">${n.category}</span></td>
+            <td>${new Date(n.date).toLocaleDateString('th-TH')}</td>
+            <td>
+                <button class="btn btn-sm btn-outline-primary btn-action" onclick="editNews(${n.id})"><i class="bi bi-pencil"></i></button>
+                <button class="btn btn-sm btn-outline-danger btn-action" onclick="deleteNews(${n.id})"><i class="bi bi-trash"></i></button>
+            </td>
+        </tr>
+    `).join('') || '<tr><td colspan="5" class="text-center text-muted">ไม่มีข้อมูล</td></tr>';
+}
+
+function renderStats() {
+    const data = getData();
+    
+    document.getElementById('total-visitors').textContent = data.stats.totalVisitors.toLocaleString();
+    document.getElementById('total-pageviews').textContent = data.stats.totalPageviews.toLocaleString();
+    document.getElementById('total-gameplays').textContent = data.stats.totalGameplays.toLocaleString();
+    document.getElementById('total-quiztakes').textContent = data.stats.totalQuiztakes.toLocaleString();
+    
+    // Monthly Chart
+    const months = ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'];
+    new Chart(document.getElementById('monthlyChart'), {
+        type: 'bar',
+        data: {
+            labels: months,
+            datasets: [{
+                label: 'ผู้เข้าชม',
+                data: data.stats.monthly,
+                backgroundColor: '#0077b6'
+            }]
+        },
+        options: { responsive: true, maintainAspectRatio: false }
+    });
+    
+    // Devices Chart
+    new Chart(document.getElementById('devicesChart'), {
+        type: 'pie',
+        data: {
+            labels: ['Desktop', 'Mobile', 'Tablet'],
+            datasets: [{
+                data: [data.stats.devices.desktop, data.stats.devices.mobile, data.stats.devices.tablet],
+                backgroundColor: ['#0077b6', '#28a745', '#fd7e14']
+            }]
+        },
+        options: { responsive: true, maintainAspectRatio: false }
+    });
+    
+    // High Scores
+    document.getElementById('highScores').innerHTML = data.stats.highScores.map((s, i) => `
+        <tr>
+            <td><span class="badge ${i === 0 ? 'bg-warning' : i === 1 ? 'bg-secondary' : 'bg-dark'}">${i + 1}</span></td>
+            <td>${s.game}</td>
+            <td class="fw-bold">${s.score}</td>
+            <td class="text-muted">${s.date}</td>
+        </tr>
+    `).join('');
+}
+
+function renderSettings() {
+    const data = getData();
+    document.getElementById('setting-sitename').value = data.settings.sitename;
+    document.getElementById('setting-description').value = data.settings.description;
+    document.getElementById('setting-intro').checked = data.settings.showIntro;
+    document.getElementById('setting-translate').checked = data.settings.showTranslate;
+    document.getElementById('setting-username').value = data.settings.username;
+}
+
+// ==================== MODAL FUNCTIONS ====================
+function openModal(type, id = null) {
+    const modal = new bootstrap.Modal(document.getElementById(type + 'Modal'));
+    
+    // Reset form
+    document.getElementById(type + 'Id').value = '';
+    if (type === 'lesson') {
+        document.getElementById('lessonModalTitle').textContent = 'เพิ่มบทเรียน';
+        document.getElementById('lessonTitle').value = '';
+        document.getElementById('lessonCategory').value = 'coral';
+        document.getElementById('lessonContent').value = '';
+        document.getElementById('lessonImage').value = '';
+        document.getElementById('lessonActive').checked = true;
+    } else if (type === 'video') {
+        document.getElementById('videoModalTitle').textContent = 'เพิ่มวิดีโอ';
+        document.getElementById('videoTitle').value = '';
+        document.getElementById('videoUrl').value = '';
+        document.getElementById('videoDesc').value = '';
+        document.getElementById('videoActive').checked = true;
+    } else if (type === 'game') {
+        document.getElementById('gameModalTitle').textContent = 'เพิ่มเกม';
+        document.getElementById('gameTitle').value = '';
+        document.getElementById('gameDesc').value = '';
+        document.getElementById('gameDifficulty').value = 'easy';
+        document.getElementById('gameImage').value = '';
+        document.getElementById('gameActive').checked = true;
+    } else if (type === 'quiz') {
+        document.getElementById('quizModalTitle').textContent = 'เพิ่มคำถาม';
+        document.getElementById('quizQuestion').value = '';
+        document.getElementById('quizOpt1').value = '';
+        document.getElementById('quizOpt2').value = '';
+        document.getElementById('quizOpt3').value = '';
+        document.getElementById('quizOpt4').value = '';
+        document.getElementById('quizCorrect').value = '0';
+        document.getElementById('quizActive').checked = true;
+    } else if (type === 'news') {
+        document.getElementById('newsModalTitle').textContent = 'เพิ่มข่าว';
+        document.getElementById('newsTitle').value = '';
+        document.getElementById('newsCategory').value = 'Marine Science';
+        document.getElementById('newsSource').value = '';
+        document.getElementById('newsContent').value = '';
+        document.getElementById('newsImage').value = '';
+        document.getElementById('newsLink').value = '';
+    }
+    
+    modal.show();
+}
+
+// ==================== CRUD FUNCTIONS ====================
+// Lessons
+function saveLesson() {
+    const data = getData();
+    const id = document.getElementById('lessonId').value;
+    const lesson = {
+        id: id ? parseInt(id) : Date.now(),
+        title: document.getElementById('lessonTitle').value,
+        category: document.getElementById('lessonCategory').value,
+        content: document.getElementById('lessonContent').value,
+        image: document.getElementById('lessonImage').value,
+        active: document.getElementById('lessonActive').checked
+    };
+    
+    if (id) {
+        const idx = data.lessons.findIndex(l => l.id === parseInt(id));
+        if (idx !== -1) data.lessons[idx] = lesson;
+    } else {
+        data.lessons.push(lesson);
+    }
+    
+    saveData(data);
+    bootstrap.Modal.getInstance(document.getElementById('lessonModal')).hide();
+    renderLessons();
+    alert('บันทึกสำเร็จ!');
+}
+
+function editLesson(id) {
+    const data = getData();
+    const lesson = data.lessons.find(l => l.id === id);
+    if (!lesson) return;
+    
+    document.getElementById('lessonId').value = lesson.id;
+    document.getElementById('lessonModalTitle').textContent = 'แก้ไขบทเรียน';
+    document.getElementById('lessonTitle').value = lesson.title;
+    document.getElementById('lessonCategory').value = lesson.category;
+    document.getElementById('lessonContent').value = lesson.content;
+    document.getElementById('lessonImage').value = lesson.image;
+    document.getElementById('lessonActive').checked = lesson.active;
+    
+    new bootstrap.Modal(document.getElementById('lessonModal')).show();
+}
+
+function deleteLesson(id) {
+    if (!confirm('ต้องการลบบทเรียนนี้?')) return;
+    const data = getData();
+    data.lessons = data.lessons.filter(l => l.id !== id);
+    saveData(data);
+    renderLessons();
+}
+
+// Videos
+function saveVideo() {
+    const data = getData();
+    const id = document.getElementById('videoId').value;
+    const video = {
+        id: id ? parseInt(id) : Date.now(),
+        title: document.getElementById('videoTitle').value,
+        url: document.getElementById('videoUrl').value,
+        desc: document.getElementById('videoDesc').value,
+        active: document.getElementById('videoActive').checked
+    };
+    
+    if (id) {
+        const idx = data.videos.findIndex(v => v.id === parseInt(id));
+        if (idx !== -1) data.videos[idx] = video;
+    } else {
+        data.videos.push(video);
+    }
+    
+    saveData(data);
+    bootstrap.Modal.getInstance(document.getElementById('videoModal')).hide();
+    renderVideos();
+    alert('บันทึกสำเร็จ!');
+}
+
+function editVideo(id) {
+    const data = getData();
+    const video = data.videos.find(v => v.id === id);
+    if (!video) return;
+    
+    document.getElementById('videoId').value = video.id;
+    document.getElementById('videoModalTitle').textContent = 'แก้ไขวิดีโอ';
+    document.getElementById('videoTitle').value = video.title;
+    document.getElementById('videoUrl').value = video.url;
+    document.getElementById('videoDesc').value = video.desc;
+    document.getElementById('videoActive').checked = video.active;
+    
+    new bootstrap.Modal(document.getElementById('videoModal')).show();
+}
+
+function deleteVideo(id) {
+    if (!confirm('ต้องการลบวิดีโอนี้?')) return;
+    const data = getData();
+    data.videos = data.videos.filter(v => v.id !== id);
+    saveData(data);
+    renderVideos();
+}
+
+// Games
+function saveGame() {
+    const data = getData();
+    const id = document.getElementById('gameId').value;
+    const game = {
+        id: id ? parseInt(id) : Date.now(),
+        title: document.getElementById('gameTitle').value,
+        desc: document.getElementById('gameDesc').value,
+        difficulty: document.getElementById('gameDifficulty').value,
+        image: document.getElementById('gameImage').value,
+        active: document.getElementById('gameActive').checked
+    };
+    
+    if (id) {
+        const idx = data.games.findIndex(g => g.id === parseInt(id));
+        if (idx !== -1) data.games[idx] = game;
+    } else {
+        data.games.push(game);
+    }
+    
+    saveData(data);
+    bootstrap.Modal.getInstance(document.getElementById('gameModal')).hide();
+    renderGames();
+    alert('บันทึกสำเร็จ!');
+}
+
+function editGame(id) {
+    const data = getData();
+    const game = data.games.find(g => g.id === id);
+    if (!game) return;
+    
+    document.getElementById('gameId').value = game.id;
+    document.getElementById('gameModalTitle').textContent = 'แก้ไขเกม';
+    document.getElementById('gameTitle').value = game.title;
+    document.getElementById('gameDesc').value = game.desc;
+    document.getElementById('gameDifficulty').value = game.difficulty;
+    document.getElementById('gameImage').value = game.image;
+    document.getElementById('gameActive').checked = game.active;
+    
+    new bootstrap.Modal(document.getElementById('gameModal')).show();
+}
+
+function deleteGame(id) {
+    if (!confirm('ต้องการลบเกมนี้?')) return;
+    const data = getData();
+    data.games = data.games.filter(g => g.id !== id);
+    saveData(data);
+    renderGames();
+}
+
+// Quizzes
+function saveQuiz() {
+    const data = getData();
+    const id = document.getElementById('quizId').value;
+    const quiz = {
+        id: id ? parseInt(id) : Date.now(),
+        question: document.getElementById('quizQuestion').value,
+        options: [
+            document.getElementById('quizOpt1').value,
+            document.getElementById('quizOpt2').value,
+            document.getElementById('quizOpt3').value,
+            document.getElementById('quizOpt4').value
+        ],
+        correct: parseInt(document.getElementById('quizCorrect').value),
+        active: document.getElementById('quizActive').checked
+    };
+    
+    if (id) {
+        const idx = data.quizzes.findIndex(q => q.id === parseInt(id));
+        if (idx !== -1) data.quizzes[idx] = quiz;
+    } else {
+        data.quizzes.push(quiz);
+    }
+    
+    saveData(data);
+    bootstrap.Modal.getInstance(document.getElementById('quizModal')).hide();
+    renderQuizzes();
+    alert('บันทึกสำเร็จ!');
+}
+
+function editQuiz(id) {
+    const data = getData();
+    const quiz = data.quizzes.find(q => q.id === id);
+    if (!quiz) return;
+    
+    document.getElementById('quizId').value = quiz.id;
+    document.getElementById('quizModalTitle').textContent = 'แก้ไขคำถาม';
+    document.getElementById('quizQuestion').value = quiz.question;
+    document.getElementById('quizOpt1').value = quiz.options[0];
+    document.getElementById('quizOpt2').value = quiz.options[1];
+    document.getElementById('quizOpt3').value = quiz.options[2];
+    document.getElementById('quizOpt4').value = quiz.options[3];
+    document.getElementById('quizCorrect').value = quiz.correct;
+    document.getElementById('quizActive').checked = quiz.active;
+    
+    new bootstrap.Modal(document.getElementById('quizModal')).show();
+}
+
+function deleteQuiz(id) {
+    if (!confirm('ต้องการลบคำถามนี้?')) return;
+    const data = getData();
+    data.quizzes = data.quizzes.filter(q => q.id !== id);
+    saveData(data);
+    renderQuizzes();
+}
+
+// News
+function saveNews() {
+    const data = getData();
+    const id = document.getElementById('newsId').value;
+    const news = {
+        id: id ? parseInt(id) : Date.now(),
+        title: document.getElementById('newsTitle').value,
+        category: document.getElementById('newsCategory').value,
+        source: document.getElementById('newsSource').value,
+        content: document.getElementById('newsContent').value,
+        image: document.getElementById('newsImage').value,
+        link: document.getElementById('newsLink').value,
+        date: id ? data.news.find(n => n.id === parseInt(id))?.date : new Date().toISOString()
+    };
+    
+    if (id) {
+        const idx = data.news.findIndex(n => n.id === parseInt(id));
+        if (idx !== -1) data.news[idx] = news;
+    } else {
+        data.news.push(news);
+    }
+    
+    saveData(data);
+    bootstrap.Modal.getInstance(document.getElementById('newsModal')).hide();
+    renderNews();
+    alert('บันทึกสำเร็จ!');
+}
+
+function editNews(id) {
+    const data = getData();
+    const news = data.news.find(n => n.id === id);
+    if (!news) return;
+    
+    document.getElementById('newsId').value = news.id;
+    document.getElementById('newsModalTitle').textContent = 'แก้ไขข่าว';
+    document.getElementById('newsTitle').value = news.title;
+    document.getElementById('newsCategory').value = news.category;
+    document.getElementById('newsSource').value = news.source;
+    document.getElementById('newsContent').value = news.content;
+    document.getElementById('newsImage').value = news.image;
+    document.getElementById('newsLink').value = news.link;
+    
+    new bootstrap.Modal(document.getElementById('newsModal')).show();
+}
+
+function deleteNews(id) {
+    if (!confirm('ต้องการลบข่าวนี้?')) return;
+    const data = getData();
+    data.news = data.news.filter(n => n.id !== id);
+    saveData(data);
+    renderNews();
+}
+
+// Settings
+function saveSettings() {
+    const data = getData();
+    data.settings.sitename = document.getElementById('setting-sitename').value;
+    data.settings.description = document.getElementById('setting-description').value;
+    data.settings.showIntro = document.getElementById('setting-intro').checked;
+    data.settings.showTranslate = document.getElementById('setting-translate').checked;
+    data.settings.username = document.getElementById('setting-username').value;
+    
+    const newPassword = document.getElementById('setting-password').value;
+    if (newPassword) {
+        data.settings.password = newPassword;
+    }
+    
+    saveData(data);
+    alert('บันทึกการตั้งค่าสำเร็จ!');
+}
+
+function resetAllData() {
+    if (!confirm('คุณแน่ใจหรือไม่? ข้อมูลทั้งหมดจะถูกรีเซ็ตเป็นค่าเริ่มต้น')) return;
+    if (!confirm('ยืนยันอีกครั้ง - ข้อมูลจะหายทั้งหมด!')) return;
+    
+    localStorage.removeItem('adminData');
+    location.reload();
+}
+
+function exportData() {
+    const data = getData();
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'underwater-learning-backup-' + new Date().toISOString().split('T')[0] + '.json';
+    a.click();
+    URL.revokeObjectURL(url);
+}
+
+function importData(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        try {
+            const data = JSON.parse(e.target.result);
+            if (confirm('นำเข้าข้อมูล? ข้อมูลปัจจุบันจะถูกแทนที่')) {
+                saveData(data);
+                location.reload();
+            }
+        } catch (err) {
+            alert('ไฟล์ไม่ถูกต้อง');
+        }
+    };
+    reader.readAsText(file);
+}
+
+// ==================== INIT ====================
+window.onload = function() {
+    renderDashboard();
+    renderLessons();
+    renderVideos();
+    renderGames();
+    renderQuizzes();
+    renderNews();
+    renderStats();
+    renderSettings();
+};
+</script>
+</body>
+</html>
