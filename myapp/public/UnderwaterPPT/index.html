@@ -227,8 +227,6 @@
                 <li class="nav-item"><a class="nav-link" href="minigame.html">Mini Game</a></li>
                 <li class="nav-item"><a class="nav-link" href="quiz.html">แบบทดสอบ</a></li>
                 <li class="nav-item"><a class="nav-link" href="map.html">แผนที่</a></li>
-                <li class="nav-item mt-3"><a href="login.html"
-                        class="btn btn-primary rounded-pill w-100">เข้าสู่ระบบ</a></li>
             </ul>
         </div>
     </div>
@@ -345,7 +343,6 @@
             </div>
 
             <div class="row g-4" id="news-container">
-                <!-- Skeleton Loading -->
                 <div class="col-md-4">
                     <div class="news-card">
                         <div class="news-skeleton" style="height: 200px;"></div>
@@ -404,188 +401,7 @@
         src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
     <script>
-        setInterval(() => {
-            const frame = document.querySelector('.goog-te-banner-frame');
-            if (frame) frame.style.display = 'none';
-            document.body.style.top = '0';
-        }, 300);
-
-        // =====================================================
-        // ข้อมูลข่าวเหมือนกับ news-detail.html (SHARED DATA)
-        // =====================================================
-
-        const FALLBACK_NEWS = [
-            {
-                id: 0,
-                sourceName: "National Geographic",
-                category: "Marine Science",
-                title: "Coral Reefs Show Signs of Recovery in Protected Areas",
-                date: new Date().toISOString(),
-                image: "https://images.unsplash.com/photo-1546026423-cc4642628d2b?w=800",
-                descClean: "New research reveals that coral reefs in marine protected areas are showing remarkable recovery after years of conservation efforts."
-            },
-            {
-                id: 1,
-                sourceName: "BBC Earth",
-                category: "Wildlife",
-                title: "Sea Turtles Return to Nesting Beaches in Record Numbers",
-                date: new Date(Date.now() - 86400000).toISOString(),
-                image: "https://images.unsplash.com/photo-1583212292454-1fe6229603b7?w=800",
-                descClean: "Conservation efforts have led to a significant increase in sea turtle nesting activities across tropical beaches worldwide."
-            },
-            {
-                id: 2,
-                sourceName: "Ocean Conservancy",
-                category: "Conservation",
-                title: "Global Initiative Removes 1 Million Tons of Ocean Plastic",
-                date: new Date(Date.now() - 172800000).toISOString(),
-                image: "https://images.unsplash.com/photo-1618477461853-cf6ed80faba5?w=800",
-                descClean: "A worldwide cleanup effort has successfully removed over one million tons of plastic waste from the world's oceans."
-            },
-            {
-                id: 3,
-                sourceName: "NOAA",
-                category: "Research",
-                title: "New Deep-Sea Species Discovered Near Hydrothermal Vents",
-                date: new Date(Date.now() - 259200000).toISOString(),
-                image: "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800",
-                descClean: "Scientists have discovered several new species of marine life thriving near hydrothermal vents in the Pacific Ocean."
-            },
-            {
-                id: 4,
-                sourceName: "Marine Biology Journal",
-                category: "Marine Science",
-                title: "Whale Migration Patterns Shift Due to Ocean Warming",
-                date: new Date(Date.now() - 345600000).toISOString(),
-                image: "https://images.unsplash.com/photo-1568430462989-44163eb1752f?w=800",
-                descClean: "Research shows that whale migration routes are changing as ocean temperatures rise, affecting their feeding and breeding habits."
-            },
-            {
-                id: 5,
-                sourceName: "WWF",
-                category: "Conservation",
-                title: "Mangrove Restoration Project Protects Coastal Communities",
-                date: new Date(Date.now() - 432000000).toISOString(),
-                image: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800",
-                descClean: "New mangrove restoration initiatives are helping protect coastal communities from storms while providing habitat for marine life."
-            },
-            {
-                id: 6,
-                sourceName: "Oceana",
-                category: "Policy",
-                title: "New Marine Protected Areas Established in Southeast Asia",
-                date: new Date(Date.now() - 518400000).toISOString(),
-                image: "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800",
-                descClean: "Several Southeast Asian countries have announced the creation of new marine protected areas to safeguard biodiversity."
-            },
-            {
-                id: 7,
-                sourceName: "Science Daily",
-                category: "Research",
-                title: "Ocean Acidification Effects on Shellfish Population Studied",
-                date: new Date(Date.now() - 604800000).toISOString(),
-                image: "https://images.unsplash.com/photo-1582967788606-a171f1080ca8?w=800",
-                descClean: "New study examines how increasing ocean acidification is affecting shellfish populations and marine food chains."
-            },
-            {
-                id: 8,
-                sourceName: "The Guardian",
-                category: "Environment",
-                title: "Sustainable Fishing Practices Gain Momentum Globally",
-                date: new Date(Date.now() - 691200000).toISOString(),
-                image: "https://images.unsplash.com/photo-1535131749006-b7f58c99034b?w=800",
-                descClean: "More fishing communities are adopting sustainable practices to ensure healthy fish populations for future generations."
-            }
-        ];
-
-        function extractImageFromDesc(desc) {
-            if (!desc) return null;
-            const imgMatch = desc.match(/<img[^>]+src=["']([^"']+)["']/i);
-            return imgMatch ? imgMatch[1] : null;
-        }
-
-        const RSS_SOURCES = [
-            { name: "ScienceDaily", url: "https://www.sciencedaily.com/rss/plants_animals/marine_biology.xml", category: "Marine Science" },
-            { name: "Phys.org", url: "https://phys.org/rss-feed/earth-news/environment/", category: "Environment" }
-        ];
-
-        async function fetchNews() {
-            const container = document.getElementById('news-container');
-            let allNews = [];
-
-            try {
-                // ลองดึงจาก RSS
-                const fetchPromises = RSS_SOURCES.map(source =>
-                    fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(source.url)}&count=10`)
-                        .then(res => res.json())
-                        .then(data => {
-                            if (data.status === 'ok' && data.items && data.items.length > 0) {
-                                return data.items.map((item, idx) => {
-                                    let imageUrl = item.enclosure?.link || item.thumbnail || extractImageFromDesc(item.description) || null;
-                                    return {
-                                        sourceName: source.name,
-                                        category: source.category,
-                                        title: item.title,
-                                        date: item.pubDate,
-                                        image: imageUrl,
-                                        descClean: item.description?.replace(/<[^>]*>/g, '').substring(0, 150) + '...'
-                                    };
-                                });
-                            }
-                            return [];
-                        })
-                        .catch(() => [])
-                );
-
-                const results = await Promise.all(fetchPromises);
-                allNews = results.flat();
-
-                if (allNews.length > 0) {
-                    allNews.sort((a, b) => new Date(b.date) - new Date(a.date));
-                }
-
-            } catch (error) {
-                console.error("RSS Error:", error);
-            }
-
-            // ถ้า RSS ไม่ทำงาน ใช้ FALLBACK_NEWS (ข้อมูลเดียวกับ news-detail.html)
-            if (allNews.length === 0) {
-                allNews = FALLBACK_NEWS;
-            }
-
-            // กำหนด ID
-            allNews = allNews.map((item, index) => ({ ...item, id: index }));
-
-            // แสดง 3 ข่าวแรก
-            const latestNews = allNews.slice(0, 3);
-
-            container.innerHTML = latestNews.map((news, idx) => `
-                <div class="col-md-4" data-aos="fade-up" data-aos-delay="${idx * 100}">
-                    <a href="news-detail.html?id=${news.id}" class="text-decoration-none">
-                        <div class="news-card">
-                            <img src="${news.image || 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800'}" 
-                                 class="news-img" alt="${news.title}"
-                                 onerror="this.src='https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800'">
-                            <div class="card-body">
-                                <span class="badge bg-primary bg-opacity-10 text-primary mb-2">${news.category}</span>
-                                <h5 class="news-title">${news.title}</h5>
-                                <p class="text-secondary small mb-2" style="display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">${news.descClean}</p>
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <span class="small text-muted"><i class="bi bi-clock me-1"></i>${new Date(news.date).toLocaleDateString('th-TH')}</span>
-                                    <span class="small text-muted">${news.sourceName}</span>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-            `).join('');
-
-            // Refresh AOS animations
-            if (typeof AOS !== 'undefined') {
-                AOS.refresh();
-            }
-        }
-
+        // --- 1. จัดการ Intro Screen ---
         function createIntroBubbles() {
             const container = document.getElementById('bubbles-intro');
             if (!container) return;
@@ -622,11 +438,9 @@
                     }, 2500);
                 }
             }
-
-            // ดึงข่าวจากระบบเดียวกับ news-detail.html
-            fetchNews();
         });
 
+        // --- 2. Smart Navbar ---
         let lastScrollTop = 0;
         const navbar = document.querySelector('.navbar');
         window.addEventListener('scroll', function () {
@@ -639,6 +453,76 @@
             navbar.style.boxShadow = scrollTop > 10 ? '0 4px 20px rgba(0,0,0,0.1)' : 'none';
             lastScrollTop = scrollTop;
         });
+
+        // --- 3. ซ่อน Google Translate Banner ---
+        setInterval(() => {
+            const frame = document.querySelector('.goog-te-banner-frame');
+            if (frame) frame.style.display = 'none';
+            document.body.style.top = '0';
+        }, 300);
+    </script>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getFirestore, collection, getDocs, query, limit, orderBy } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAifapE2aLzu3UUDsWwVaNK5OhwgTo0x0Y",
+            authDomain: "ppt21-92f97.firebaseapp.com",
+            projectId: "ppt21-92f97",
+            storageBucket: "ppt21-92f97.firebasestorage.app",
+            messagingSenderId: "171020058825",
+            appId: "1:171020058825:web:2a6216cb9bfece19cf8d18"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        async function loadHomeNews() {
+            const container = document.getElementById('news-container');
+            try {
+                // ดึงข้อมูลข่าวสาร 3 อันล่าสุด เรียงตามวันที่ (ถ้ามีฟิลด์ date)
+                const q = query(collection(db, "news"), limit(3));
+                const snapshot = await getDocs(q);
+                let html = "";
+                
+                if (snapshot.empty) {
+                    container.innerHTML = "<p class='text-center text-muted'>ยังไม่มีข่าวสารอัปเดตในขณะนี้</p>";
+                    return;
+                }
+
+                snapshot.forEach((doc) => {
+                    const news = doc.data();
+                    html += `
+                    <div class="col-md-4" data-aos="fade-up">
+                        <a href="news-detail.html?id=${doc.id}" class="text-decoration-none">
+                            <div class="news-card">
+                                <img src="${news.image}" class="news-img" onerror="this.src='https://via.placeholder.com/400x250?text=Underwater+Learning'">
+                                <div class="card-body">
+                                    <span class="badge bg-primary bg-opacity-10 text-primary mb-2">${news.category || 'ข่าวทั่วไป'}</span>
+                                    <h5 class="news-title">${news.title}</h5>
+                                    <p class="text-secondary small">${news.content ? news.content.substring(0, 100) + '...' : ''}</p>
+                                    <div class="d-flex justify-content-between align-items-center mt-3">
+                                        <small class="text-muted"><i class="bi bi-calendar3 me-1"></i> ${news.date || ''}</small>
+                                        <span class="text-primary fw-bold small">อ่านต่อ <i class="bi bi-arrow-right"></i></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>`;
+                });
+                container.innerHTML = html;
+                
+                // สั่งให้ AOS ทำงานซ้ำหลังจากโหลดข้อมูลเสร็จ
+                if(window.AOS) AOS.refresh();
+                
+            } catch (e) { 
+                console.error("Firebase Error:", e);
+                container.innerHTML = "<p class='text-center text-danger'>ขออภัย เกิดข้อผิดพลาดในการโหลดข้อมูล</p>";
+            }
+        }
+
+        loadHomeNews();
     </script>
 </body>
 

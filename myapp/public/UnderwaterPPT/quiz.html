@@ -4,171 +4,82 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>แบบทดสอบ - Underwater Learning</title>
-    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
-
     <style>
-        /* --- Clean & Modern Quiz Styles (Fixed Footer) --- */
+        body { background-color: #f0f8ff; top: 0px !important; position: static !important; }
+        .goog-te-banner-frame { display: none !important; }
         
-        body {
-            font-family: 'Kanit', sans-serif;
-            background-color: #f8f9fa;
-            color: #333;
-            overflow-x: hidden;
-            /* Sticky Footer Setup */
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
+        .quiz-hero {
+            background: linear-gradient(120deg, #89f7fe 0%, #66a6ff 100%);
+            color: white;
+            padding: 100px 0 60px;
+            border-radius: 0 0 50px 50px;
+            margin-bottom: 40px;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(102, 166, 255, 0.4);
         }
-
-        /* Navbar */
-        .navbar {
-            background-color: rgba(255, 255, 255, 0.98);
-            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
-            padding: 15px 0;
-        }
-        .navbar-brand { color: #007bff !important; font-weight: 800; font-size: 1.6rem; }
-        .nav-link { color: #555 !important; font-weight: 500; margin: 0 10px; }
-        .nav-link:hover, .nav-link.active { color: #007bff !important; }
-
-        /* Quiz Section (Main Content) */
-        main.quiz-section {
-            padding-top: 120px;
-            padding-bottom: 80px;
-            flex: 1; /* ดัน Footer ไปล่างสุด */
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: flex-start; /* เริ่มจากด้านบน */
-        }
-
-        /* Quiz Card */
-        .quiz-card {
-            background: #ffffff;
-            border-radius: 24px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.05);
-            padding: 40px;
-            width: 100%;
-            max-width: 800px;
-            margin: 0 auto;
-            border: 1px solid #fff;
-            box-sizing: border-box;
+        
+        .question-card {
+            background: white;
+            border-radius: 20px;
+            padding: 35px;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            border: 1px solid rgba(0,0,0,0.05);
+            transition: 0.3s;
+            position: relative;
             overflow: hidden;
         }
-
-        .question-box {
-            margin-bottom: 40px;
-            padding-bottom: 30px;
-            border-bottom: 1px solid #f0f0f0;
-        }
-        .question-box:last-child { border-bottom: none; margin-bottom: 0; }
-
-        .question-title {
-            font-weight: 600;
-            font-size: 1.2rem;
-            color: #2c3e50;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: flex-start;
-            gap: 15px;
+        .question-card:hover { transform: translateY(-5px); box-shadow: 0 15px 40px rgba(0,0,0,0.1); }
+        .question-card::before {
+            content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 6px;
+            background: #66a6ff;
         }
         
-        .q-number {
-            background: #e7f1ff; color: #007bff;
-            min-width: 35px; height: 35px;
-            border-radius: 10px;
-            display: flex; align-items: center; justify-content: center;
-            font-weight: 800;
-            margin-top: 2px;
-        }
-
-        /* Option Label */
-        .option-label {
-            display: flex; 
-            align-items: center;
-            width: auto; 
-            background: #fff;
+        .option-box {
             border: 2px solid #e9ecef;
             border-radius: 12px;
-            padding: 15px 20px;
-            margin-bottom: 10px;
-            cursor: pointer;
+            padding: 12px 20px;
+            margin-bottom: 12px;
             transition: all 0.2s ease;
-            position: relative;
-            box-sizing: border-box;
+            cursor: pointer;
         }
-
-        .option-label:hover {
-            border-color: #007bff;
-            background: #f8fbff;
-            transform: translateY(-2px);
-        }
-
-        /* Hide Radio Input */
-        .option-input {
-            position: absolute; opacity: 0; cursor: pointer; height: 0; width: 0;
-        }
-
-        /* Checked State */
-        .option-input:checked + .option-content { color: #007bff; font-weight: 600; }
-        .option-label.selected {
-            border-color: #007bff; background-color: #e7f1ff; box-shadow: 0 4px 12px rgba(0, 123, 255, 0.15);
-        }
-
-        .option-content {
-            display: flex; align-items: center; gap: 10px; font-size: 1rem; color: #555; width: 100%;
-        }
+        .option-box:hover { background-color: #f1f9ff; border-color: #66a6ff; }
         
-        /* Button */
-        .btn-submit-quiz {
-            background: linear-gradient(135deg, #007bff, #0056b3);
-            color: white; border: none; padding: 15px 50px;
-            border-radius: 50px; font-size: 1.2rem; font-weight: 600;
-            box-shadow: 0 10px 30px rgba(0, 123, 255, 0.3);
-            transition: 0.3s; display: inline-block;
-        }
-        .btn-submit-quiz:hover {
-            transform: translateY(-3px); box-shadow: 0 15px 40px rgba(0, 123, 255, 0.4); color: white;
+        /* ซ่อน Radio เดิม แล้วแต่ง Style ใหม่ */
+        .form-check-input { display: none; } 
+        .form-check-input:checked + .form-check-label { color: #0d6efd; font-weight: bold; }
+        .option-box:has(.form-check-input:checked) {
+            background-color: #e7f1ff;
+            border-color: #0d6efd;
+            box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.2);
         }
 
-        /* Mobile Fixes */
-        @media (max-width: 576px) {
-            .quiz-section { padding-left: 15px; padding-right: 15px; }
-            .quiz-card { padding: 25px 15px; }
-            .question-title { font-size: 1.1rem; }
-            .option-label { padding: 12px 15px; }
-        }
-
-        /* Footer */
-        footer {
-            background-color: #f8f9fa;
-            padding: 30px 0;
-            border-top: 1px solid #eee;
-            text-align: center;
-            width: 100%;
-            margin-top: auto; /* ดันตัวเองไปล่างสุด */
-        }
+        #google_translate_element { display: inline-block; }
+        .goog-te-gadget-simple { background-color: #fff !important; border: 1px solid #dee2e6 !important; padding: 6px 12px !important; border-radius: 50px !important; }
     </style>
 </head>
 <body>
-    
+
     <nav class="navbar navbar-expand-lg fixed-top">
         <div class="container">
             <a class="navbar-brand d-flex align-items-center" href="index.html">
                 <i class="bi bi-water me-2 text-primary" style="font-size: 1.8rem;"></i>
                 <div class="d-flex flex-column lh-1">
-                    <span style="font-weight: 800; font-size: 1.6rem; letter-spacing: -0.5px;">Underwater Learning</span>
+                    <span style="font-weight: 800; font-size: 1.6rem; letter-spacing: -0.5px;">Underwater
+                        Learning</span>
                     <small class="text-muted" style="font-size: 0.85rem; font-weight: 400; margin-top: 2px;">
                         Voice Beneath the Waves
                     </small>
                 </div>
             </a>
-            
-            <button class="navbar-toggler border-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar">
+
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="offcanvas"
+                data-bs-target="#offcanvasNavbar">
                 <i class="bi bi-list fs-2 text-dark"></i>
             </button>
 
@@ -196,236 +107,165 @@
                 <li class="nav-item"><a class="nav-link" href="minigame.html">Mini Game</a></li>
                 <li class="nav-item"><a class="nav-link active" href="quiz.html">แบบทดสอบ</a></li>
                 <li class="nav-item"><a class="nav-link" href="map.html">แผนที่</a></li>
-                <li class="nav-item mt-3"><a href="login.html" class="btn btn-primary rounded-pill w-100">เข้าสู่ระบบ</a></li>
             </ul>
         </div>
     </div>
 
-    <main class="quiz-section">
+    <header class="quiz-hero" data-aos="fade-down">
         <div class="container">
-            <div class="text-center mb-5" data-aos="fade-down">
-                <span class="badge bg-primary bg-opacity-10 text-primary px-3 py-2 rounded-pill mb-3">Quiz Time</span>
-                <h1 class="fw-bold display-5 mb-2">ทดสอบความรู้โลกใต้ทะเล</h1>
-                <p class="text-muted">ลองดูซิว่าคุณรู้จักมหาสมุทรดีแค่ไหน?</p>
-            </div>
-
-            <form id="quizForm" class="quiz-card" data-aos="fade-up">
-                
-                <div class="question-box">
-                    <div class="question-title">
-                        <div class="q-number">1</div>
-                        <div>สัตว์ชนิดใดถือเป็น "นักล่าสูงสุด" (Apex Predator) ในห่วงโซ่อาหารทางทะเลส่วนใหญ่?</div>
-                    </div>
-                    <label class="option-label" onclick="selectOption(this)">
-                        <input type="radio" name="q1" value="0" class="option-input">
-                        <div class="option-content"><i class="bi bi-circle me-2"></i> เต่าทะเล</div>
-                    </label>
-                    <label class="option-label" onclick="selectOption(this)">
-                        <input type="radio" name="q1" value="1" class="option-input">
-                        <div class="option-content"><i class="bi bi-circle me-2"></i> ฉลาม</div>
-                    </label>
-                    <label class="option-label" onclick="selectOption(this)">
-                        <input type="radio" name="q1" value="0" class="option-input">
-                        <div class="option-content"><i class="bi bi-circle me-2"></i> ปลาการ์ตูน</div>
-                    </label>
-                </div>
-
-                <div class="question-box">
-                    <div class="question-title">
-                        <div class="q-number">2</div>
-                        <div>ปรากฏการณ์ "ปะการังฟอกขาว" เกิดจากสาเหตุใดเป็นหลัก?</div>
-                    </div>
-                    <label class="option-label" onclick="selectOption(this)">
-                        <input type="radio" name="q2" value="0" class="option-input">
-                        <div class="option-content"><i class="bi bi-circle me-2"></i> ปลากินปะการังมากเกินไป</div>
-                    </label>
-                    <label class="option-label" onclick="selectOption(this)">
-                        <input type="radio" name="q2" value="0" class="option-input">
-                        <div class="option-content"><i class="bi bi-circle me-2"></i> น้ำทะเลเย็นเกินไป</div>
-                    </label>
-                    <label class="option-label" onclick="selectOption(this)">
-                        <input type="radio" name="q2" value="1" class="option-input">
-                        <div class="option-content"><i class="bi bi-circle me-2"></i> อุณหภูมิน้ำทะเลสูงขึ้น (โลกร้อน)</div>
-                    </label>
-                </div>
-
-                <div class="question-box">
-                    <div class="question-title">
-                        <div class="q-number">3</div>
-                        <div>ขยะชนิดใดใช้เวลาย่อยสลายในทะเลนานที่สุด?</div>
-                    </div>
-                    <label class="option-label" onclick="selectOption(this)">
-                        <input type="radio" name="q3" value="1" class="option-input">
-                        <div class="option-content"><i class="bi bi-circle me-2"></i> ขวดพลาสติก</div>
-                    </label>
-                    <label class="option-label" onclick="selectOption(this)">
-                        <input type="radio" name="q3" value="0" class="option-input">
-                        <div class="option-content"><i class="bi bi-circle me-2"></i> เศษกระดาษ</div>
-                    </label>
-                    <label class="option-label" onclick="selectOption(this)">
-                        <input type="radio" name="q3" value="0" class="option-input">
-                        <div class="option-content"><i class="bi bi-circle me-2"></i> เศษอาหาร</div>
-                    </label>
-                </div>
-
-                <div class="question-box">
-                    <div class="question-title">
-                        <div class="q-number">4</div>
-                        <div>สัตว์วันชนิดใด *ไม่ใช่* ปลา?</div>
-                    </div>
-                    <label class="option-label" onclick="selectOption(this)">
-                        <input type="radio" name="q4" value="0" class="option-input">
-                        <div class="option-content"><i class="bi bi-circle me-2"></i> ฉลามวาฬ</div>
-                    </label>
-                    <label class="option-label" onclick="selectOption(this)">
-                        <input type="radio" name="q4" value="1" class="option-input">
-                        <div class="option-content"><i class="bi bi-circle me-2"></i> วาฬสีน้ำเงิน</div>
-                    </label>
-                    <label class="option-label" onclick="selectOption(this)">
-                        <input type="radio" name="q4" value="0" class="option-input">
-                        <div class="option-content"><i class="bi bi-circle me-2"></i> ม้าน้ำ</div>
-                    </label>
-                </div>
-
-                <div class="question-box">
-                    <div class="question-title">
-                        <div class="q-number">5</div>
-                        <div>เราควรทำอย่างไรเพื่อช่วยอนุรักษ์แนวปะการัง?</div>
-                    </div>
-                    <label class="option-label" onclick="selectOption(this)">
-                        <input type="radio" name="q5" value="0" class="option-input">
-                        <div class="option-content"><i class="bi bi-circle me-2"></i> เก็บปะการังมาเลี้ยงที่บ้าน</div>
-                    </label>
-                    <label class="option-label" onclick="selectOption(this)">
-                        <input type="radio" name="q5" value="1" class="option-input">
-                        <div class="option-content"><i class="bi bi-circle me-2"></i> ไม่เหยียบหรือสัมผัสปะการัง</div>
-                    </label>
-                    <label class="option-label" onclick="selectOption(this)">
-                        <input type="radio" name="q5" value="0" class="option-input">
-                        <div class="option-content"><i class="bi bi-circle me-2"></i> ให้อาหารปลาเยอะๆ</div>
-                    </label>
-                </div>
-
-                <div class="text-center mt-5">
-                    <button type="button" class="btn-submit-quiz" onclick="submitQuiz()">
-                        <i class="bi bi-send-check me-2"></i> ส่งคำตอบ
-                    </button>
-                </div>
-            </form>
+            <h1 class="display-4 fw-bold"><i class="bi bi-patch-question-fill"></i> ทดสอบความรู้</h1>
+            <p class="lead opacity-90">มารู้วัดระดับความรู้เกี่ยวกับโลกใต้ทะเลกันเถอะ!</p>
         </div>
-    </main>
+    </header>
 
-    <div class="modal fade" id="scoreModal" tabindex="-1">
+    <div class="container pb-5">
+        <div id="quiz-container" class="row justify-content-center">
+            <div class="col-lg-8 text-center py-5">
+                <div class="spinner-border text-primary" role="status"></div>
+                <p class="mt-3 text-muted">กำลังโหลดข้อสอบ...</p>
+            </div>
+        </div>
+        
+        <div class="row justify-content-center mt-4 d-none" id="submit-section">
+            <div class="col-lg-6">
+                <button class="btn btn-primary w-100 py-3 rounded-pill fs-5 fw-bold shadow-lg" onclick="submitQuiz()">
+                    <i class="bi bi-send-check me-2"></i> ส่งคำตอบ
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="scoreModal" tabindex="-1" data-bs-backdrop="static">
         <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content text-center border-0 rounded-4 p-4">
+            <div class="modal-content text-center p-4 border-0 rounded-4 shadow-lg">
                 <div class="modal-body">
                     <div class="mb-3">
-                        <i class="bi bi-trophy-fill text-warning" style="font-size: 5rem; filter: drop-shadow(0 5px 15px rgba(255, 193, 7, 0.4));"></i>
+                        <i class="bi bi-trophy-fill text-warning display-1"></i>
                     </div>
-                    <h2 class="fw-bold mb-2">ผลการทดสอบ</h2>
-                    <h1 class="display-3 fw-bold text-primary mb-3"><span id="quizScore">0</span><span class="fs-4 text-muted">/5</span></h1>
-                    <p id="feedbackText" class="text-secondary fs-5 mb-4"></p>
-                    
-                    <div class="d-flex gap-2 justify-content-center">
-                        <a href="lessons.html" class="btn btn-light rounded-pill px-4 fw-bold">ทบทวนบทเรียน</a>
-                        <a href="scores.html" class="btn btn-primary rounded-pill px-4 fw-bold">ดูอันดับ</a>
-                    </div>
+                    <h2 class="fw-bold mb-2">คะแนนของคุณ</h2>
+                    <h1 class="display-2 fw-bold text-primary mb-3" id="scoreText">0/0</h1>
+                    <p class="text-muted fs-5" id="scoreMsg">พยายามเข้านะ!</p>
+                    <button class="btn btn-primary rounded-pill px-5 py-2 mt-3 fw-bold" onclick="location.reload()">
+                        <i class="bi bi-arrow-clockwise me-1"></i> ทำอีกครั้ง
+                    </button>
                 </div>
             </div>
         </div>
     </div>
 
-    <footer>
+    <footer class="text-center py-4 bg-white mt-auto border-top">
         <div class="container">
-            <p class="text-muted mb-0 small">© 2025 Underwater Learning. All rights reserved.</p>
+            <p class="text-secondary mb-0">© 2025 Underwater Learning. All rights reserved.</p>
         </div>
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    <script>
-        AOS.init({ once: true, offset: 50 });
+    <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
-        // ฟังก์ชันเลือกคำตอบ (เปลี่ยนสีปุ่ม)
-        function selectOption(label) {
-            // หา container แม่ (question-box)
-            const questionBox = label.closest('.question-box');
+    <script>
+        AOS.init({ duration: 800, once: true });
+        
+        function googleTranslateElementInit() { new google.translate.TranslateElement({ pageLanguage: 'en', includedLanguages: 'en,th,ja,zh-CN', layout: google.translate.TranslateElement.InlineLayout.SIMPLE, autoDisplay: false }, 'google_translate_element'); }
+        function moveTranslateWidget() {
+            const w = document.getElementById('google_translate_element'), d = document.getElementById('desktop-translate-container'), m = document.getElementById('mobile-translate-container');
+            if (window.innerWidth < 992) { if (m && w) m.appendChild(w); } else { if (d && w) d.appendChild(w); }
+        }
+        window.addEventListener('resize', moveTranslateWidget); window.addEventListener('load', moveTranslateWidget);
+        setInterval(() => { const f = document.querySelector('.goog-te-banner-frame'); if (f) f.style.display = 'none'; document.body.style.top = '0'; }, 300);
+    </script>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAifapE2aLzu3UUDsWwVaNK5OhwgTo0x0Y",
+            authDomain: "ppt21-92f97.firebaseapp.com",
+            projectId: "ppt21-92f97",
+            storageBucket: "ppt21-92f97.firebasestorage.app",
+            messagingSenderId: "171020058825",
+            appId: "1:171020058825:web:2a6216cb9bfece19cf8d18",
+            measurementId: "G-6J5D16LK4Q"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        
+        let correctAnswers = [];
+
+        async function loadQuiz() {
+            const container = document.getElementById('quiz-container');
+            try {
+                const snapshot = await getDocs(collection(db, "quizzes"));
+                
+                if (snapshot.empty) {
+                    container.innerHTML = `<div class="col-12 text-center text-muted py-5"><i class="bi bi-clipboard-x fs-1"></i><p class="mt-2">ยังไม่มีแบบทดสอบในระบบ</p></div>`;
+                    return;
+                }
+
+                let html = "";
+                let count = 0;
+                correctAnswers = [];
+
+                snapshot.forEach((doc) => {
+                    const q = doc.data();
+                    if (q.active) {
+                        count++;
+                        correctAnswers.push(q.ans); // เก็บเฉลยไว้
+                        
+                        html += `
+                        <div class="col-lg-8" data-aos="fade-up" data-aos-delay="${count * 50}">
+                            <div class="question-card">
+                                <h5 class="fw-bold mb-4 text-dark"><span class="badge bg-primary me-2">ข้อ ${count}</span> ${q.q}</h5>
+                                <div class="d-flex flex-column gap-2">
+                                    ${q.opts.map((opt, i) => `
+                                        <label class="option-box d-flex align-items-center">
+                                            <input class="form-check-input me-3" type="radio" name="q_${count-1}" value="${i}">
+                                            <span class="form-check-label">${opt}</span>
+                                        </label>
+                                    `).join('')}
+                                </div>
+                            </div>
+                        </div>`;
+                    }
+                });
+
+                container.innerHTML = html;
+                if(count > 0) document.getElementById('submit-section').classList.remove('d-none');
+                
+            } catch (e) {
+                console.error(e);
+                container.innerHTML = `<p class="text-center text-danger">เกิดข้อผิดพลาดในการโหลดข้อสอบ</p>`;
+            }
+        }
+
+        window.submitQuiz = () => {
+            let score = 0;
+            let answered = 0;
             
-            // ลบคลาส selected จากทุกปุ่มในข้อนี้
-            const allLabels = questionBox.querySelectorAll('.option-label');
-            allLabels.forEach(l => {
-                l.classList.remove('selected');
-                l.querySelector('.bi-circle-fill')?.classList.replace('bi-circle-fill', 'bi-circle');
+            correctAnswers.forEach((ans, index) => {
+                const selected = document.querySelector(`input[name="q_${index}"]:checked`);
+                if (selected) {
+                    answered++;
+                    // 🔥 แก้ไขตรงนี้: แปลงเป็นตัวเลขทั้งคู่ก่อนเทียบ และเอาอิโมจิออก
+                    if (parseInt(selected.value) === parseInt(ans)) score++;
+                }
             });
 
-            // เพิ่มคลาส selected ให้ปุ่มที่กด
-            label.classList.add('selected');
-            
-            // เปลี่ยนไอคอนวงกลม
-            const icon = label.querySelector('.bi-circle');
-            if(icon) {
-                icon.classList.replace('bi-circle', 'bi-circle-fill');
-            }
-            
-            // เลือก radio input
-            const input = label.querySelector('input');
-            input.checked = true;
-        }
-
-        function submitQuiz() {
-            let score = 0;
-            const form = document.getElementById('quizForm');
-            const formData = new FormData(form);
-            let answeredCount = 0;
-            
-            for(let pair of formData.entries()) {
-                score += parseInt(pair[1]);
-                answeredCount++;
+            if (answered < correctAnswers.length) {
+                if(!confirm(`คุณทำไป ${answered} จาก ${correctAnswers.length} ข้อ ยืนยันจะส่งคำตอบไหม?`)) return;
             }
 
-            // ถ้าตอบไม่ครบ 5 ข้อ
-            if(answeredCount < 5) {
-                alert("กรุณาตอบคำถามให้ครบทุกข้อนะครับ!");
-                return;
-            }
-
-            document.getElementById('quizScore').innerText = score;
-            const feedback = document.getElementById('feedbackText');
+            // Show Score (เอาอิโมจิออก)
+            document.getElementById('scoreText').innerText = `${score}/${correctAnswers.length}`;
+            const msg = score === correctAnswers.length ? "สุดยอด! คุณเก่งมาก" : score > correctAnswers.length/2 ? "ทำได้ดี! พยายามอีกนิดนะ" : "ลองใหม่อีกครั้งนะ สู้ๆ!";
+            document.getElementById('scoreMsg').innerText = msg;
             
-            if(score === 5) feedback.innerHTML = "สุดยอด! คุณคือผู้เชี่ยวชาญ <br><small>ไม่มีใครรู้เรื่องทะเลดีไปกว่าคุณแล้ว</small>";
-            else if(score >= 3) feedback.innerHTML = "เก่งมาก! พยายามอีกนิดนะ <br><small>กลับไปอ่านทบทวนแล้วมาใหม่ได้เสมอ</small>";
-            else feedback.innerHTML = "ไม่ต้องเสียใจ! ลองใหม่ได้นะ <br><small>ความพยายามอยู่ที่ไหน ความสำเร็จอยู่ที่นั่น</small>";
-
-            // Save Score
-            let scores = JSON.parse(localStorage.getItem('oceanScores')) || [];
-            scores.push({ date: new Date().toLocaleDateString(), score: score + "/5", game: 'แบบทดสอบ' });
-            localStorage.setItem('oceanScores', JSON.stringify(scores));
-
             new bootstrap.Modal(document.getElementById('scoreModal')).show();
-        }
+        };
+
+        loadQuiz();
     </script>
-     <script>
-    // --- Smart Navbar Logic ---
-    let lastScrollTop = 0;
-    const navbar = document.querySelector('.navbar');
-
-    window.addEventListener('scroll', function() {
-        let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-
-        if (scrollTop > lastScrollTop && scrollTop > 100) {
-            navbar.style.transform = 'translateY(-100%)'; // ซ่อน
-        } else {
-            navbar.style.transform = 'translateY(0)'; // แสดง
-        }
-
-        if (scrollTop > 10) {
-            navbar.style.boxShadow = '0 4px 20px rgba(0,0,0,0.1)';
-        } else {
-            navbar.style.boxShadow = 'none';
-        }
-
-        lastScrollTop = scrollTop;
-    });
-</script>
 </body>
 </html>

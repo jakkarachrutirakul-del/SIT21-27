@@ -13,120 +13,40 @@
     <link rel="stylesheet" href="css/style.css">
 
     <style>
-        /* --- Clean Theme Styles for Lessons Page --- */
-        body {
-            font-family: 'Kanit', sans-serif;
-            background-color: #ffffff;
-            color: #333;
-            overflow-x: hidden;
-            
-            /* 🔥 FIX: บังคับไม่ให้ Google ดันหน้าเว็บลงมา */
-            top: 0px !important; 
-            position: static !important; 
-        }
-
-        /* 🔥 FIX: ซ่อนแถบ Google Translate ด้านบนแบบถาวร */
-        .goog-te-banner-frame.skiptranslate, 
-        iframe.goog-te-banner-frame {
-            display: none !important;
-            visibility: hidden !important;
-            height: 0 !important; 
-            width: 0 !important;
-        }
-
-        /* ปรับแต่งปุ่ม Google Translate ให้สวย */
-        .goog-te-gadget-simple {
-            background-color: #fff !important;
-            border: 1px solid #dee2e6 !important;
-            padding: 6px 12px !important;
-            border-radius: 50px !important;
-            font-size: 14px !important;
-            font-family: 'Kanit', sans-serif !important;
-            color: #333 !important;
-            display: flex !important;
-            align-items: center !important;
-        }
-        .goog-te-gadget-simple img { display: none !important; }
-        .goog-te-menu-value { margin: 0 !important; }
-        .goog-te-menu-value span { color: #333 !important; border: none !important; }
-
-        /* Navbar (White) */
-        .navbar {
-            background-color: rgba(255, 255, 255, 0.98);
-            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
-            padding: 15px 0;
-            transition: transform 0.3s ease-in-out, box-shadow 0.3s;
-        }
+        /* --- Styles เดิม --- */
+        body { font-family: 'Kanit', sans-serif; background-color: #f8f9fa; color: #333; top: 0px !important; position: static !important; overflow-x: hidden; }
+        .goog-te-banner-frame { display: none !important; }
+        .navbar { background-color: rgba(255, 255, 255, 0.98); box-shadow: 0 2px 15px rgba(0,0,0,0.05); padding: 15px 0; transition: transform 0.3s, box-shadow 0.3s; }
         .navbar-brand { color: #007bff !important; font-weight: 800; font-size: 1.6rem; }
-        .nav-link { color: #555 !important; font-weight: 500; margin: 0 10px; transition: 0.3s; }
-        .nav-link:hover, .nav-link.active { color: #007bff !important; }
+        .hero-section { padding: 140px 0 80px; text-align: center; background: linear-gradient(180deg, #e3f2fd 0%, #f8f9fa 100%); }
+        .hero-title { font-size: 3.5rem; font-weight: 800; color: #0d6efd; margin-bottom: 20px; letter-spacing: -1px; }
+        .hero-subtitle { font-size: 1.2rem; color: #6c757d; max-width: 700px; margin: 0 auto; line-height: 1.6; }
         
-        /* Buttons */
-        .btn-outline-custom {
-            border: 2px solid #007bff; color: #007bff; border-radius: 50px; padding: 8px 25px;
-        }
-        .btn-outline-custom:hover { background-color: #007bff; color: white; }
-
-        /* Hero Section */
-        .hero-section {
-            padding: 140px 0 60px;
-            text-align: center;
-            background: linear-gradient(180deg, #f8f9fa 0%, #ffffff 100%);
-        }
-        .hero-title {
-            font-size: 3rem; font-weight: 700; color: #007bff; margin-bottom: 20px;
-        }
-        .hero-subtitle {
-            font-size: 1.1rem; color: #6c757d; max-width: 600px; margin: 0 auto;
-        }
-
-        /* Lesson Cards (Clean Style) */
-        .lesson-card {
-            background: #fff;
-            border: 1px solid #eee;
-            border-radius: 20px;
-            overflow: hidden;
-            transition: all 0.3s ease;
-            height: 100%;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-            position: relative;
-            cursor: pointer;
-        }
+        .lesson-card { background: #fff; border: none; border-radius: 16px; overflow: hidden; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); height: 100%; box-shadow: 0 10px 30px rgba(0,0,0,0.05); cursor: pointer; display: flex; flex-direction: column; }
+        .lesson-card:hover { transform: translateY(-10px); box-shadow: 0 20px 40px rgba(13, 110, 253, 0.15); }
+        .card-img-wrapper { height: 220px; overflow: hidden; position: relative; }
+        .card-img-top { height: 100%; width: 100%; object-fit: cover; transition: transform 0.5s; }
+        .lesson-card:hover .card-img-top { transform: scale(1.05); }
+        .card-body { padding: 25px; flex-grow: 1; display: flex; flex-direction: column; }
+        .lesson-category { font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: #0d6efd; margin-bottom: 8px; }
+        .lesson-title { font-weight: 700; font-size: 1.4rem; margin-bottom: 12px; color: #212529; line-height: 1.3; }
+        .lesson-desc { font-size: 0.95rem; color: #6c757d; margin-bottom: 20px; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; line-height: 1.6; }
+        .btn-read { margin-top: auto; background-color: #f1f8ff; color: #0d6efd; border: none; padding: 10px 20px; border-radius: 50px; font-weight: 600; width: 100%; transition: 0.3s; }
+        .lesson-card:hover .btn-read { background-color: #0d6efd; color: #fff; }
         
-        .lesson-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 15px 30px rgba(0, 123, 255, 0.15);
-            border-color: #007bff;
-        }
-
-        .card-img-top {
-            height: 200px;
-            object-fit: cover;
-            width: 100%;
-        }
-
-        .card-body { padding: 25px; }
-
-        .lesson-title { font-weight: 700; font-size: 1.25rem; margin-bottom: 10px; color: #333; }
-        .lesson-desc { font-size: 0.95rem; color: #6c757d; margin-bottom: 20px; }
+        /* Modal */
+        .modal-content { border-radius: 20px; border: none; overflow: hidden; }
+        .modal-header { border-bottom: 1px solid #f0f0f0; padding: 20px 30px; background: #fff; }
+        .modal-title { font-weight: 700; color: #0d6efd; font-size: 1.5rem; }
+        .modal-body { padding: 40px; font-size: 1.05rem; line-height: 1.8; color: #444; background: #fff; }
+        .modal-body img { max-width: 100%; border-radius: 12px; margin-bottom: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        .modal-body h4 { font-weight: 700; color: #212529; margin-top: 30px; margin-bottom: 15px; }
+        .modal-body ul { padding-left: 20px; margin-bottom: 20px; }
+        .modal-body li { margin-bottom: 10px; }
         
-        .btn-read {
-            background-color: #e7f1ff; color: #007bff; border: none;
-            padding: 8px 20px; border-radius: 50px; font-weight: 600; width: 100%;
-            transition: 0.3s;
-        }
-        .lesson-card:hover .btn-read {
-            background-color: #007bff; color: #fff;
-        }
-
-        /* Modal Styles */
-        .modal-content { border-radius: 20px; border: none; box-shadow: 0 20px 50px rgba(0,0,0,0.2); }
-        .modal-header { border-bottom: 1px solid #eee; padding: 20px 30px; }
-        .modal-title { font-weight: 700; color: #007bff; }
-        .modal-body { padding: 30px; font-size: 1rem; line-height: 1.8; color: #444; }
-        
-        /* Footer */
-        footer { background-color: #f8f9fa; padding: 50px 0; border-top: 1px solid #eee; margin-top: 80px; text-align: center; }
+        /* Translate Button */
+        #google_translate_element { display: inline-block; }
+        .goog-te-gadget-simple { background-color: #fff !important; border: 1px solid #dee2e6 !important; padding: 6px 12px !important; border-radius: 50px !important; }
     </style>
 </head>
 
@@ -137,14 +57,16 @@
             <a class="navbar-brand d-flex align-items-center" href="index.html">
                 <i class="bi bi-water me-2 text-primary" style="font-size: 1.8rem;"></i>
                 <div class="d-flex flex-column lh-1">
-                    <span style="font-weight: 800; font-size: 1.6rem; letter-spacing: -0.5px;">Underwater Learning</span>
+                    <span style="font-weight: 800; font-size: 1.6rem; letter-spacing: -0.5px;">Underwater
+                        Learning</span>
                     <small class="text-muted" style="font-size: 0.85rem; font-weight: 400; margin-top: 2px;">
                         Voice Beneath the Waves
                     </small>
                 </div>
             </a>
-            
-            <button class="navbar-toggler border-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar">
+
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="offcanvas"
+                data-bs-target="#offcanvasNavbar">
                 <i class="bi bi-list fs-2 text-dark"></i>
             </button>
 
@@ -172,7 +94,6 @@
                 <li class="nav-item"><a class="nav-link" href="minigame.html">Mini Game</a></li>
                 <li class="nav-item"><a class="nav-link" href="quiz.html">แบบทดสอบ</a></li>
                 <li class="nav-item"><a class="nav-link" href="map.html">แผนที่</a></li>
-                <li class="nav-item mt-3"><a href="login.html" class="btn btn-primary rounded-pill w-100">เข้าสู่ระบบ</a></li>
             </ul>
         </div>
     </div>
@@ -181,79 +102,16 @@
         <section class="hero-section">
             <div class="container" data-aos="fade-down">
                 <h1 class="hero-title">ห้องเรียนใต้น้ำ</h1>
-                <p class="hero-subtitle">เลือกหัวข้อที่คุณสนใจ เพื่อเจาะลึกความลับของมหาสมุทร<br>ตั้งแต่สิ่งมีชีวิตขนาดจิ๋ว ไปจนถึงระบบนิเวศอันยิ่งใหญ่</p>
+                <p class="hero-subtitle">เลือกหัวข้อที่คุณสนใจ เพื่อเจาะลึกความลับของมหาสมุทร<br>ตั้งแต่สิ่งมีชีวิตขนาดจิ๋ว ไปจนถึงระบบนิเวศอันยิ่งใหญ่ที่รอให้คุณค้นพบ</p>
             </div>
         </section>
 
         <div class="container pb-5">
-            <div class="row g-4 justify-content-center">
-                
-                <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="100">
-                    <div class="lesson-card" onclick="showLesson('coral')">
-                        <img src="https://www.visitsealife.com/bangkok/media/zpbdq1xs/corlareaf-2.jpg" class="card-img-top" alt="Coral">
-                        <div class="card-body text-center">
-                            <h3 class="lesson-title">โลกของปะการัง</h3>
-                            <p class="lesson-desc">เจาะลึกระบบนิเวศปะการัง ความหลากหลาย และความสำคัญต่อท้องทะเล</p>
-                            <button class="btn btn-read rounded-pill">อ่านบทเรียน</button>
-                        </div>
-                    </div>
+            <div class="row g-4 justify-content-center" id="lessons-container">
+                <div class="col-12 text-center py-5">
+                    <div class="spinner-border text-primary" role="status"></div>
+                    <p class="mt-3 text-muted">กำลังโหลดบทเรียน...</p>
                 </div>
-
-                <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="200">
-                    <div class="lesson-card" onclick="showLesson('animals')">
-                        <img src="https://www.playpark.com/th-th/wp-content/uploads/2018/05/blue-whale-facts-13.jpg" class="card-img-top" alt="Animals">
-                        <div class="card-body text-center">
-                            <h3 class="lesson-title">สัตว์ทะเลมหัศจรรย์</h3>
-                            <p class="lesson-desc">รู้จักเพื่อนตัวน้อยและยักษ์ใหญ่ในท้องทะเล ตั้งแต่ปลาการ์ตูนถึงวาฬสีน้ำเงิน</p>
-                            <button class="btn btn-read rounded-pill">อ่านบทเรียน</button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="300">
-                    <div class="lesson-card" onclick="showLesson('conservation')">
-                        <img src="https://images.unsplash.com/photo-1618477461853-cf6ed80faba5?q=80&w=800" class="card-img-top" alt="Conservation">
-                        <div class="card-body text-center">
-                            <h3 class="lesson-title">ภารกิจรักษ์ทะเล</h3>
-                            <p class="lesson-desc">เรียนรู้วิธีลดขยะพลาสติก และช่วยกันดูแลมหาสมุทรให้ยั่งยืน</p>
-                            <button class="btn btn-read rounded-pill">อ่านบทเรียน</button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="400">
-                    <div class="lesson-card" onclick="showLesson('deepsea')">
-                        <img src="https://t4.ftcdn.net/jpg/10/25/08/87/360_F_1025088752_tTls5FtYD56nTbQKFvzwqBjHdi5DIgwh.jpg" class="card-img-top" alt="Conservation">
-                        <div class="card-body text-center">
-                            <h3 class="lesson-title">โลกใต้ทะเลลึก</h3>
-                            <p class="lesson-desc">ดำดิ่งสู่จุดที่ลึกที่สุด สำรวจสิ่งมีชีวิตเรืองแสงและความลับของร่องลึก</p>
-                            <button class="btn btn-read rounded-pill">อ่านบทเรียน</button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="500">
-                    <div class="lesson-card" onclick="showLesson('turtles')">
-                        <img src="https://phuketaquarium.org/wp-content/uploads/2019/01/%E0%B8%A5%E0%B8%B9%E0%B8%81%E0%B9%80%E0%B8%95%E0%B9%88%E0%B8%B2%E0%B8%A1%E0%B8%B0%E0%B9%80%E0%B8%9F%E0%B8%B7%E0%B8%AD%E0%B8%87.jpg" class="card-img-top" alt="Turtle">
-                        <div class="card-body text-center">
-                            <h3 class="lesson-title">เต่าทะเลนักเดินทาง</h3>
-                            <p class="lesson-desc">ติดตามการเดินทางข้ามสมุทร และความลับเรื่องอุณหภูมิที่กำหนดเพศ</p>
-                            <button class="btn btn-read rounded-pill">อ่านบทเรียน</button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="600">
-                    <div class="lesson-card" onclick="showLesson('plankton')">
-                        <img src="https://www.tnnthailand.com/static/2025/bb4efa27-1eac-4e8d-9fbb-998ad86055b4.webp" class="card-img-top" alt="Plankton">
-                        <div class="card-body text-center">
-                            <h3 class="lesson-title">แพลงก์ตอนจิ๋ว</h3>
-                            <p class="lesson-desc">สิ่งมีชีวิตเล็กๆ ที่เป็นจุดเริ่มต้นของห่วงโซ่อาหารและลมหายใจของโลก</p>
-                            <button class="btn btn-read rounded-pill">อ่านบทเรียน</button>
-                        </div>
-                    </div>
-                </div>
-
             </div>
         </div>
     </main>
@@ -262,9 +120,7 @@
         <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title d-flex align-items-center gap-2">
-                        <span id="lessonIcon"></span> <span id="lessonTitle"></span>
-                    </h5>
+                    <h5 class="modal-title d-flex align-items-center gap-2" id="lessonTitle"></h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
@@ -274,167 +130,125 @@
         </div>
     </div>
 
-    <footer>
+    <footer class="text-center py-4 bg-white mt-auto border-top">
         <div class="container">
-            <h4 class="fw-bold text-primary mb-3">Underwater Learning</h4>
-            <div class="d-flex justify-content-center gap-4 mb-4">
-                <a href="#" class="text-secondary fs-4"><i class="bi bi-facebook"></i></a>
-                <a href="#" class="text-secondary fs-4"><i class="bi bi-instagram"></i></a>
-                <a href="#" class="text-secondary fs-4"><i class="bi bi-youtube"></i></a>
-            </div>
-            <p class="text-secondary small mb-0">© 2025 Underwater Learning. All rights reserved.</p>
+            <p class="text-secondary mb-0">© 2025 Underwater Learning. All rights reserved.</p>
         </div>
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
-    <script type="text/javascript">
-        function googleTranslateElementInit() {
-            new google.translate.TranslateElement({
-                pageLanguage: 'th',
-                includedLanguages: 'en,th,zh-CN,ja',
-                layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
-                autoDisplay: false
-            }, 'google_translate_element');
+<script>
+    // 1. เริ่มต้นระบบ Animation ทันทีที่โหลดหน้า
+    AOS.init({ duration: 800, once: true });
+
+    function googleTranslateElementInit() {
+        new google.translate.TranslateElement({
+            pageLanguage: 'en',
+            includedLanguages: 'en,th,ja,zh-CN',
+            layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+            autoDisplay: false
+        }, 'google_translate_element');
+    }
+
+    // ย้ายปุ่มแปลภาษา
+    function moveTranslateWidget() {
+        const widget = document.getElementById('google_translate_element');
+        const desktopContainer = document.getElementById('desktop-translate-container');
+        const mobileContainer = document.getElementById('mobile-translate-container');
+        if (window.innerWidth < 992) { 
+            if (mobileContainer && widget) mobileContainer.appendChild(widget);
+        } else {
+            if (desktopContainer && widget) desktopContainer.appendChild(widget);
         }
-    </script>
-    <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    }
+    window.addEventListener('resize', moveTranslateWidget);
+    window.addEventListener('load', moveTranslateWidget);
+</script>
 
-    <script>
-        AOS.init({ once: true, offset: 50 });
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-        // ✅ สคริปต์ย้ายปุ่มแปลภาษาอัตโนมัติ (Desktop <-> Mobile)
-        function moveTranslateWidget() {
-            const widget = document.getElementById('google_translate_element');
-            const desktopContainer = document.getElementById('desktop-translate-container');
-            const mobileContainer = document.getElementById('mobile-translate-container');
+    const firebaseConfig = {
+        apiKey: "AIzaSyAifapE2aLzu3UUDsWwVaNK5OhwgTo0x0Y",
+        authDomain: "ppt21-92f97.firebaseapp.com",
+        projectId: "ppt21-92f97",
+        storageBucket: "ppt21-92f97.firebasestorage.app",
+        messagingSenderId: "171020058825",
+        appId: "1:171020058825:web:2a6216cb9bfece19cf8d18",
+        measurementId: "G-6J5D16LK4Q"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    async function loadLessons() {
+        const container = document.getElementById('lessons-container');
+        try {
+            const snapshot = await getDocs(collection(db, "lessons"));
+            let html = "";
             
-            if (window.innerWidth < 992) { 
-                if (mobileContainer && widget) mobileContainer.appendChild(widget);
-            } else {
-                if (desktopContainer && widget) desktopContainer.appendChild(widget);
+            if (snapshot.empty) {
+                container.innerHTML = `
+                    <div class="col-12 text-center py-5">
+                        <i class="bi bi-journal-x text-muted" style="font-size: 3rem;"></i>
+                        <p class="mt-3 text-muted">ยังไม่มีบทเรียนในระบบ</p>
+                    </div>`;
+                return;
             }
-        }
-        window.addEventListener('resize', moveTranslateWidget);
-        window.addEventListener('load', moveTranslateWidget);
 
-        // ข้อมูลบทเรียน
-        const lessonData = {
-            coral: {
+            snapshot.forEach((doc) => {
+                const item = doc.data();
+                if (item.active) {
+                    // จัดการเครื่องหมายคำพูดในเนื้อหา เพื่อไม่ให้ HTML พังเวลาส่งเข้าฟังก์ชัน
+                    const safeTitle = item.title.replace(/'/g, "&apos;").replace(/"/g, "&quot;");
+                    const safeImage = item.image.replace(/'/g, "&apos;").replace(/"/g, "&quot;");
+                    // แปลงเนื้อหาเป็น Base64 หรือเก็บในตัวแปรแยกเพื่อความปลอดภัย (แบบง่ายใช้ encodeURI)
+                    const safeContent = encodeURIComponent(item.content); 
+
+                    html += `
+                    <div class="col-md-6 col-lg-4" data-aos="fade-up">
+                        <div class="lesson-card" onclick="showLessonDetail('${safeTitle}', '${safeContent}', '${safeImage}')">
+                            <div class="card-img-wrapper">
+                                <img src="${item.image}" class="card-img-top" onerror="this.src='https://via.placeholder.com/400x250?text=No+Image'">
+                            </div>
+                            <div class="card-body text-center">
+                                <span class="lesson-category">${item.category || 'บทเรียน'}</span>
+                                <h3 class="lesson-title">${item.title}</h3>
+                                <p class="lesson-desc">${item.content.substring(0, 80)}...</p>
+                                <button class="btn btn-read rounded-pill w-100">อ่านบทเรียน</button>
+                            </div>
+                        </div>
+                    </div>`;
+                }
+            });
             
-                title: 'เจาะลึกโลกของปะการัง (Coral Reefs)',
-                content: `
-                    <img src="https://www.visitsealife.com/bangkok/media/zpbdq1xs/corlareaf-2.jpg" class="img-fluid rounded mb-4 w-100" alt="Coral">
-                    <h4 class="text-primary fw-bold">1. ปะการังคือ "สัตว์" ไม่ใช่พืช!</h4>
-                    <p>หลายคนเข้าใจผิดว่าปะการังเป็นหินหรือพืช แต่จริงๆ แล้วปะการังประกอบด้วยสัตว์ตัวเล็กๆ นับล้านตัวที่เรียกว่า <strong>"โพลิป (Polyps)"</strong> ซึ่งเป็นสัตว์ไม่มีกระดูกสันหลังในกลุ่มเดียวกับแมงกะพรุนและดอกไม้ทะเล</p>
-                    <h4 class="text-primary fw-bold mt-4">2. ป่าดิบชื้นแห่งท้องทะเล</h4>
-                    <p>แนวปะการังครอบคลุมพื้นที่เพียง <strong>ไม่ถึง 1%</strong> ของท้องทะเล แต่เป็นที่อยู่อาศัยของสิ่งมีชีวิตกว่า <strong>25%</strong> ความหลากหลายทางชีวภาพนี้ทำให้มันได้รับฉายาว่า "Rainforests of the Sea"</p>
-                    <div class="alert alert-warning mt-3 border-0 shadow-sm">
-                        <h5 class="fw-bold"><i class="bi bi-exclamation-triangle-fill"></i> ภัยคุกคาม: ปะการังฟอกขาว</h5>
-                        <p class="mb-0">เมื่ออุณหภูมิน้ำทะเลสูงขึ้นเพียง 1-2 องศาเซลเซียส ปะการังจะขับสาหร่ายจิ๋ว (Zooxanthellae) ออกมา ทำให้เสียสีสันและกลายเป็นสีขาว หากสภาวะนี้ยืดเยื้อ ปะการังจะตายในที่สุด</p>
-                    </div>
-                `
-            },
-            animals: {
+            container.innerHTML = html;
             
-                title: 'สัตว์ทะเลมหัศจรรย์ (Amazing Marine Life)',
-                content: `
-                    <img src="https://www.playpark.com/th-th/wp-content/uploads/2018/05/blue-whale-facts-13.jpg" class="img-fluid rounded mb-4 w-100" alt="Whale">
-                    <h4 class="text-primary fw-bold">1. วาฬสีน้ำเงิน - ยักษ์ใหญ่ใจดี</h4>
-                    <p>เป็นสัตว์ที่มีขนาด <strong>ใหญ่ที่สุดในโลก</strong> ยาวได้ถึง 30 เมตร ลิ้นของมันหนักเท่ากับช้างหนึ่งเชือก และหัวใจมีขนาดเท่ากับรถยนต์คันเล็กๆ!</p>
-                    <h4 class="text-primary fw-bold mt-4">2. หมึกยักษ์ - อัจฉริยะ 3 หัวใจ</h4>
-                    <p>หมึกยักษ์เป็นสัตว์ไม่มีกระดูกสันหลังที่ฉลาดที่สุด มี <strong>3 หัวใจ</strong> และ <strong>9 สมอง</strong> (1 สมองหลัก + 8 สมองย่อยในหนวดแต่ละข้าง) เลือดของมันเป็นสีฟ้าเพราะมีทองแดงเป็นส่วนประกอบ</p>
-                `
-            },
-            conservation: {
+            // 🔥 สั่งให้ Animation ทำงานใหม่หลังจากโหลดข้อมูลเสร็จ
+            setTimeout(() => { if(window.AOS) AOS.refresh(); }, 100);
 
-                title: 'ภารกิจรักษ์ทะเล (Ocean Conservation)',
-                content: `
-                    <img src="https://images.unsplash.com/photo-1618477461853-cf6ed80faba5?q=80&w=800" class="img-fluid rounded mb-4 w-100" alt="Pollution">
-                    <h4 class="text-danger fw-bold">วิกฤตแพขยะแปซิฟิก</h4>
-                    <p>รู้หรือไม่? มีแพขยะขนาดมหึมาลอยอยู่กลางมหาสมุทรแปซิฟิก ซึ่งมีขนาดใหญ่กว่า <strong>ประเทศไทยถึง 3 เท่า</strong>! ส่วนใหญ่เป็นไมโครพลาสติกที่อันตรายต่อสัตว์</p>
-                    <div class="card bg-light border-0 p-3 mt-3">
-                        <h5 class="text-success fw-bold">The 3R Concept</h5>
-                        <ul class="mb-0">
-                            <li><strong>Reduce:</strong> ลดการใช้พลาสติกครั้งเดียวทิ้ง</li>
-                            <li><strong>Reuse:</strong> ใช้ซ้ำถุงผ้าและแก้วน้ำ</li>
-                            <li><strong>Recycle:</strong> แยกขยะให้ถูกประเภท</li>
-                        </ul>
-                    </div>
-                `
-            },
-            deepsea: {
-
-                title: 'โลกใต้ทะเลลึก (The Deep Sea)',
-                content: `
-                    <img src="https://t4.ftcdn.net/jpg/10/25/08/87/360_F_1025088752_tTls5FtYD56nTbQKFvzwqBjHdi5DIgwh.jpg" class="img-fluid rounded mb-4 w-100" alt="Deep Sea">
-                    <h4 class="text-primary fw-bold">1. ร่องลึกมาเรียนา</h4>
-                    <p>จุดที่ลึกที่สุดของโลก ลึกกว่าความสูงของยอดเขาเอเวอเรสต์! แรงดันน้ำที่นี่มหาศาลจนบดขยี้รถยนต์ได้สบายๆ</p>
-                    <h4 class="text-primary fw-bold mt-4">2. การเรืองแสง (Bioluminescence)</h4>
-                    <p>ในความมืดมิด สัตว์ทะเลลึกกว่า 90% สร้างแสงได้เอง! เพื่อใช้ล่อเหยื่อ (เช่น ปลา Anglerfish) หรือเพื่อหาคู่</p>
-                `
-            },
-            turtles: {
-                title: 'เต่าทะเล: นักเดินทางข้ามสมุทร',
-                content: `
-                    <img src="https://phuketaquarium.org/wp-content/uploads/2019/01/%E0%B8%A5%E0%B8%B9%E0%B8%81%E0%B9%80%E0%B8%95%E0%B9%88%E0%B8%B2%E0%B8%A1%E0%B8%B0%E0%B9%80%E0%B8%9F%E0%B8%B7%E0%B8%AD%E0%B8%87.jpg" class="img-fluid rounded mb-4 w-100" alt="Turtle">
-                    <h4 class="text-primary fw-bold">1. GPS ธรรมชาติ</h4>
-                    <p>เต่าทะเลสามารถว่ายน้ำข้ามมหาสมุทรนับพันกิโลเมตรและกลับมาวางไข่ที่ชายหาดเดิมที่มันเกิดได้ โดยอาศัยสนามแม่เหล็กโลกในการนำทาง</p>
-                    <h4 class="text-primary fw-bold mt-4">2. อุณหภูมิกำหนดเพศ</h4>
-                    <p>เพศของลูกเต่าไม่ได้ถูกกำหนดด้วยยีน แต่ด้วย "อุณหภูมิของทราย" ที่หลุมไข่ (ร้อน=เมีย, เย็น=ผู้)</p>
-                `
-            },
-            plankton: {
-
-                title: 'แพลงก์ตอน: จิ๋วแต่แจ๋ว',
-                content: `
-                    <img src="https://www.tnnthailand.com/static/2025/bb4efa27-1eac-4e8d-9fbb-998ad86055b4.webp" class="img-fluid rounded mb-4 w-100" alt="Plankton">
-                    <h4 class="text-primary fw-bold">1. ลมหายใจของโลก</h4>
-                    <p>ออกซิเจนที่เราหายใจกว่า <strong>50-80%</strong> ไม่ได้มาจากป่า แต่มาจาก "แพลงก์ตอนพืช" ในทะเล</p>
-                    <h4 class="text-primary fw-bold mt-4">2. ฐานของพีระมิด</h4>
-                    <p>ถ้าไม่มีแพลงก์ตอน สัตว์ทะเลทั้งหมดจะตาย เพราะแพลงก์ตอนเป็นอาหารของปลาเล็ก ซึ่งเป็นอาหารของปลาใหญ่อีกทอดหนึ่ง</p>
-                `
-            }
-        };
-
-        function showLesson(key) {
-            const data = lessonData[key];
-            if (!data) return;
-
-            document.getElementById('lessonIcon').textContent = data.icon;
-            document.getElementById('lessonTitle').textContent = data.title;
-            document.getElementById('lessonBody').innerHTML = data.content;
-
-            const modal = new bootstrap.Modal(document.getElementById('lessonModal'));
-            modal.show();
+        } catch (e) { 
+            console.error(e); 
+            container.innerHTML = `<p class="text-center text-danger">เกิดข้อผิดพลาด: ${e.message}</p>`;
         }
-        
-        if(window.location.hash) {
-            const key = window.location.hash.substring(1); 
-            if(lessonData[key]) {
-                setTimeout(() => showLesson(key), 500); 
-            }
-        }
+    }
+    
+    // ฟังก์ชันแสดง Modal (Decode ข้อมูลกลับมาแสดง)
+    window.showLessonDetail = (title, encodedContent, img) => {
+        const content = decodeURIComponent(encodedContent).replace(/\n/g, '<br>');
+        document.getElementById('lessonTitle').innerText = title;
+        document.getElementById('lessonBody').innerHTML = `
+            <img src="${img}" class="img-fluid rounded mb-3 w-100 shadow-sm">
+            <div class="mt-3 text-start" style="font-size: 1.1rem; line-height: 1.8;">${content}</div>
+        `;
+        new bootstrap.Modal(document.getElementById('lessonModal')).show();
+    };
 
-        // --- Smart Navbar Logic ---
-        let lastScrollTop = 0;
-        const navbar = document.querySelector('.navbar');
-
-        window.addEventListener('scroll', function() {
-            let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-            if (scrollTop > lastScrollTop && scrollTop > 100) {
-                navbar.style.transform = 'translateY(-100%)'; 
-            } else {
-                navbar.style.transform = 'translateY(0)'; 
-            }
-            if (scrollTop > 10) {
-                navbar.style.boxShadow = '0 4px 20px rgba(0,0,0,0.1)';
-            } else {
-                navbar.style.boxShadow = 'none';
-            }
-            lastScrollTop = scrollTop;
-        });
-    </script>
+    loadLessons();
+</script>
 </body>
 </html>

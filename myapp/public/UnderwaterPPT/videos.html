@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="th">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,10 +12,96 @@
     
     <link rel="stylesheet" href="css/style.css">
     
-    <link rel="stylesheet" href="css/videos.css">
-
     <style>
-      
+        /* --- Video Specific Styles --- */
+        body { background-color: #f9f9f9; top: 0px !important; position: static !important; }
+        .goog-te-banner-frame { display: none !important; }
+        
+        .hero-section {
+            padding: 120px 0 60px;
+            text-align: center;
+            background: linear-gradient(180deg, #e3f2fd 0%, #f9f9f9 100%);
+        }
+        .hero-title { font-size: 3rem; font-weight: 800; color: #0d6efd; margin-bottom: 15px; }
+        .hero-subtitle { color: #6c757d; font-size: 1.1rem; }
+
+        .filter-wrapper {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+        .btn-filter {
+            border: none;
+            background: #fff;
+            color: #555;
+            padding: 10px 25px;
+            border-radius: 50px;
+            font-weight: 500;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            transition: 0.3s;
+        }
+        .btn-filter:hover, .btn-filter.active {
+            background: #0d6efd;
+            color: #fff;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(13, 110, 253, 0.2);
+        }
+
+        .video-card {
+            background: #fff;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            transition: 0.3s;
+            cursor: pointer;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        .video-card:hover { transform: translateY(-8px); box-shadow: 0 15px 40px rgba(0,0,0,0.1); }
+        
+        .video-thumb {
+            position: relative;
+            padding-top: 56.25%; /* 16:9 Aspect Ratio */
+            overflow: hidden;
+        }
+        .video-thumb img {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            object-fit: cover;
+            transition: 0.5s;
+        }
+        .video-card:hover .video-thumb img { transform: scale(1.05); }
+        
+        .play-overlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.3);
+            display: flex; align-items: center; justify-content: center;
+            opacity: 0; transition: 0.3s;
+        }
+        .video-card:hover .play-overlay { opacity: 1; }
+        .play-icon {
+            width: 60px; height: 60px;
+            background: rgba(255,255,255,0.9);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            color: #0d6efd; font-size: 2rem;
+            box-shadow: 0 0 20px rgba(255,255,255,0.5);
+        }
+
+        .video-info { padding: 20px; flex-grow: 1; display: flex; flex-direction: column; }
+        .video-cat { font-size: 0.75rem; font-weight: 700; color: #0d6efd; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+        .video-title { font-size: 1.1rem; font-weight: 700; margin-bottom: 10px; line-height: 1.4; color: #333; }
+        .video-desc { font-size: 0.9rem; color: #666; margin-bottom: 15px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        .video-meta { margin-top: auto; display: flex; gap: 15px; color: #999; font-size: 0.85rem; }
+        
+        /* Translate Button */
+        #google_translate_element { display: inline-block; }
+        .goog-te-gadget-simple { background-color: #fff !important; border: 1px solid #dee2e6 !important; padding: 6px 12px !important; border-radius: 50px !important; }
     </style>
 </head>
 
@@ -27,14 +112,16 @@
             <a class="navbar-brand d-flex align-items-center" href="index.html">
                 <i class="bi bi-water me-2 text-primary" style="font-size: 1.8rem;"></i>
                 <div class="d-flex flex-column lh-1">
-                    <span style="font-weight: 800; font-size: 1.6rem; letter-spacing: -0.5px;">Underwater Learning</span>
+                    <span style="font-weight: 800; font-size: 1.6rem; letter-spacing: -0.5px;">Underwater
+                        Learning</span>
                     <small class="text-muted" style="font-size: 0.85rem; font-weight: 400; margin-top: 2px;">
                         Voice Beneath the Waves
                     </small>
                 </div>
             </a>
-            
-            <button class="navbar-toggler border-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar">
+
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="offcanvas"
+                data-bs-target="#offcanvasNavbar">
                 <i class="bi bi-list fs-2 text-dark"></i>
             </button>
 
@@ -62,7 +149,6 @@
                 <li class="nav-item"><a class="nav-link" href="minigame.html">Mini Game</a></li>
                 <li class="nav-item"><a class="nav-link" href="quiz.html">แบบทดสอบ</a></li>
                 <li class="nav-item"><a class="nav-link" href="map.html">แผนที่</a></li>
-                <li class="nav-item mt-3"><a href="login.html" class="btn btn-primary rounded-pill w-100">เข้าสู่ระบบ</a></li>
             </ul>
         </div>
     </div>
@@ -70,182 +156,166 @@
     <main>
         <div class="container">
             <section class="hero-section" data-aos="fade-down">
-                <h1 class="hero-title">คลิปวิดีโอ</h1>
+                <h1 class="hero-title">คลังวิดีโอ</h1>
                 <p class="hero-subtitle">รวมสารคดีและวิดีโอสอนเกี่ยวกับโลกใต้น้ำจากทั่วทุกมุมโลก</p>
             </section>
 
             <div class="filter-wrapper" data-aos="fade-up">
-                <button class="btn-filter active" onclick="filterVids('all')">ทั้งหมด</button>
-                <button class="btn-filter" onclick="filterVids('documentary')">สารคดี</button>
-                <button class="btn-filter" onclick="filterVids('tutorial')">สอนความรู้</button>
-                <button class="btn-filter" onclick="filterVids('adventure')">ผจญภัย</button>
+                <button class="btn-filter active" onclick="filterVids('all', this)">ทั้งหมด</button>
+                <button class="btn-filter" onclick="filterVids('documentary', this)">สารคดี</button>
+                <button class="btn-filter" onclick="filterVids('tutorial', this)">สอนความรู้</button>
+                <button class="btn-filter" onclick="filterVids('adventure', this)">ผจญภัย</button>
             </div>
 
-            <div class="row g-4" id="videosGrid"></div>
+            <div class="row g-4" id="videosGrid">
+                <div class="col-12 text-center py-5">
+                    <div class="spinner-border text-primary" role="status"></div>
+                    <p class="mt-3 text-muted">กำลังโหลดวิดีโอ...</p>
+                </div>
+            </div>
         </div>
     </main>
 
     <div id="videoModal" class="modal fade" tabindex="-1">
         <div class="modal-dialog modal-xl modal-dialog-centered">
-            <div class="modal-content border-0 rounded-4 shadow-lg">
+            <div class="modal-content border-0 rounded-4 shadow-lg bg-dark">
                 <div class="modal-header border-bottom-0">
-                    <h5 class="modal-title fw-bold text-primary" id="modalTitle"></h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    <h5 class="modal-title fw-bold text-white" id="modalTitle"></h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body p-0">
                     <div class="ratio ratio-16x9" id="videoPlayer"></div>
-                    <div id="videoDesc" class="p-4 text-secondary"></div>
+                    <div id="videoDesc" class="p-4 text-light opacity-75"></div>
                 </div>
             </div>
         </div>
     </div>
 
-    <footer>
+    <footer class="text-center py-4 bg-white mt-auto border-top">
         <div class="container">
-            <h4 class="fw-bold text-primary mb-3">Underwater Learning</h4>
-            <div class="d-flex justify-content-center gap-4 mb-4">
-                <a href="#" class="text-secondary fs-4"><i class="bi bi-facebook"></i></a>
-                <a href="#" class="text-secondary fs-4"><i class="bi bi-instagram"></i></a>
-                <a href="#" class="text-secondary fs-4"><i class="bi bi-youtube"></i></a>
-            </div>
-            <p class="text-secondary small mb-0">© 2025 Underwater Learning. All rights reserved.</p>
+            <p class="text-secondary mb-0">© 2025 Underwater Learning. All rights reserved.</p>
         </div>
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
     <script>
-        AOS.init({ once: true, offset: 50 });
-
-        // Video Data
-        const vids = [
-            {
-                id: 1, title: 'สำรวจโลกแนวปะการัง', cat: 'documentary', catName: 'สารคดี',
-                emoji: '', dur: '15:30', views: '1.2K',
-                ytID: 'wMP1KAtaJAg',
-                desc: 'ดำดิ่งลงสู่โลกใต้น้ำที่สวยงามของแนวปะการัง ชมความหลากหลายของสิ่งมีชีวิต',
-                full: 'แนวปะการังเป็นหนึ่งในระบบนิเวศที่หลากหลายที่สุดในโลก มีสิ่งมีชีวิตนับพันชนิดอาศัยอยู่'
-            },
-            {
-                id: 2, title: 'ชีวิตของฉลามขาว', cat: 'documentary', catName: 'สารคดี',
-                emoji: '', dur: '22:15', views: '2.5K',
-                ytID: '4HGNqFdaD34',
-                desc: 'ติดตามชีวิตของฉลามขาวขนาดใหญ่ สัตว์นักล่าที่น่าเกรงขามแห่งมหาสมุทร',
-                full: 'ฉลามขาวเป็นนักล่าที่มีประสิทธิภาพสูง อยู่บนสุดของห่วงโซ่อาหารในทะเล'
-            },
-            {
-                id: 3, title: 'วิธีดำน้ำดูปะการัง', cat: 'tutorial', catName: 'สอนความรู้',
-                emoji: '', dur: '12:45', views: '890',
-                ytID: 'EAUBDqaQDqs',
-                desc: 'เรียนรู้เทคนิคการดำน้ำดูปะการังอย่างถูกวิธี ปลอดภัย และไม่ทำลายสิ่งแวดล้อม',
-                full: 'การดำน้ำดูปะการังต้องทำอย่างระมัดระวัง ไม่แตะต้องปะการังและสัตว์ทะเล'
-            },
-            {
-                id: 4, title: 'เต่าทะเล: การเดินทาง', cat: 'documentary', catName: 'สารคดี',
-                emoji: '', dur: '18:20', views: '1.8K',
-                ytID: 'tA1Tj70u_1U',
-                desc: 'ติดตามการเดินทางอันยาวไกลของเต่าทะเลจากทะเลเปิดกลับสู่หาดที่เกิด',
-                full: 'เต่าทะเลมีความสามารถพิเศษในการนำทางกลับหาดเกิด แม้จะห่างไกลนับพันกิโล'
-            },
-            {
-                id: 5, title: 'รู้จักปลาในทะเลไทย', cat: 'tutorial', catName: 'สอนความรู้',
-                emoji: '', dur: '14:10', views: '1.5K',
-                ytID: 'X9tQv_3m1o8',
-                desc: 'เรียนรู้เกี่ยวกับปลาทะเลที่พบได้ในน่านน้ำไทย ทั้งปลาหายากและปลาสวยงาม',
-                full: 'ทะเลไทยมีปลาหลากหลายชนิด ตั้งแต่ปลาการ์ตูน ปลาผีเสื้อ ไปจนถึงปลากระเบน'
-            },
-            {
-                id: 6, title: 'ผจญภัยในถ้ำใต้น้ำ', cat: 'adventure', catName: 'ผจญภัย',
-                emoji: '', dur: '20:30', views: '3.2K',
-                ytID: 'u9W3N_5T_8U',
-                desc: 'ร่วมผจญภัยไปกับนักดำน้ำมืออาชีพในการสำรวจถ้ำใต้น้ำที่ลึกลับ',
-                full: 'การดำน้ำในถ้ำเป็นการผจญภัยที่ท้าทาย ต้องมีทักษะและอุปกรณ์พิเศษ'
-            }
-        ];
-
-        let modal;
-
-        function showVids(filter = 'all') {
-            const grid = document.getElementById('videosGrid');
-            const filtered = filter === 'all' ? vids : vids.filter(v => v.cat === filter);
-
-            grid.innerHTML = filtered.map((v, i) => `
-                <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="${i * 50}">
-                    <div class="video-card h-100" onclick="playVid(${v.id})">
-                        <div class="video-thumb">
-                            <img src="https://img.youtube.com/vi/${v.ytID}/mqdefault.jpg" alt="${v.title}">
-                            <div class="play-overlay">
-                                <div class="play-icon"><i class="bi bi-play-fill"></i></div>
-                            </div>
-                        </div>
-                        <div class="video-info">
-                            <span class="video-cat">${v.catName}</span>
-                            <h3 class="video-title">${v.title}</h3>
-                            <p class="video-desc">${v.desc}</p>
-                            <div class="video-meta">
-                                <span><i class="bi bi-clock"></i> ${v.dur}</span>
-                                <span><i class="bi bi-eye"></i> ${v.views}</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        function filterVids(cat) {
-            document.querySelectorAll('.btn-filter').forEach(b => b.classList.remove('active'));
-            event.target.classList.add('active');
-            showVids(cat);
-        }
-
-        function playVid(id) {
-            const v = vids.find(x => x.id === id);
-            if (!v) return;
-
-            document.getElementById('modalTitle').textContent = v.title;
-            document.getElementById('videoPlayer').innerHTML = `
-                <iframe src="https://www.youtube.com/embed/${v.ytID}?autoplay=1&rel=0" 
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                        allowfullscreen class="w-100 h-100">
-                </iframe>
-            `;
-            document.getElementById('videoDesc').innerHTML = `<p>${v.full}</p>`;
-
-            if (!modal) {
-                modal = new bootstrap.Modal(document.getElementById('videoModal'));
-            }
-            modal.show();
-        }
-
-        document.getElementById('videoModal').addEventListener('hidden.bs.modal', () => {
-            document.getElementById('videoPlayer').innerHTML = '';
-        });
-
-        showVids();
-    </script>
-     <script>
-    // --- Smart Navbar Logic ---
+    // 1. เปิดใช้ AOS และ Navbar
+    AOS.init({ duration: 800, once: true });
+    
+    // Navbar Scroll Logic
     let lastScrollTop = 0;
     const navbar = document.querySelector('.navbar');
-
     window.addEventListener('scroll', function() {
         let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-
-        if (scrollTop > lastScrollTop && scrollTop > 100) {
-            navbar.style.transform = 'translateY(-100%)'; // ซ่อน
-        } else {
-            navbar.style.transform = 'translateY(0)'; // แสดง
-        }
-
-        if (scrollTop > 10) {
-            navbar.style.boxShadow = '0 4px 20px rgba(0,0,0,0.1)';
-        } else {
-            navbar.style.boxShadow = 'none';
-        }
-
+        if (scrollTop > lastScrollTop && scrollTop > 100) { navbar.style.transform = 'translateY(-100%)'; } 
+        else { navbar.style.transform = 'translateY(0)'; }
+        navbar.style.boxShadow = scrollTop > 10 ? '0 4px 20px rgba(0,0,0,0.1)' : 'none';
         lastScrollTop = scrollTop;
     });
+</script>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyAifapE2aLzu3UUDsWwVaNK5OhwgTo0x0Y",
+        authDomain: "ppt21-92f97.firebaseapp.com",
+        projectId: "ppt21-92f97",
+        storageBucket: "ppt21-92f97.firebasestorage.app",
+        messagingSenderId: "171020058825",
+        appId: "1:171020058825:web:2a6216cb9bfece19cf8d18",
+        measurementId: "G-6J5D16LK4Q"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    let allVideos = [];
+
+    async function fetchVideos() {
+        const grid = document.getElementById('videosGrid');
+        try {
+            const snapshot = await getDocs(collection(db, "videos"));
+            
+            if (snapshot.empty) {
+                grid.innerHTML = `<div class="col-12 text-center py-5"><p class="text-muted">ยังไม่มีวิดีโอในระบบ</p></div>`;
+                return;
+            }
+
+            allVideos = [];
+            snapshot.forEach((doc) => {
+                const v = doc.data();
+                if (v.active) {
+                    // ถ้าวิดีโอเก่าไม่มีหมวดหมู่ ให้ตั้งเป็น general
+                    v.category = v.category || 'general'; 
+                    allVideos.push(v);
+                }
+            });
+
+            renderVideos('all');
+
+        } catch (e) { 
+            console.error(e);
+            grid.innerHTML = `<p class="text-center text-danger py-5">เกิดข้อผิดพลาดในการโหลดวิดีโอ</p>`;
+        }
+    }
+
+    // ฟังก์ชันแสดงผลและกรอง
+    window.renderVideos = (filter) => {
+        const grid = document.getElementById('videosGrid');
+        let filtered = allVideos;
+
+        if (filter !== 'all') {
+            filtered = allVideos.filter(v => v.category === filter);
+        }
+
+        if (filtered.length === 0) {
+            grid.innerHTML = `<div class="col-12 text-center py-5 text-muted">ไม่พบวิดีโอในหมวดนี้</div>`;
+            return;
+        }
+
+        const catNames = { 'documentary': 'สารคดี', 'tutorial': 'สอนความรู้', 'adventure': 'ผจญภัย', 'general': 'ทั่วไป' };
+
+        grid.innerHTML = filtered.map((v, index) => `
+            <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="${index * 50}">
+                <div class="video-card" onclick="playVid('${v.url}', '${v.title}', '${v.desc || ''}')">
+                    <div class="video-thumb">
+                        <img src="https://img.youtube.com/vi/${v.url}/mqdefault.jpg" class="w-100" onerror="this.src='https://via.placeholder.com/640x360?text=Video'">
+                        <div class="play-overlay"><div class="play-icon"><i class="bi bi-play-fill"></i></div></div>
+                    </div>
+                    <div class="video-info">
+                        <span class="video-cat">${catNames[v.category] || v.category}</span>
+                        <h3 class="video-title">${v.title}</h3>
+                        <p class="video-desc">${v.desc || ''}</p>
+                    </div>
+                </div>
+            </div>`).join('');
+        
+        if(window.AOS) setTimeout(() => AOS.refresh(), 100);
+    };
+    
+    window.playVid = (id, title, desc) => {
+        document.getElementById('modalTitle').innerText = title;
+        document.getElementById('videoPlayer').innerHTML = `<iframe src="https://www.youtube.com/embed/${id}?autoplay=1" class="w-100 h-100" allowfullscreen></iframe>`;
+        document.getElementById('videoDesc').innerText = desc;
+        new bootstrap.Modal(document.getElementById('videoModal')).show();
+    };
+
+    window.filterVids = (cat, btn) => {
+        document.querySelectorAll('.btn-filter').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        renderVideos(cat);
+    };
+
+    document.getElementById('videoModal').addEventListener('hidden.bs.modal', () => {
+        document.getElementById('videoPlayer').innerHTML = '';
+    });
+
+    fetchVideos();
 </script>
 </body>
 </html>
